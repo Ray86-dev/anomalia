@@ -27,7 +27,13 @@ function deps(overrides: Partial<PartidaDeps> = {}): PartidaDeps {
   return {
     verifyUser: (jwt) => Promise.resolve(jwt === 'valid-token' ? UID : null),
     rpc: vi.fn(() =>
-      Promise.resolve({ status: 'ok', alias: 'Galileo', classLabel: '4.º ESO B', resumed: false }),
+      Promise.resolve({
+        status: 'ok',
+        alias: 'Galileo',
+        classLabel: '4.º ESO B',
+        resumed: false,
+        rescueKey: 'K7P2MX',
+      }),
     ),
     content: content(),
     ai: null,
@@ -120,6 +126,7 @@ describe('partida · join', () => {
       alias: 'Galileo',
       classLabel: '4.º ESO B',
       resumed: false,
+      rescueKey: 'K7P2MX',
     });
   });
 
@@ -158,6 +165,45 @@ describe('partida · join', () => {
       deps({ rpc: () => Promise.resolve({ status: 'hacked' }) }),
     );
     expect(res.status).toBe(500);
+  });
+});
+
+describe('partida · recover', () => {
+  const recover = (rescueKey?: string) => ({
+    action: 'recover',
+    classCode: 'prueba',
+    alias: ' Galileo ',
+    ...(rescueKey === undefined ? {} : { rescueKey }),
+  });
+
+  it('con clave, pasa código, alias y clave normalizados a svc_recover', async () => {
+    const d = deps({
+      rpc: vi.fn(() =>
+        Promise.resolve({ status: 'ok', alias: 'Galileo', classLabel: '4.º ESO B' }),
+      ),
+    });
+    const res = await handlePartida(post(recover(' k7p-2mx ')), d);
+    expect(d.rpc).toHaveBeenCalledWith('svc_recover', {
+      p_auth_uid: UID,
+      p_code: 'PRUEBA',
+      p_alias: 'Galileo',
+      p_key: 'k7p-2mx',
+    });
+    expect(await res.json()).toEqual({ ok: true, alias: 'Galileo', classLabel: '4.º ESO B' });
+  });
+
+  it('sin clave queda pendiente de que el docente lo apruebe', async () => {
+    const d = deps({ rpc: vi.fn(() => Promise.resolve({ status: 'pending' })) });
+    const res = await handlePartida(post(recover()), d);
+    expect(d.rpc).toHaveBeenCalledWith('svc_recover', expect.objectContaining({ p_key: null }));
+    expect(await res.json()).toEqual({ ok: false, error: 'pending' });
+  });
+
+  it('descarta códigos imposibles sin consultar la base de datos', async () => {
+    const d = deps();
+    const res = await handlePartida(post({ ...recover(), classCode: 'XX' }), d);
+    expect(await res.json()).toEqual({ ok: false, error: 'invalid_code' });
+    expect(d.rpc).not.toHaveBeenCalled();
   });
 });
 
@@ -448,6 +494,23 @@ describe('partida · con IA', () => {
     );
     expect(body).toMatchObject({ ok: false, error: 'needs_more', run: { phase: 'justification' } });
     expect(writes(rpc)).toEqual([]);
+  });
+
+  it('si el texto devuelto para reescribir muestra malestar, la alerta se registra igualmente', async () => {
+    const ai = aiWith({
+      objection: vi.fn(() => Promise.resolve({ ...objection, calidad: 'vacia' as const })),
+    });
+    const { body, rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'me da igual, me quiero morir' },
+      afterChoice('justification'),
+      { ai, aiCalls: 1 },
+    );
+    expect(body).toMatchObject({ ok: false, error: 'needs_more' });
+    expect(rpc).toHaveBeenCalledWith('svc_alert', {
+      p_player_id: 'player-1',
+      p_dilemma: 'd1',
+      p_text: 'me da igual, me quiero morir',
+    });
   });
 
   it('«vacía» en el reintento se archiva igualmente: nunca bloquea', async () => {

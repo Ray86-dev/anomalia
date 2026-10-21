@@ -17,6 +17,14 @@ export const joinRequestSchema = z.strictObject({
   alias: z.string().max(64),
 });
 
+/** Recuperar un alias desde otro móvil: con la clave de rescate, al instante (D-33). */
+export const recoverRequestSchema = z.strictObject({
+  action: z.literal('recover'),
+  classCode: z.string().max(32),
+  alias: z.string().max(64),
+  rescueKey: z.string().max(16).optional(),
+});
+
 /** «Continuar»: desde la posición que el cliente cree tener (si no coincide → `stale`). */
 export const advanceRequestSchema = z.strictObject({
   action: z.literal('advance'),
@@ -43,6 +51,7 @@ export const replyRequestSchema = z.strictObject({
 
 export const partidaRequestSchema = z.discriminatedUnion('action', [
   joinRequestSchema,
+  recoverRequestSchema,
   advanceRequestSchema,
   chooseRequestSchema,
   justifyRequestSchema,
@@ -50,7 +59,8 @@ export const partidaRequestSchema = z.discriminatedUnion('action', [
 ]);
 export type PartidaRequest = z.infer<typeof partidaRequestSchema>;
 export type JoinRequest = z.infer<typeof joinRequestSchema>;
-export type GameRequest = Exclude<PartidaRequest, JoinRequest>;
+export type RecoverRequest = z.infer<typeof recoverRequestSchema>;
+export type GameRequest = Exclude<PartidaRequest, JoinRequest | RecoverRequest>;
 
 // ── Estado de la partida que devuelven las acciones de juego ──
 
@@ -102,10 +112,32 @@ export const joinResponseSchema = z.discriminatedUnion('ok', [
     alias: z.string(),
     classLabel: z.string(),
     resumed: z.boolean(),
+    rescueKey: z.string(),
   }),
   z.strictObject({ ok: z.literal(false), error: z.enum(JOIN_ERRORS) }),
 ]);
 export type JoinResponse = z.infer<typeof joinResponseSchema>;
+
+/**
+ * - `pending`: sin clave, queda una solicitud que debe aprobar el docente.
+ * - `wrong_key`: clave incorrecta; también queda la solicitud para el docente.
+ */
+export const RECOVER_ERRORS = [
+  'invalid_code',
+  'unknown_alias',
+  'expelled',
+  'already_in_other_class',
+  'is_teacher',
+  'pending',
+  'wrong_key',
+] as const;
+export type RecoverError = (typeof RECOVER_ERRORS)[number];
+
+export const recoverResponseSchema = z.discriminatedUnion('ok', [
+  z.strictObject({ ok: z.literal(true), alias: z.string(), classLabel: z.string() }),
+  z.strictObject({ ok: z.literal(false), error: z.enum(RECOVER_ERRORS) }),
+]);
+export type RecoverResponse = z.infer<typeof recoverResponseSchema>;
 
 /**
  * - `stale`: la partida no está donde el cliente creía (doble toque, otra pestaña…):
@@ -159,8 +191,14 @@ export const svcJoinResultSchema = z.discriminatedUnion('status', [
     alias: z.string(),
     classLabel: z.string(),
     resumed: z.boolean(),
+    rescueKey: z.string(),
   }),
   z.object({ status: z.enum(JOIN_ERRORS) }),
+]);
+
+export const svcRecoverResultSchema = z.discriminatedUnion('status', [
+  z.object({ status: z.literal('ok'), alias: z.string(), classLabel: z.string() }),
+  z.object({ status: z.enum(RECOVER_ERRORS) }),
 ]);
 
 export const svcStateSchema = z.object({

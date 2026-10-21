@@ -25,6 +25,7 @@ import {
 import {
   partidaRequestSchema,
   svcJoinResultSchema,
+  svcRecoverResultSchema,
   svcStateSchema,
   svcWriteResultSchema,
   type GameError,
@@ -32,6 +33,8 @@ import {
   type GameResponse,
   type JoinRequest,
   type JoinResponse,
+  type RecoverRequest,
+  type RecoverResponse,
   type SvcState,
 } from '../../../shared/schemas/partida.ts';
 import type { DialogueContext } from '../_shared/ai/prompts.ts';
@@ -39,12 +42,14 @@ import { bearerToken, corsHeaders, isForbiddenOrigin, jsonResponse } from '../_s
 
 export type SvcFunction =
   | 'svc_join'
+  | 'svc_recover'
   | 'svc_load'
   | 'svc_advance'
   | 'svc_choose'
   | 'svc_justify'
   | 'svc_reply'
-  | 'svc_ai_take';
+  | 'svc_ai_take'
+  | 'svc_alert';
 
 /** Diálogo con la IA; cada llamada devuelve `null` si falla y entonces se usa el respaldo. */
 export type AiDialogue = {
@@ -95,7 +100,36 @@ async function join(uid: string, request: JoinRequest, deps: PartidaDeps): Promi
     await deps.rpc('svc_join', { p_auth_uid: uid, p_code: code, p_alias: alias }),
   );
   return result.status === 'ok'
-    ? { ok: true, alias: result.alias, classLabel: result.classLabel, resumed: result.resumed }
+    ? {
+        ok: true,
+        alias: result.alias,
+        classLabel: result.classLabel,
+        resumed: result.resumed,
+        rescueKey: result.rescueKey,
+      }
+    : { ok: false, error: result.status };
+}
+
+// ── recover ──
+
+async function recover(
+  uid: string,
+  request: RecoverRequest,
+  deps: PartidaDeps,
+): Promise<RecoverResponse> {
+  const code = request.classCode.replace(/[\s-]/g, '').toUpperCase();
+  if (!CLASS_CODE.test(code)) return { ok: false, error: 'invalid_code' };
+  const key = request.rescueKey?.trim();
+  const result = svcRecoverResultSchema.parse(
+    await deps.rpc('svc_recover', {
+      p_auth_uid: uid,
+      p_code: code,
+      p_alias: cleanAlias(request.alias),
+      p_key: key === undefined || key === '' ? null : key,
+    }),
+  );
+  return result.status === 'ok'
+    ? { ok: true, alias: result.alias, classLabel: result.classLabel }
     : { ok: false, error: result.status };
 }
 
@@ -219,7 +253,17 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
       const output = calls === null ? null : await deps.ai.objection(context, text);
       if (output !== null) {
         // «Vacía»: un único reintento para que el alumno añada razones; el segundo envío se archiva.
-        if (output.calidad === 'vacia' && calls === 1) return failure('needs_more', state);
+        if (output.calidad === 'vacia' && calls === 1) {
+          // La alerta no se pierde aunque el alumno reescriba el texto después.
+          if (alert || output.alerta) {
+            await deps.rpc('svc_alert', {
+              p_player_id: playerId,
+              p_dilemma: dilemma.id,
+              p_text: text,
+            });
+          }
+          return failure('needs_more', state);
+        }
         objection = output.objecion;
         source = 'ia';
         quality = output.calidad;
@@ -285,7 +329,11 @@ export async function handlePartida(request: Request, deps: PartidaDeps): Promis
 
     const data = parsed.data;
     const result =
-      data.action === 'join' ? await join(uid, data, deps) : await play(uid, data, deps);
+      data.action === 'join'
+        ? await join(uid, data, deps)
+        : data.action === 'recover'
+          ? await recover(uid, data, deps)
+          : await play(uid, data, deps);
     return jsonResponse(200, result, cors);
   } catch (error) {
     console.error('partida: unexpected error', error instanceof Error ? error.message : error);

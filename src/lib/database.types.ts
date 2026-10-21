@@ -23,6 +23,7 @@ export type Database = {
           created_at: string
           id: string
           seen_at: string | null
+          text: string | null
         }
         Insert: {
           answer_id: string
@@ -30,6 +31,7 @@ export type Database = {
           created_at?: string
           id?: string
           seen_at?: string | null
+          text?: string | null
         }
         Update: {
           answer_id?: string
@@ -37,6 +39,7 @@ export type Database = {
           created_at?: string
           id?: string
           seen_at?: string | null
+          text?: string | null
         }
         Relationships: [
           {
@@ -123,6 +126,35 @@ export type Database = {
           },
         ]
       }
+      class_snapshots: {
+        Row: {
+          class_id: string
+          results: Json
+          results_answers: number
+          updated_at: string
+        }
+        Insert: {
+          class_id: string
+          results?: Json
+          results_answers?: number
+          updated_at?: string
+        }
+        Update: {
+          class_id?: string
+          results?: Json
+          results_answers?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_snapshots_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: true
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classes: {
         Row: {
           ai_budget: number
@@ -181,6 +213,7 @@ export type Database = {
           created_at: string
           id: string
           last_seen_at: string | null
+          rescue_key: string
           status: string
         }
         Insert: {
@@ -190,6 +223,7 @@ export type Database = {
           created_at?: string
           id?: string
           last_seen_at?: string | null
+          rescue_key?: string
           status?: string
         }
         Update: {
@@ -199,6 +233,7 @@ export type Database = {
           created_at?: string
           id?: string
           last_seen_at?: string | null
+          rescue_key?: string
           status?: string
         }
         Relationships: [
@@ -328,6 +363,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      class_console: { Args: { p_class_id: string }; Returns: Json }
       class_roster: {
         Args: { p_class_id: string }
         Returns: {
@@ -340,6 +376,10 @@ export type Database = {
           status: string
         }[]
       }
+      class_snapshot: {
+        Args: { p_class_id: string; p_force?: boolean }
+        Returns: Json
+      }
       create_class: {
         Args: {
           p_chapter_1: string[]
@@ -349,8 +389,14 @@ export type Database = {
         }
         Returns: Json
       }
+      delete_class: { Args: { p_class_id: string }; Returns: undefined }
+      my_recovery: { Args: never; Returns: Json }
       my_state: { Args: never; Returns: Json }
       ping: { Args: never; Returns: string }
+      resolve_recovery: {
+        Args: { p_approve: boolean; p_request_id: string }
+        Returns: Json
+      }
       svc_advance: {
         Args: {
           p_from_dilemma: string
@@ -364,6 +410,10 @@ export type Database = {
       svc_ai_take: {
         Args: { p_dilemma: string; p_max_calls: number; p_player_id: string }
         Returns: number
+      }
+      svc_alert: {
+        Args: { p_dilemma: string; p_player_id: string; p_text: string }
+        Returns: undefined
       }
       svc_choose: {
         Args: {
@@ -397,6 +447,15 @@ export type Database = {
         Returns: Json
       }
       svc_load: { Args: { p_auth_uid: string }; Returns: Json }
+      svc_recover: {
+        Args: {
+          p_alias: string
+          p_auth_uid: string
+          p_code: string
+          p_key: string
+        }
+        Returns: Json
+      }
       svc_reply: {
         Args: {
           p_alert: boolean
@@ -407,6 +466,10 @@ export type Database = {
           p_text: string
         }
         Returns: Json
+      }
+      unlock_chapter: {
+        Args: { p_chapter: number; p_class_id: string }
+        Returns: undefined
       }
     }
     Enums: {
