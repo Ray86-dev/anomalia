@@ -20,9 +20,6 @@
     "aliasAyuda": "De 3 a 16 caracteres: letras, números, «-» o «_». No uses tu nombre real.",
     "unirseBoton": "Entrar en el Archivo",
     "uniendose": "Abriendo el Archivo…",
-    "conectadoTitulo": "Conectado como {alias}",
-    "conectadoClase": "Clase: {clase}",
-    "conectadoEspera": "Tu primer viaje empezará aquí muy pronto.",
     "errores": {
       "invalid_code": "Ese código no corresponde a ninguna clase activa. Revísalo.",
       "alias_taken": "Ese alias ya está en uso en tu clase. Elige otro.",
@@ -33,6 +30,107 @@
       "is_teacher": "Esta sesión pertenece a una cuenta docente.",
       "anonymous_disabled": "El acceso de alumnado no está activado todavía. Avisa a tu docente.",
       "rate_limited": "Demasiados intentos seguidos desde esta red. Espera un minuto y vuelve a probar."
+    }
+  },
+  "juego": {
+    "cronista": "Cronista {alias}",
+    "comenzar": "Comenzar",
+    "comenzarAyuda": "Activa el sonido si puedes. El juego también se entiende sin él.",
+    "siguiente": "Siguiente",
+    "continuar": "Continuar",
+    "reintentar": "Reintentar",
+    "guardando": "Guardando…",
+    "opcion": "Opción {id}",
+    "viaje": {
+      "titulo": "Viaje temporal",
+      "abriendo": "Abriendo la anomalía…",
+      "destino": "{lugar}, {anio}",
+      "llegar": "Llegar"
+    },
+    "prologo": {
+      "viajar": "Viajar a la primera anomalía"
+    },
+    "escena": {
+      "irAlConsejo": "Escuchar al Consejo"
+    },
+    "consejo": {
+      "titulo": "El Consejo",
+      "ayuda": "Desliza para escuchar a los tres consejeros. Ninguno tiene la respuesta correcta.",
+      "tarjeta": "Consejero {n} de {total}",
+      "decidir": "Tomar mi decisión"
+    },
+    "decision": {
+      "titulo": "Tu decisión",
+      "ayuda": "Elige una opción. Después tendrás que explicar por qué.",
+      "confirmarTitulo": "Esto alterará la historia",
+      "confirmarTexto": "Has elegido: {opcion}",
+      "confirmar": "Alterar la historia",
+      "cambiar": "Pensarlo otra vez"
+    },
+    "justificacion": {
+      "titulo": "Justifica tu decisión",
+      "eleccion": "Has elegido: {opcion}",
+      "etiqueta": "Tu argumento",
+      "ayuda": "Entre {min} y {max} palabras.",
+      "contador": "{n} palabras",
+      "enviar": "Archivar mi argumento",
+      "vacio": "Escribe tu argumento antes de archivarlo.",
+      "corto": "Mnemósine no puede archivar esto todavía: añade alguna razón más (mínimo {min} palabras). Si no se te ocurre nada más, pulsa otra vez y se archivará así.",
+      "largo": "Has pasado de {max} palabras. Intenta resumir lo esencial.",
+      "borrador": "Tu borrador se guarda en este móvil mientras escribes."
+    },
+    "objecion": {
+      "titulo": "{nombre} te plantea una objeción",
+      "replicaEtiqueta": "Tu réplica",
+      "ayuda": "Responde a la objeción: puedes darle la razón en algo, matizar o rebatirla ({min}–{max} palabras).",
+      "enviar": "Responder",
+      "cierreTitulo": "{nombre} responde",
+      "volver": "Volver a 2077"
+    },
+    "ondas": {
+      "titulo": "Ondas temporales",
+      "estado": "El mundo en 2077",
+      "desnivel": "Desnivel prometeico",
+      "desnivelAyuda": "Poder menos responsabilidad: cuanto más alto, más inestable es el futuro.",
+      "sinCambio": "sin cambios",
+      "verArchivo": "Ver lo que ocurrió de verdad"
+    },
+    "mundo": {
+      "poder": "Poder",
+      "responsabilidad": "Responsabilidad",
+      "equidad": "Equidad",
+      "confianza": "Confianza"
+    },
+    "archivo": {
+      "titulo": "Archivo real",
+      "subtitulo": "Lo que ocurrió de verdad",
+      "cerrar": "Cerrar la anomalía"
+    },
+    "espera": {
+      "titulo": "Capítulo I completado",
+      "texto": "Has cerrado las anomalías de este capítulo. Cuando tu docente abra el siguiente, podrás continuar.",
+      "comprobar": "Comprobar si ya puedo seguir",
+      "bloqueado": "El capítulo II todavía está cerrado."
+    },
+    "epilogo": {
+      "titulo": "Fin de esta versión",
+      "texto": "Has llegado al final de lo que se puede jugar por ahora. El epílogo, la reflexión final y tu expediente llegarán en próximas versiones."
+    },
+    "audio": {
+      "silenciar": "Silenciar el sonido",
+      "activar": "Activar el sonido"
+    },
+    "errores": {
+      "red": "No se ha podido guardar: revisa la conexión y vuelve a intentarlo.",
+      "invalido": "No se ha podido guardar. Revisa lo que has escrito e inténtalo otra vez.",
+      "expulsado": "Tu docente ha retirado este alias. Pídele ayuda."
+    },
+    "creditos": {
+      "abrir": "Créditos de imágenes y música",
+      "titulo": "Créditos",
+      "texto": "Imágenes y música de dominio público o con licencia libre. Más detalles en el archivo de licencias del proyecto.",
+      "licencia": "Ver la licencia",
+      "cerrar": "Cerrar"
     }
   },
   "consola": {

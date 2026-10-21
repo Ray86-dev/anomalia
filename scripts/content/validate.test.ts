@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { validateContent, type RawContent } from './validate.ts';
+import { validateContent, type InkResult, type RawContent } from './validate.ts';
 
 const contentDir = fileURLToPath(new URL('../../content/', import.meta.url));
 const json = (file: string): unknown => JSON.parse(readFileSync(join(contentDir, file), 'utf8'));
@@ -19,11 +19,25 @@ function realContent(): RawContent {
     blocked: json('alias-bloqueados.json'),
     fallbacks: json('respaldos.json'),
     ui: json('interfaz.json'),
+    ambients: json('ambientes.json'),
   };
 }
 
-const readText = (path: string) => (path === 'dilemas/d1-galileo.ink' ? 'Roma.\n-> END' : null);
-const validate = (raw: RawContent, strict = false) => validateContent(raw, { strict, readText });
+const VALID_PROLOGUE = '=== prologo ===\nAño 2077.\n-> END';
+const inkFiles: Record<string, string> = {
+  'prologo.ink': VALID_PROLOGUE,
+  'dilemas/d1-galileo.ink': '=== escena ===\nRoma.\n-> END',
+};
+const readText = (path: string) => inkFiles[path] ?? null;
+
+/** Compilador falso: «falla» si la fuente contiene ROTO (el real se prueba al generar el contenido). */
+const compileInk = (source: string): InkResult =>
+  source.includes('ROTO')
+    ? { json: null, errors: ['error de sintaxis'], warnings: [] }
+    : { json: '{"inkVersion":21}', errors: [], warnings: [] };
+
+const validate = (raw: RawContent, strict = false) =>
+  validateContent(raw, { strict, readText, compileInk, assetExists: () => true });
 
 type Mutable = Record<string, unknown> & { opciones: Record<string, unknown>[] };
 const d1 = (raw: RawContent) => raw.dilemmas[0]?.data as Mutable;
@@ -58,13 +72,25 @@ describe('validateContent', () => {
     const raw = realContent();
     const endings = raw.endings as Record<string, unknown>[];
     const reordered = [...endings.slice(-1), ...endings.slice(0, -1)];
-    expect(validate({ ...raw, endings: reordered }).errors.join('\n')).toMatch(/caso por defecto|condicion: null/);
+    expect(validate({ ...raw, endings: reordered }).errors.join('\n')).toMatch(
+      /caso por defecto|condicion: null/,
+    );
   });
 
   it('rechaza un archivo Ink inexistente', () => {
     const raw = realContent();
     d1(raw).escena = { ink: 'dilemas/no-existe.ink' };
     expect(validate(raw).errors.join('\n')).toMatch(/no existe content\/dilemas\/no-existe\.ink/);
+  });
+
+  it('compila el prólogo y las escenas, e informa de los errores de Ink', () => {
+    expect(Object.keys(validate(realContent()).inks).sort()).toEqual(['d1', 'prologo']);
+    inkFiles['prologo.ink'] = 'ROTO';
+    try {
+      expect(validate(realContent()).errors.join('\n')).toMatch(/prologo\.ink: error de sintaxis/);
+    } finally {
+      inkFiles['prologo.ink'] = VALID_PROLOGUE;
+    }
   });
 
   it('rechaza términos bloqueados que al normalizarse quedarían demasiado cortos', () => {

@@ -2,20 +2,32 @@
   "d1": {
     "A": {
       "kaltz": {
-        "objecion": { "normal": "TODO(contenido): objeción preescrita de Inés Kaltz a la opción A (M1)." },
-        "cierre": { "normal": "TODO(contenido): cierre preescrito de Inés Kaltz (M1)." }
+        "objecion": {
+          "normal": "Has elegido que Galileo diga en público lo contrario de lo que sabe. Entiendo que quieras salvarle, pero piénsalo: si todos los científicos mintieran cuando les amenazan, ¿podríamos fiarnos de lo que dicen? ¿Hay alguna verdad que no debería negarse nunca, pase lo que pase?"
+        },
+        "cierre": {
+          "normal": "Sigo pensando que la verdad no se negocia, pero reconozco que proteger una vida también es un deber. Ese choque entre dos deberes es justo lo que el Archivo necesitaba guardar."
+        }
       }
     },
     "B": {
       "novak": {
-        "objecion": { "normal": "TODO(contenido): objeción preescrita de Dex Novak a la opción B (M1)." },
-        "cierre": { "normal": "TODO(contenido): cierre preescrito de Dex Novak (M1)." }
+        "objecion": {
+          "normal": "Admiro la valentía, pero hagamos cuentas: si Galileo se mantiene firme y lo pierde todo, ¿quién terminará sus investigaciones? Un mártir inspira, pero no hace experimentos. ¿Seguro que un gesto heroico vale más que años de descubrimientos?"
+        },
+        "cierre": {
+          "normal": "Sigo creyendo que la ciencia necesita investigadores vivos más que héroes. Pero me has hecho ver que, sin confianza en la verdad, los descubrimientos tampoco llegan muy lejos. Archivado."
+        }
       }
     },
     "C": {
       "jonas": {
-        "objecion": { "normal": "TODO(contenido): objeción preescrita de Hana Jonás a la opción C (M1)." },
-        "cierre": { "normal": "TODO(contenido): cierre preescrito de Hana Jonás (M1)." }
+        "objecion": {
+          "normal": "Difundir los escritos en secreto parece una buena salida, pero ¿has pensado en quién corre el riesgo? Copistas, mensajeros, el propio Galileo si lo descubren. Cuando no sabemos cómo acabará algo y el daño no tiene vuelta atrás, ¿no deberíamos ser más prudentes?"
+        },
+        "cierre": {
+          "normal": "No me has convencido del todo, y está bien: la prudencia no es quedarse quieto, sino pensar en todas las personas afectadas. Has puesto razones sobre la mesa; el Archivo las guarda."
+        }
       }
     }
   }

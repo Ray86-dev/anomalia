@@ -1,0 +1,22 @@
+{
+  "barroco": { "paleta": ["#1a120b", "#5c3d22", "#e3c08a"], "capas": [] },
+  "artdeco": { "paleta": ["#0f1418", "#2f4a4f", "#d4af37"], "capas": [] },
+  "foto50": { "paleta": ["#121212", "#4a4a44", "#e8e2d0"], "capas": [] },
+  "clinico": { "paleta": ["#0a1014", "#1d3b48", "#9be7ff"], "capas": [] },
+  "2077": {
+    "paleta": ["#05070d", "#0d2a3a", "#7fe0d0"],
+    "capas": [
+      {
+        "src": "img/2077/tng-andromeda.webp",
+        "credito": "Foto: Gianni0088 (Wikimedia Commons), CC BY 4.0. Recortada.",
+        "licenciaUrl": "https://creativecommons.org/licenses/by/4.0/deed.es",
+        "pie": { "normal": "El Telescopio Nazionale Galileo, en La Palma, bajo la galaxia de Andrómeda." },
+        "foco": "50% 50%"
+      }
+    ],
+    "musica": {
+      "src": "audio/2077/outer-space-loop.mp3",
+      "credito": "Música: «Outer Space Loop», de wipics (OpenGameArt), CC0."
+    }
+  }
+}

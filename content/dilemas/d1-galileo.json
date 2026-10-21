@@ -6,13 +6,28 @@
   "lugar": "Roma",
   "titulo": { "normal": "Galileo ante la Inquisición" },
   "tema": { "normal": "Autoridad frente a evidencia. ¿Qué cuenta como conocimiento? Ciencia y creencia." },
-  "rolCronista": { "normal": "Joven asistente de Galileo la noche antes de la sentencia." },
+  "rolCronista": { "normal": "Eres el joven ayudante de Galileo la noche antes de la sentencia." },
   "estetica": "barroco",
   "escena": { "ink": "dilemas/d1-galileo.ink" },
   "consejeros": [
-    { "id": "kaltz", "argumento": { "normal": "TODO(contenido): postura de Inés Kaltz ante el dilema (M1)." } },
-    { "id": "novak", "argumento": { "normal": "TODO(contenido): postura de Dex Novak ante el dilema (M1)." } },
-    { "id": "jonas", "argumento": { "normal": "TODO(contenido): postura de Hana Jonás ante el dilema (M1)." } }
+    {
+      "id": "kaltz",
+      "argumento": {
+        "normal": "Hay deberes que no dependen de lo que pase después. Decir en público lo contrario de lo que sabes que es verdad es mentir, aunque sea para salvarte. Pero proteger una vida también es un deber. Antes de decidir, pregúntate qué regla estarías dispuesto a que siguiera todo el mundo."
+      }
+    },
+    {
+      "id": "novak",
+      "argumento": {
+        "normal": "La ciencia no avanza con mártires: avanza con gente viva que sigue investigando. Si Galileo lo pierde todo, se pierde también lo que aún podría descubrir. Lo importante es que el conocimiento siga circulando, por el camino que sea. Frenarlo es el verdadero riesgo."
+      }
+    },
+    {
+      "id": "jonas",
+      "argumento": {
+        "normal": "No sabemos qué pasará después: quién más puede salir perjudicado, qué represalias habrá. Cuando el daño no tiene vuelta atrás, como una vida o la libertad de otras personas, la prudencia es una obligación. Antes de arriesgar, piensa en quién paga el precio."
+      }
+    }
   ],
   "voces": [],
   "opciones": [
@@ -23,8 +38,10 @@
       "rama": null,
       "objetor": "kaltz",
       "ondas": {
-        "titular": { "normal": "TODO(contenido): titular de 2077 tras la opción A (M1)." },
-        "texto": { "normal": "TODO(contenido): cómo cambia 2077 tras la opción A (M1)." }
+        "titular": { "normal": "2077 · La ciencia aprendió a callar a tiempo" },
+        "texto": {
+          "normal": "En esta línea temporal, los científicos aprendieron a ceder en público y a seguir trabajando en privado. El conocimiento avanzó con cuidado, pero mucha gente sospecha que los expertos dicen solo lo que conviene."
+        }
       }
     },
     {
@@ -34,8 +51,10 @@
       "rama": "d1-firme",
       "objetor": "novak",
       "ondas": {
-        "titular": { "normal": "TODO(contenido): titular de 2077 tras la opción B (M1)." },
-        "texto": { "normal": "TODO(contenido): cómo cambia 2077 tras la opción B (M1)." }
+        "titular": { "normal": "2077 · La verdad que no se dejó doblar" },
+        "texto": {
+          "normal": "La firmeza de aquella noche se convirtió en un ejemplo que se enseña en todas las escuelas, también en las de Canarias. La gente confía más en la ciencia… pero el Archivo guarda una pregunta abierta: cuánto le costó a Galileo esa firmeza."
+        }
       }
     },
     {
@@ -45,13 +64,17 @@
       "rama": null,
       "objetor": "jonas",
       "ondas": {
-        "titular": { "normal": "TODO(contenido): titular de 2077 tras la opción C (M1)." },
-        "texto": { "normal": "TODO(contenido): cómo cambia 2077 tras la opción C (M1)." }
+        "titular": { "normal": "2077 · El conocimiento que cruzó fronteras" },
+        "texto": {
+          "normal": "Los escritos viajaron a escondidas y se copiaron lejos de Roma. La técnica avanzó más deprisa y llegó a más gente. Nadie recuerda ya quiénes se arriesgaron para que fuera posible."
+        }
       }
     }
   ],
   "justificacion": {
-    "pregunta": { "normal": "TODO(contenido): pregunta guiada específica del dilema (M1)." },
+    "pregunta": {
+      "normal": "¿Por qué has elegido esta opción? Explica qué has puesto por delante (la verdad, la vida de Galileo, el avance del conocimiento…) y por qué ese valor pesa más que los otros."
+    },
     "palabras": [40, 80]
   },
   "replica": { "palabras": [30, 60] },
@@ -62,8 +85,32 @@
     "verificado": false
   },
   "ia": {
-    "contexto": "Roma, 1633, la noche antes de la sentencia de Galileo ante la Inquisición. Tema: autoridad frente a evidencia; qué cuenta como conocimiento; ciencia y creencia. TODO(verificar): añadir el motivo del proceso."
+    "contexto": "Roma, 1633, la noche antes de la sentencia de Galileo ante la Inquisición. Galileo ha defendido que la Tierra se mueve alrededor del Sol (TODO(verificar)). Tema: autoridad frente a evidencia; qué cuenta como conocimiento; ciencia y creencia. El alumno es su joven ayudante y le aconseja qué hacer."
   },
-  "sensibilidad": [],
-  "assets": { "capas": [], "stems": [] }
+  "sensibilidad": [
+    "Galileo no tiene frases entre comillas: no se inventan citas de personas reales.",
+    "Las ondas de la opción B no deben describir qué le habría pasado a Galileo: queda como pregunta abierta."
+  ],
+  "assets": {
+    "capas": [
+      {
+        "src": "img/d1/roma-falda.webp",
+        "credito": "Grabado: G. B. Falda, h. 1665 (Rijksmuseum), CC0.",
+        "pie": { "normal": "Roma: la plaza de Santa Maria sopra Minerva en un grabado de G. B. Falda, hacia 1665." },
+        "foco": "55% 40%",
+        "tinte": true
+      }
+    ],
+    "archivo": {
+      "src": "img/d1/galileo-sustermans.webp",
+      "credito": "Justus Sustermans (National Maritime Museum, Greenwich). Dominio público.",
+      "pie": { "normal": "Retrato de Galileo Galilei pintado por Justus Sustermans hacia 1636." }
+    },
+    "musica": {
+      "src": "audio/d1/frescobaldi-toccata.mp3",
+      "credito": "Música: G. Frescobaldi, «Toccata avanti la Messa della Domenica». Grabación: Random pipings (Wikimedia Commons), CC BY 3.0.",
+      "licenciaUrl": "https://creativecommons.org/licenses/by/3.0/deed.es"
+    },
+    "stems": []
+  }
 }

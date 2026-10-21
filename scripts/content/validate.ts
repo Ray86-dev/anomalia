@@ -2,6 +2,7 @@ import { basename } from 'node:path';
 import { z } from 'zod';
 import { canonical, type BlockedTerms } from '../../shared/game/alias.ts';
 import {
+  ambientsSchema,
   blockedTermsSchema,
   classModeSchema,
   conceptSchema,
@@ -11,6 +12,7 @@ import {
   fallbacksSchema,
   rubricSchema,
   uiSchema,
+  type Ambients,
   type ClassMode,
   type Concept,
   type Counselor,
@@ -31,6 +33,7 @@ export type RawContent = {
   readonly blocked: unknown;
   readonly fallbacks: unknown;
   readonly ui: unknown;
+  readonly ambients: unknown;
 };
 
 export type Content = {
@@ -42,7 +45,15 @@ export type Content = {
   readonly modes: readonly ClassMode[];
   readonly blocked: BlockedTerms;
   readonly fallbacks: Fallbacks;
+  readonly ambients: Ambients;
   readonly dilemmas: readonly Dilemma[];
+};
+
+export type InkResult = {
+  /** JSON compilado, o `null` si hay errores. */
+  readonly json: string | null;
+  readonly errors: readonly string[];
+  readonly warnings: readonly string[];
 };
 
 export type ValidationOptions = {
@@ -50,12 +61,22 @@ export type ValidationOptions = {
   readonly strict: boolean;
   /** Lee un archivo relativo a `content/`; `null` si no existe. */
   readonly readText: (relativePath: string) => string | null;
+  /** ¿Existe el archivo en public/assets/? */
+  readonly assetExists: (src: string) => boolean;
+  /** Compila una fuente Ink y comprueba que existen los nudos indicados. */
+  readonly compileInk: (source: string, requiredKnots: readonly string[]) => InkResult;
 };
+
+/** Historias Ink del juego: id → archivo y nudos que debe tener. */
+export const PROLOGUE_INK = { id: 'prologo', path: 'prologo.ink', knots: ['prologo'] } as const;
+export const SCENE_KNOTS = ['escena'] as const;
 
 export type ValidationResult = {
   readonly errors: readonly string[];
   readonly warnings: readonly string[];
   readonly content: Content | null;
+  /** JSON compilado de cada historia Ink, por id (`prologo`, `d1`, `d1-facil`…). */
+  readonly inks: Readonly<Record<string, string>>;
 };
 
 function formatPath(path: readonly PropertyKey[]): string {
@@ -92,7 +113,21 @@ function duplicates(ids: readonly string[]): string[] {
 export function validateContent(raw: RawContent, options: ValidationOptions): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
+  const inks: Record<string, string> = {};
   const notice = (message: string) => (options.strict ? errors : warnings).push(message);
+
+  function checkInk(id: string, path: string, knots: readonly string[], owner: string): void {
+    const source = options.readText(path);
+    if (source === null) {
+      errors.push(`${owner}: no existe content/${path}`);
+      return;
+    }
+    if (source.includes('TODO(')) notice(`${path}: contiene marcas TODO`);
+    const result = options.compileInk(source, knots);
+    for (const error of result.errors) errors.push(`${path}: ${error}`);
+    for (const warning of result.warnings) notice(`${path}: ${warning}`);
+    if (result.json !== null) inks[id] = result.json;
+  }
 
   function parse<T>(schema: z.ZodType<T>, data: unknown, file: string): T | null {
     const result = schema.safeParse(data);
@@ -111,6 +146,7 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   const modes = parse(z.array(classModeSchema), raw.modes, 'modos.json');
   const blocked = parse(blockedTermsSchema, raw.blocked, 'alias-bloqueados.json');
   const fallbacks = parse(fallbacksSchema, raw.fallbacks, 'respaldos.json');
+  const ambients = parse(ambientsSchema, raw.ambients, 'ambientes.json');
   const dilemmas = raw.dilemmas.map(({ file, data }) => {
     const dilemma = parse(dilemmaSchema, data, file);
     if (dilemma && !basename(file).startsWith(`${dilemma.id}-`)) {
@@ -118,6 +154,18 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     }
     return dilemma;
   });
+
+  checkInk(PROLOGUE_INK.id, PROLOGUE_INK.path, PROLOGUE_INK.knots, 'prólogo');
+
+  /** Imágenes y pistas declaradas deben existir en public/assets/ (si faltan, el juego usa el fondo procedural). */
+  function checkAssets(owner: string, assets: { src: string }[]): void {
+    for (const { src } of assets) {
+      if (!options.assetExists(src)) notice(`${owner}: falta public/assets/${src}`);
+    }
+  }
+  for (const [aesthetic, ambient] of Object.entries(ambients ?? {})) {
+    checkAssets(`ambientes.json › ${aesthetic}`, [...ambient.capas, ...(ambient.musica ? [ambient.musica] : [])]);
+  }
 
   // ── Identificadores únicos ──
   const uniqueness: [string, readonly { id: string }[] | null][] = [
@@ -155,16 +203,15 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
         }
       }
     }
-    for (const ink of [d.escena.ink, d.escena.inkFacil]) {
-      if (ink === undefined) continue;
-      const text = options.readText(ink);
-      if (text === null) {
-        errors.push(`${file} › escena: no existe content/${ink}`);
-      } else if (text.includes('TODO(')) {
-        notice(`${ink}: contiene marcas TODO`);
-      }
+    checkInk(d.id, d.escena.ink, SCENE_KNOTS, `${file} › escena`);
+    if (d.escena.inkFacil !== undefined) {
+      checkInk(`${d.id}-facil`, d.escena.inkFacil, SCENE_KNOTS, `${file} › escena`);
+    } else if (options.strict) {
+      errors.push(`${file} › escena: falta la escena en lectura fácil («inkFacil»)`);
     }
     if (!d.archivoReal.verificado) notice(`${file} › archivoReal: pendiente de verificar por el docente`);
+    const { capas, archivo, musica } = d.assets;
+    checkAssets(`${file} › assets`, [...capas, ...(archivo ? [archivo] : []), ...(musica ? [musica] : [])]);
   }
 
   if (fallbacks) {
@@ -212,13 +259,13 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   }
 
   const complete =
-    ui && counselors && concepts && endings && rubric && modes && blocked && fallbacks
-      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks }
+    ui && counselors && concepts && endings && rubric && modes && blocked && fallbacks && ambients
+      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks, ambients }
       : null;
   const content =
     errors.length === 0 && complete
       ? { ...complete, dilemmas: [...validDilemmas].sort((a, b) => a.capitulo - b.capitulo || a.orden - b.orden) }
       : null;
 
-  return { errors, warnings, content };
+  return { errors, warnings, content, inks };
 }

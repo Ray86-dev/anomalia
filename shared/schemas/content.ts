@@ -15,6 +15,39 @@ export const textoSchema = z.strictObject({
 });
 
 const worldVar = z.enum(WORLD_VARS);
+const color = z.string().regex(/^#[0-9a-fA-F]{6}$/);
+
+/** Estéticas por época (§10.1). */
+export const AESTHETICS = ['barroco', 'artdeco', 'foto50', 'clinico', '2077'] as const;
+
+/** Imagen de public/assets/ con su crédito (licencias en public/assets/LICENSES.md). */
+export const imageSchema = z.strictObject({
+  src: z.string().regex(/^[a-z0-9/_.-]+\.(jpg|jpeg|png|webp)$/, 'ruta relativa a public/assets/'),
+  credito: z.string().min(1),
+  licenciaUrl: z.url().optional(),
+  pie: textoSchema.optional(),
+  /** Punto de interés para recortar en vertical, p. ej. «50% 40%». */
+  foco: z
+    .string()
+    .regex(/^\d{1,3}% \d{1,3}%$/)
+    .optional(),
+  /** Teñir con la paleta de la época (grabados claros: el papel pasa a tono oscuro y el texto se lee). */
+  tinte: z.boolean().optional(),
+});
+
+export const trackSchema = z.strictObject({
+  src: z.string().regex(/^[a-z0-9/_.-]+\.(mp3|m4a|aac)$/, 'MP3/AAC en public/assets/ (iOS)'),
+  credito: z.string().min(1),
+  licenciaUrl: z.url().optional(),
+});
+
+/** Ambiente de una época: paleta (fondo, medio, acento), capas de fondo y música. */
+export const ambientSchema = z.strictObject({
+  paleta: z.tuple([color, color, color]),
+  capas: z.array(imageSchema),
+  musica: trackSchema.optional(),
+});
+export const ambientsSchema = z.record(z.enum(AESTHETICS), ambientSchema);
 const wordRange = z
   .tuple([z.number().int().positive(), z.number().int().positive()])
   .refine(([min, max]) => min <= max, 'el mínimo no puede superar al máximo');
@@ -40,7 +73,7 @@ export const dilemmaSchema = z
     titulo: textoSchema,
     tema: textoSchema,
     rolCronista: textoSchema,
-    estetica: z.enum(['barroco', 'artdeco', 'foto50', 'clinico', '2077']),
+    estetica: z.enum(AESTHETICS),
     escena: z.strictObject({ ink: z.string().min(1), inkFacil: z.string().min(1).optional() }),
     consejeros: z
       .array(z.strictObject({ id, argumento: textoSchema }))
@@ -56,9 +89,11 @@ export const dilemmaSchema = z
     archivoReal: z.strictObject({ texto: textoSchema, verificado: z.boolean() }),
     ia: z.strictObject({ contexto: z.string().min(1) }),
     sensibilidad: z.array(z.string()),
+    /** Si faltan capas o música, se usan las del ambiente de la época. */
     assets: z.strictObject({
-      capas: z.array(z.string()),
-      musica: z.string().optional(),
+      capas: z.array(imageSchema),
+      archivo: imageSchema.optional(),
+      musica: trackSchema.optional(),
       stems: z.array(z.string()),
     }),
   })
@@ -187,3 +222,8 @@ export type Ending = z.infer<typeof endingSchema>;
 export type Rubric = z.infer<typeof rubricSchema>;
 export type ClassMode = z.infer<typeof classModeSchema>;
 export type Fallbacks = z.infer<typeof fallbacksSchema>;
+export type Aesthetic = (typeof AESTHETICS)[number];
+export type ContentImage = z.infer<typeof imageSchema>;
+export type Track = z.infer<typeof trackSchema>;
+export type Ambient = z.infer<typeof ambientSchema>;
+export type Ambients = z.infer<typeof ambientsSchema>;

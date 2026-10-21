@@ -5,14 +5,16 @@
  *   npm run content            avisos para lo pendiente (TODO, sin verificar)
  *   npm run content:strict     los avisos son errores y la lectura fácil es obligatoria
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { compileInk } from './content/ink.ts';
 import { validateContent, type Content, type RawContent } from './content/validate.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const contentDir = join(root, 'content');
 const outFile = join(root, 'shared', 'generated', 'content.ts');
+const inkDir = join(root, 'shared', 'generated', 'ink');
 const strict = process.argv.includes('--strict');
 
 const parseErrors: string[] = [];
@@ -45,9 +47,16 @@ const raw: RawContent = {
   blocked: readJson('alias-bloqueados.json'),
   fallbacks: readJson('respaldos.json'),
   ui: readJson('interfaz.json'),
+  ambients: readJson('ambientes.json'),
 };
 
-const { errors, warnings, content } = validateContent(raw, { strict, readText });
+const assetExists = (src: string) => existsSync(join(root, 'public', 'assets', src));
+const { errors, warnings, content, inks } = validateContent(raw, {
+  strict,
+  readText,
+  compileInk,
+  assetExists,
+});
 const allErrors = [...parseErrors, ...errors];
 
 for (const warning of warnings) console.warn(`  aviso  ${warning}`);
@@ -63,6 +72,7 @@ function emit(c: Content): string {
   return `// Generado por scripts/build-content.ts a partir de content/. NO EDITAR A MANO.
 import type { BlockedTerms } from '../game/alias.ts';
 import type {
+  Ambients,
   ClassMode,
   Concept,
   Counselor,
@@ -89,9 +99,17 @@ export const blockedTerms: BlockedTerms = ${json(c.blocked)};
 
 export const fallbacks: Fallbacks = ${json(c.fallbacks)};
 
+export const ambients: Ambients = ${json(c.ambients)};
+
 export const dilemmas: readonly Dilemma[] = ${json(c.dilemmas)};
 `;
 }
+
+// Historias Ink compiladas: una por archivo, para cargarlas bajo demanda en el navegador.
+rmSync(inkDir, { recursive: true, force: true });
+mkdirSync(inkDir, { recursive: true });
+for (const [id, json] of Object.entries(inks))
+  writeFileSync(join(inkDir, `${id}.json`), json, 'utf8');
 
 const output = emit(content);
 const previous = existsSync(outFile) ? readFileSync(outFile, 'utf8') : null;
@@ -102,6 +120,7 @@ if (output !== previous) {
 
 console.log(
   `✔ Contenido válido: ${content.dilemmas.length} dilema(s), ${content.counselors.length} consejeros, ` +
-    `${content.concepts.length} conceptos, ${content.endings.length} finales` +
+    `${content.concepts.length} conceptos, ${content.endings.length} finales, ` +
+    `${Object.keys(inks).length} historias Ink` +
     (warnings.length > 0 ? ` · ${warnings.length} aviso(s) pendientes` : ''),
 );
