@@ -58,9 +58,37 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
   - la migración `core` se aplicó por MCP y se registró como `20261021191252`, y el archivo local lleva esa misma versión;
   - la CLI está vinculada y `db push` y `migration list` funcionan sin la contraseña de la base de datos.
 
-### Pendientes (no bloquean M0)
+## 2026-10-21 · M1 (vertical slice de D1)
+
+### Tomadas por el docente
+- **D-18 · Ilustraciones y música (§15): dominio público y bancos con licencia libre.**
+  - Se aceptan CC0, CC BY y dominio público; nada NC ni ND.
+  - Cada recurso queda documentado en `public/assets/LICENSES.md`.
+  - El juego tiene un panel de créditos (botón «i») con enlace a cada licencia, porque CC BY exige una atribución clara.
+- **D-19 · Objetores de D1:** A → Inés Kaltz, B → Dex Novak, C → Hana Jonás. El docente dio «todo OK».
+
+### Propuestas técnicas
+- **D-20 · Fases y acciones.** La partida avanza por las fases de `shared/game/phases.ts`. `partida` acepta cuatro acciones:
+  - `advance` («Continuar»);
+  - `choose` (decisión), que aplica los deltas **en el servidor**;
+  - `justify`, que guarda la justificación y la objeción de respaldo hasta el M2;
+  - `reply`, que guarda la réplica y el cierre.
+
+  Si la partida no está donde el cliente cree (doble toque, otra pestaña…), el servidor responde `stale` con el estado real y el cliente lo adopta.
+- **D-21 · Longitud de los textos sin bloqueo.** El contador de palabras avisa si el texto es corto o largo, pero un segundo envío lo archiva igualmente, en coherencia con «nunca bloquea definitivamente» (§7.2). El servidor solo rechaza los textos vacíos y los que superan 1200 o 900 caracteres.
+- **D-22 · Capítulos.** Al acabar el capítulo I, el alumno espera si el docente ha configurado un capítulo II y aún no lo ha abierto. En modo de una sesión pasa directamente al epílogo. La pantalla de espera consulta cada 30 s.
+- **D-23 · Ambientes por época** (`content/ambientes.json`): paleta, capas de fondo y música de cada estética. Un dilema puede sustituir capas y música con sus propios `assets`.
+  - Las fases del bucle anteriores a las ondas usan la época del dilema.
+  - El prólogo, las ondas, el Archivo real y la espera usan el 2077.
+- **D-24 · Carga diferida.** Pixi, Ink, GSAP y Howler se cargan bajo demanda.
+  - **Ink:** se compila en el build y cada historia es un JSON aparte.
+  - **Pixi:** usa `pixi.js/unsafe-eval` para respetar nuestra CSP, y si no hay WebGL se queda el degradado CSS.
+  - **Música:** se reproduce en streaming (`html5`), con fundidos, y el silencio se recuerda en el móvil.
+- **D-25 · Grabados claros.** Se tiñen con el tono medio de la paleta para que el texto blanco tenga contraste suficiente (`tinte: true`).
+
+### Pendientes (no bloquean M1)
 - Proveedor y modelo de IA (M2).
 - «Clave de rescate» para recuperar la partida sin aprobación manual (M3). Motivo: iOS borra los datos del sitio tras 7 días sin visitarlo.
 - Detalle del modelo de snapshots del Centro (M3).
-- Mapeo de la rúbrica con el currículo, título definitivo, origen de ilustraciones y música, revisión de los textos históricos (§15).
+- Mapeo de la rúbrica con el currículo, título definitivo y revisión de los textos históricos (§15). Las marcas `TODO(verificar)` de D1 están en `content/dilemas/d1-galileo.ink` y en el contexto para la IA.
 - Consulta al DPD de la Consejería sobre el uso de una IA externa y sobre las alertas de malestar (datos sensibles de menores, art. 9 RGPD).

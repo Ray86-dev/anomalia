@@ -51,7 +51,14 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 
 ## Arquitectura (resumen)
 
-- **Contenido:** `content/` (JSON + Ink) → `npm run content` (`scripts/build-content.ts`) valida con zod y genera `shared/generated/content.ts`. Ese archivo no se versiona ni se edita a mano.
+- **Contenido:** `content/` (JSON + Ink) → `npm run content` (`scripts/build-content.ts`) valida con zod, compila Ink con `inkjs/full` y genera `shared/generated/` (`content.ts` y `ink/<id>.json`). Esos archivos no se versionan ni se editan a mano.
+  - Nudos Ink obligatorios: `prologo` en `content/prologo.ink` y `escena` en cada dilema.
+  - Etiquetas Ink: `# titulo` y `# pregunta`.
+- **Recursos:** imágenes y música en `public/assets/`, siempre con su entrada en `public/assets/LICENSES.md` y `credito` (más `licenciaUrl` si es CC BY) en el JSON que las declara.
+  - Solo CC0, CC BY o dominio público.
+  - Imágenes en WebP de unos 1050×1400 (recorte vertical); música en MP3 de unos 128 kbps.
+- **Juego del alumno** (`src/routes/alumno/game/`): una pantalla por fase. El servidor es la autoridad: el cliente adopta siempre el estado que devuelve `partida`.
+  - Motor en `src/engine/`: Ink, Pixi, Howler y GSAP, todo cargado bajo demanda.
 - **`shared/`:** TS puro, sin DOM ni APIs de Node o Deno. Lo importan la app (alias `@shared`) y las Edge Functions (rutas relativas).
   - Los imports relativos llevan extensión `.ts`.
   - Solo puede depender de `zod`.
