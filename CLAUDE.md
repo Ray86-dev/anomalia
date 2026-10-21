@@ -43,7 +43,9 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 - **No desplegar en horario de clase.** Un despliegue borra los chunks que los móviles tienen cargados.
 - **Migraciones:**
   - versionadas en `supabase/migrations/AAAAMMDDHHMMSS_nombre.sql`;
-  - nunca se edita una migración ya aplicada: se crea otra.
+  - nunca se edita una migración ya aplicada: se crea otra;
+  - las tablas y funciones nuevas nacen **sin permisos** para `anon` y `authenticated` (D-15): concede en la migración solo lo necesario y activa RLS en cada tabla;
+  - toda función `security definer` lleva `set search_path = ''` y `revoke execute … from public, anon, authenticated` antes de su `grant`.
 - **Commits** en inglés con prefijo convencional (`feat:`, `fix:`, `chore:`…).
 
 ## Arquitectura (resumen)

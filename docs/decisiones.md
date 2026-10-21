@@ -43,7 +43,11 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
   - una sesión: D1, D3 y D4 en el capítulo I, sin capítulo II.
 
   Al crear la clase se copian en `classes.chapter_1` y `classes.chapter_2`.
-- **D-14 · ESLint 9 en lugar de 10:** `eslint-plugin-jsx-a11y`, clave para la accesibilidad, todavía no admite ESLint 10. TypeScript se fija en 6.0.x porque typescript-eslint aún no admite la 7.
+- **D-14 · Versiones de herramientas:**
+  - **TypeScript** se fija en 6.0.x porque typescript-eslint todavía no admite la 7.
+  - **ESLint 10** se usa con un `overrides` de npm para `eslint-plugin-jsx-a11y`, que es clave para la accesibilidad. El plugin solo declara compatibilidad hasta ESLint 9, pero no usa ninguna API retirada en la 10. La alternativa, ESLint 9, ya no tiene soporte.
+- **D-15 · Permisos seguros por defecto en la base de datos:** las tablas y funciones nuevas de `public` no conceden nada a `anon` ni a `authenticated` (`alter default privileges`). Cada migración debe conceder los permisos de forma explícita.
+- **D-16 · Bundle:** React, Supabase y zod van en chunks propios. Así cachean entre despliegues y la app propiamente dicha pesa unos 15 KB. El build apunta a iOS 15 o superior.
 
 ### Pendientes (no bloquean M0)
 - Proveedor y modelo de IA (M2).
