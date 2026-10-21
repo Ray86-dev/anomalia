@@ -1,0 +1,25 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Entorno: nunca se sube nada salvo el ejemplo
+.env
+.env.*
+*.local
+!.env.example
+
+# Generado por `npm run content`
+shared/generated/
+
+# Supabase CLI
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
