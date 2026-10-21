@@ -15,6 +15,10 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
   - El docente solo los lee en dos casos: en las alertas y al verificar un código de PDF.
   - El nombre real nunca sale del móvil.
 - **D-04 · Cuentas de docente creadas a mano, sin registro público.** Ser docente equivale a tener fila en `teachers`; se añade con `npm run teacher:add`.
+  - *Nota técnica:* el alta por email no se puede desactivar en Supabase.
+    - `[auth.email] enable_signup = false` apaga todo el proveedor de email, así que el docente tampoco podría iniciar sesión.
+    - Desactivar las altas globales bloquearía el inicio de sesión anónimo del alumnado.
+  - Quien se registre por su cuenta no obtiene ningún permiso: lo que da acceso es la lista blanca, y la confirmación por email sigue activa.
 
 ### Propuestas técnicas aprobadas con el plan de M0
 - **D-05 · Escrituras del alumnado solo a través de la Edge Function `partida`.**
@@ -48,6 +52,11 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
   - **ESLint 10** se usa con un `overrides` de npm para `eslint-plugin-jsx-a11y`, que es clave para la accesibilidad. El plugin solo declara compatibilidad hasta ESLint 9, pero no usa ninguna API retirada en la 10. La alternativa, ESLint 9, ya no tiene soporte.
 - **D-15 · Permisos seguros por defecto en la base de datos:** las tablas y funciones nuevas de `public` no conceden nada a `anon` ni a `authenticated` (`alter default privileges`). Cada migración debe conceder los permisos de forma explícita.
 - **D-16 · Bundle:** React, Supabase y zod van en chunks propios. Así cachean entre despliegues y la app propiamente dicha pesa unos 15 KB. El build apunta a iOS 15 o superior.
+
+- **D-17 · Puesta en marcha de Supabase (21/10/2026):**
+  - se ha pausado «teselas» para poder crear «anomalia» (`kicpndzbcswxchxiejje`, eu-west-1);
+  - la migración `core` se aplicó por MCP y se registró como `20261021191252`, y el archivo local lleva esa misma versión;
+  - la CLI está vinculada y `db push` y `migration list` funcionan sin la contraseña de la base de datos.
 
 ### Pendientes (no bloquean M0)
 - Proveedor y modelo de IA (M2).

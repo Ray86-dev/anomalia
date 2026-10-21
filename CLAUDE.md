@@ -47,6 +47,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
   - las tablas y funciones nuevas nacen **sin permisos** para `anon` y `authenticated` (D-15): concede en la migración solo lo necesario y activa RLS en cada tabla;
   - toda función `security definer` lleva `set search_path = ''` y `revoke execute … from public, anon, authenticated` antes de su `grant`.
 - **Commits** en inglés con prefijo convencional (`feat:`, `fix:`, `chore:`…).
+- **Proyecto de Supabase:** «anomalia» (`kicpndzbcswxchxiejje`, eu-west-1), vinculado a la CLI. El MCP de Supabase sirve para consultas y avisos; las migraciones se aplican con `npm run db:push`.
 
 ## Arquitectura (resumen)
 
@@ -86,5 +87,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 | `npm run test:integration` | Matriz RLS y la Edge Function `partida` contra Supabase |
 | `npm run db:push` | Aplica las migraciones pendientes (lee `.env.local`) |
 | `npm run functions:deploy` | Despliega `partida` sin Docker (`--use-api`) |
+| `npm run db:types` | Regenera `src/lib/database.types.ts` tras cada migración |
+| `npx supabase config push` | Sube la config de Auth de `supabase/config.toml`; **revisa el diff**: los valores locales sustituyen a los remotos |
 | `npm run teacher:add -- correo@dominio` | Añade un usuario de Auth existente a la lista blanca de docentes |
 | `npm run seed:demo` | Recrea la clase simulada PRUEBA con 30 alumnos |

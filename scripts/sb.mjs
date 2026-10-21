@@ -6,10 +6,11 @@ import { existsSync } from 'node:fs';
 
 if (existsSync('.env.local')) process.loadEnvFile('.env.local');
 
+// La CLI del paquete npm `supabase` es un script de Node: se ejecuta sin shell.
+const cli = 'node_modules/supabase/dist/supabase.js';
 const args = process.argv.slice(2);
-const { status } = spawnSync('npx', ['supabase', ...args], {
+const { status } = spawnSync(process.execPath, [cli, ...args], {
   stdio: 'inherit',
-  shell: process.platform === 'win32',
   env: process.env,
 });
 process.exit(status ?? 1);

@@ -8,3 +8,4 @@ supabase/.temp/
 content/
 docs/
 *.md
+src/lib/database.types.ts

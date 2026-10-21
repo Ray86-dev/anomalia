@@ -23,7 +23,8 @@
     "db:push": "node scripts/sb.mjs db push",
     "functions:deploy": "node scripts/sb.mjs functions deploy partida --use-api",
     "teacher:add": "tsx scripts/add-teacher.ts",
-    "seed:demo": "tsx scripts/seed-demo.ts"
+    "seed:demo": "tsx scripts/seed-demo.ts",
+    "db:types": "node scripts/gen-types.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

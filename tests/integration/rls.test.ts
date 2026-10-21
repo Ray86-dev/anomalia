@@ -185,10 +185,13 @@ describe.skipIf(!configured)('RLS y partida (integración)', () => {
         .from('players')
         .insert({ class_id: classA.id, alias: 'Colado', auth_uid: null });
       expect(insert.error).not.toBeNull();
-      const update = await s1.from('runs').update({ poder: 100 }).select('poder');
+      // Filtros que coinciden con todo: Supabase rechaza UPDATE/DELETE sin WHERE y queremos probar la RLS.
+      const update = await s1.from('runs').update({ poder: 100 }).gte('poder', 0).select('poder');
       expect(update.error !== null || update.data.length === 0).toBe(true);
-      const del = await s1.from('players').delete().select('id');
+      const del = await s1.from('players').delete().neq('alias', '').select('id');
       expect(del.error !== null || del.data.length === 0).toBe(true);
+      const own = await s1.from('runs').select('poder');
+      expect(own.data).toEqual([{ poder: 50 }]);
       const answer = await s1
         .from('answers')
         .insert({ player_id: classA.id, dilemma_id: 'd1', choice: 'A' });
@@ -244,7 +247,7 @@ describe.skipIf(!configured)('RLS y partida (integración)', () => {
     });
 
     it('no permite que una cuenta docente se una como alumno', async () => {
-      expect(await join(teacherA, classA.code, 'Profe')).toEqual({
+      expect(await join(teacherA, classA.code, 'Kepler9')).toEqual({
         ok: false,
         error: 'is_teacher',
       });
@@ -300,8 +303,16 @@ describe.skipIf(!configured)('RLS y partida (integración)', () => {
       const seen = await teacherA
         .from('alerts')
         .update({ seen_at: new Date().toISOString() })
+        .eq('class_id', classA.id)
         .select('seen_at');
+      expect(seen.error).toBeNull();
       expect(seen.data?.[0]?.seen_at).toBeTruthy();
+      const foreign = await teacherB
+        .from('alerts')
+        .update({ seen_at: null })
+        .eq('class_id', classA.id)
+        .select('id');
+      expect(foreign.data).toEqual([]);
     });
 
     it('no pueden modificar clases directamente (solo por RPC)', async () => {
