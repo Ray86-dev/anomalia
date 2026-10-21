@@ -1,0 +1,35 @@
+/* Tokens de diseño base (Archivo de Mnemósine). Las estéticas por época llegan en M6. */
+:root {
+  color-scheme: dark;
+
+  /* Color — contraste AA o superior sobre --bg */
+  --bg: #0b0e14;
+  --bg-raised: #141a26;
+  --bg-input: #0f141e;
+  --line: #2b3549;
+  --text: #edf0f6;
+  --text-muted: #a9b3c7;
+  --accent: #7fe0d0;
+  --accent-ink: #052421;
+  --danger: #ff9b8f;
+  --focus: #ffd479;
+
+  /* Tipografía: tamaños en rem para que el ajuste de tamaño de texto escale todo */
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+  --text-base: 1.125rem; /* 18 px: el mínimo del proyecto es 17 px */
+  --text-small: 1.0625rem; /* 17 px: nunca por debajo */
+  --text-h1: 1.75rem;
+  --text-h2: 1.3125rem;
+
+  /* Espaciado y forma */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.75rem;
+  --radius: 0.875rem;
+  --tap: 3rem; /* objetivo táctil mínimo: 48 px */
+  --page-max: 30rem;
+}
