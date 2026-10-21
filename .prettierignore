@@ -1,0 +1,10 @@
+dist/
+coverage/
+node_modules/
+package-lock.json
+shared/generated/
+supabase/.temp/
+# Los edita el docente a mano: sin formato automático
+content/
+docs/
+*.md
