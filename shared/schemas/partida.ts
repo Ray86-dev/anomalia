@@ -78,6 +78,8 @@ export const answerSnapshotSchema = z.object({
   objection: z.string().nullable(),
   reply: z.string().nullable(),
   closing: z.string().nullable(),
+  /** De dónde salió la objeción: IA o respaldo preescrito. */
+  aiSource: z.enum(['ia', 'respaldo']).nullable().default(null),
 });
 export type AnswerSnapshot = z.infer<typeof answerSnapshotSchema>;
 
@@ -110,8 +112,17 @@ export type JoinResponse = z.infer<typeof joinResponseSchema>;
  *   el cliente adopta el estado devuelto.
  * - `locked`: el capítulo II sigue bloqueado.
  * - `invalid`: texto vacío, dilema u opción inexistentes.
+ * - `needs_more`: la IA no encuentra ninguna razón en la justificación; el alumno puede
+ *   reescribirla una vez (el segundo envío se archiva siempre, §7.2).
  */
-export const GAME_ERRORS = ['stale', 'locked', 'invalid', 'not_joined', 'expelled'] as const;
+export const GAME_ERRORS = [
+  'stale',
+  'locked',
+  'invalid',
+  'needs_more',
+  'not_joined',
+  'expelled',
+] as const;
 export type GameError = (typeof GAME_ERRORS)[number];
 
 export const gameResponseSchema = z.discriminatedUnion('ok', [

@@ -20,6 +20,7 @@ function realContent(): RawContent {
     fallbacks: json('respaldos.json'),
     ui: json('interfaz.json'),
     ambients: json('ambientes.json'),
+    alerts: json('alertas.json'),
   };
 }
 

@@ -86,8 +86,34 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
   - **Música:** se reproduce en streaming (`html5`), con fundidos, y el silencio se recuerda en el móvil.
 - **D-25 · Grabados claros.** Se tiñen con el tono medio de la paleta para que el texto blanco tenga contraste suficiente (`tinte: true`).
 
-### Pendientes (no bloquean M1)
-- Proveedor y modelo de IA (M2).
+## 2026-10-21 · M2 (IA)
+
+### Tomadas por el docente
+- **D-26 · Proveedor de IA (§15): DeepSeek, modelo DeepSeek-V4.1-Flash-1017** (en la API, `deepseek-flash`).
+  - Se configura con `AI_PROVIDER=deepseek` y `AI_MODEL=deepseek-flash`; la clave va solo en los secretos de Supabase.
+  - **Aviso de privacidad, comunicado al docente:** la API de DeepSeek trata los datos en China, y varias autoridades europeas han actuado contra DeepSeek (Italia, Berlín, Irlanda).
+  - Antes de usarlo con alumnado real conviene contar con el visto bueno del DPD. Alternativa sin tocar código: el mismo modelo de pesos abiertos servido desde la UE, con `AI_PROVIDER=openai-compatible` y `AI_BASE_URL`.
+
+### Propuestas técnicas
+- **D-27 · La IA va dentro de `partida`, no en una función `ai-dialogo` aparte** (cambio sobre §11.6).
+  - `justify` y `reply` llaman a la IA y escriben el resultado en la misma petición.
+  - Ventajas: un solo viaje por la wifi del aula, la fase se valida en un único sitio y la escritura es atómica.
+  - El módulo de IA vive en `supabase/functions/_shared/ai/` por si hiciera falta separarlo.
+- **D-28 · Adaptador de dos formatos.** Uno compatible con OpenAI (DeepSeek, Mistral, OpenAI, Gemini, OpenRouter…) y otro para Anthropic.
+  - Presets por proveedor, más `AI_BASE_URL`, `AI_EXTRA_BODY` y `AI_TIMEOUT_MS` (máximo 6000).
+  - En DeepSeek se desactiva el modo «thinking», que viene activado por defecto, para no superar los 6 s.
+- **D-29 · Salvaguardas de cada llamada.**
+  - **Entrada:** se quitan emails, teléfonos, URL y usuarios de redes. El texto va delimitado como dato y se neutralizan los signos `<` y `>`.
+  - **Salida:** JSON validado con zod, conceptos filtrados por la lista cerrada, longitud máxima y sin términos de la lista de bloqueo.
+  - **Fallo:** ante cualquier problema (error, tiempo agotado, JSON inválido, respuesta vacía) se usa el respaldo preescrito.
+  - **Registros:** solo métricas (tipo de llamada, éxito, milisegundos, motivo), nunca texto.
+- **D-30 · Presupuesto atómico** (`svc_ai_take`): como mucho 3 llamadas por alumno y dilema (objeción, cierre y un reintento) y nunca por encima de `classes.ai_budget` (400 por defecto).
+- **D-31 · Calidad «vacía».** Si en el primer intento la IA no encuentra ninguna razón, el alumno recibe un aviso suave y puede reescribir; no se guarda nada. El segundo envío se archiva siempre (§7.2).
+- **D-32 · Alertas privadas.** La IA (`alerta`) y una lista local de indicios (`content/alertas.json`) crean una fila en `alerts`, que solo ve el docente.
+  - La lista local funciona aunque la IA falle.
+  - La vista de alertas en `/consola` llega en el M3.
+
+### Pendientes (no bloquean M2)
 - «Clave de rescate» para recuperar la partida sin aprobación manual (M3). Motivo: iOS borra los datos del sitio tras 7 días sin visitarlo.
 - Detalle del modelo de snapshots del Centro (M3).
 - Mapeo de la rúbrica con el currículo, título definitivo y revisión de los textos históricos (§15). Las marcas `TODO(verificar)` de D1 están en `content/dilemas/d1-galileo.ink` y en el contexto para la IA.

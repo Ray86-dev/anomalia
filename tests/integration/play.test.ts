@@ -4,6 +4,7 @@
  */
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { fallbacks } from '../../shared/generated/content.ts';
+import { gameResponseSchema } from '../../shared/schemas/partida.ts';
 import {
   anonymousStudent,
   cleanup,
@@ -69,17 +70,29 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
     expect(again).toMatchObject({ ok: false, error: 'stale', answer: { choice: 'B' } });
   });
 
-  it('la justificación devuelve la objeción del consejero que más se opone (respaldo)', async () => {
-    const result = await partida(student, {
-      action: 'justify',
-      dilemmaId: 'd1',
-      text: 'Creo que la verdad merece defenderse aunque cueste, porque si se niega una vez se puede negar siempre.',
-    });
+  it('la justificación devuelve la objeción del consejero que más se opone (IA o respaldo)', async () => {
+    const started = Date.now();
+    const result = gameResponseSchema.parse(
+      await partida(student, {
+        action: 'justify',
+        dilemmaId: 'd1',
+        text: 'Creo que la verdad merece defenderse aunque cueste, porque si se niega una vez se puede negar siempre.',
+      }),
+    );
     expect(result).toMatchObject({
       ok: true,
       run: { phase: 'objection' },
-      answer: { objector: 'novak', objection: fallbacks.d1?.B?.novak?.objecion.normal },
+      answer: { objector: 'novak' },
     });
+    const answer = result.answer;
+    console.info(`objeción: ${answer?.aiSource ?? '?'} en ${Date.now() - started} ms`);
+    if (answer?.aiSource === 'respaldo') {
+      expect(answer.objection).toBe(fallbacks.d1?.B?.novak?.objecion.normal);
+    } else {
+      expect(answer?.objection?.length).toBeGreaterThan(20);
+    }
+    // §7.2: el juego nunca espera a la IA más de 6 s (más el viaje de red)
+    expect(Date.now() - started).toBeLessThan(9000);
   });
 
   it('la réplica guarda el cierre y pasa a las ondas temporales', async () => {
@@ -88,11 +101,9 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
       dilemmaId: 'd1',
       text: 'Un mártir no hace experimentos, pero sin confianza en la verdad la ciencia tampoco avanza.',
     });
-    expect(result).toMatchObject({
-      ok: true,
-      run: { phase: 'ripples' },
-      answer: { closing: fallbacks.d1?.B?.novak?.cierre.normal },
-    });
+    expect(result).toMatchObject({ ok: true, run: { phase: 'ripples' } });
+    const closing = gameResponseSchema.parse(result).answer?.closing;
+    expect(closing?.length).toBeGreaterThan(5);
   });
 
   it('my_state permite reanudar con la respuesta del dilema en curso', async () => {

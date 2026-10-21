@@ -65,6 +65,11 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 - **Escrituras del alumnado:**
   - nunca escriben directamente en las tablas;
   - todo pasa por la Edge Function `partida`, que valida con zod, calcula con `shared/game` y llama a funciones SQL `svc_*`, ejecutables solo por `service_role`.
+- **IA** (`supabase/functions/_shared/ai/`): `partida` la llama dentro de `justify` y `reply` (D-27).
+  - Presupuesto con `svc_ai_take` y salida validada (`shared/schemas/ia.ts`).
+  - Ante cualquier fallo, devuelve `null` y se usa el respaldo de `content/respaldos.json`.
+  - Nunca registres en logs el texto del alumno ni el del modelo.
+  - Al cambiar los prompts (`prompts.ts`), mantén el texto del alumno solo en el mensaje de usuario, delimitado con `<texto_alumno>`.
 - **RLS:**
   - el alumno puede hacer SELECT de sus filas;
   - el docente (tiene fila en `teachers`) accede a sus clases por RLS y por RPC con comprobación de propiedad;

@@ -1,10 +1,27 @@
 import { describe, expect, it, vi } from 'vitest';
-import { dilemmas, fallbacks } from '../../../shared/generated/content.ts';
+import {
+  alertTerms,
+  concepts,
+  counselors,
+  dilemmas,
+  fallbacks,
+} from '../../../shared/generated/content.ts';
 import type { SvcState } from '../../../shared/schemas/partida.ts';
-import { handlePartida, type PartidaDeps } from './handler.ts';
+import { handlePartida, type AiDialogue, type PartidaDeps } from './handler.ts';
 
 const ORIGIN = 'https://ray86-dev.github.io';
 const UID = '00000000-0000-4000-8000-000000000001';
+
+const content = (
+  blocked = { contiene: ['mierda'], exactas: ['culo'] },
+): PartidaDeps['content'] => ({
+  blockedTerms: blocked,
+  dilemmas,
+  fallbacks,
+  counselors,
+  concepts,
+  alertTerms,
+});
 
 function deps(overrides: Partial<PartidaDeps> = {}): PartidaDeps {
   return {
@@ -12,11 +29,8 @@ function deps(overrides: Partial<PartidaDeps> = {}): PartidaDeps {
     rpc: vi.fn(() =>
       Promise.resolve({ status: 'ok', alias: 'Galileo', classLabel: '4.º ESO B', resumed: false }),
     ),
-    content: {
-      blockedTerms: { contiene: ['mierda'], exactas: ['culo'] },
-      dilemmas: [],
-      fallbacks: {},
-    },
+    content: content(),
+    ai: null,
     allowedOrigins: [ORIGIN],
     ...overrides,
   };
@@ -147,7 +161,7 @@ describe('partida · join', () => {
   });
 });
 
-// ── Acciones de juego (M1) ──
+// ── Acciones de juego ──
 
 type Run = SvcState['run'];
 
@@ -170,28 +184,30 @@ function loaded(run: Partial<Run> = {}, overrides: Partial<SvcState> = {}): SvcS
   };
 }
 
+type GameOptions = {
+  /** Respuesta de svc_ai_take (llamadas del alumno en el dilema, o null si no quedan). */
+  readonly aiCalls?: number | null;
+  readonly ai?: AiDialogue | null;
+};
+
 /** rpc falso: svc_load devuelve `state`; las escrituras devuelven ok con el mismo estado. */
-function gameDeps(state: SvcState | null) {
-  const rpc = vi.fn<PartidaDeps['rpc']>((fn) =>
-    Promise.resolve(fn === 'svc_load' ? state : { status: 'ok', state }),
-  );
-  return {
-    rpc,
-    deps: deps({
-      rpc,
-      content: { blockedTerms: { contiene: [], exactas: [] }, dilemmas, fallbacks },
-    }),
-  };
+function gameDeps(state: SvcState | null, { aiCalls = 1, ai = null }: GameOptions = {}) {
+  const rpc = vi.fn<PartidaDeps['rpc']>((fn) => {
+    if (fn === 'svc_load') return Promise.resolve(state);
+    if (fn === 'svc_ai_take') return Promise.resolve(aiCalls);
+    return Promise.resolve({ status: 'ok', state });
+  });
+  return { rpc, deps: deps({ rpc, content: content({ contiene: [], exactas: [] }), ai }) };
 }
 
-async function play(body: unknown, state: SvcState | null) {
-  const { rpc, deps: d } = gameDeps(state);
+async function play(body: unknown, state: SvcState | null, options?: GameOptions) {
+  const { rpc, deps: d } = gameDeps(state, options);
   const res = await handlePartida(post(body), d);
   return { status: res.status, body: (await res.json()) as Record<string, unknown>, rpc };
 }
 
 const writes = (rpc: ReturnType<typeof gameDeps>['rpc']) =>
-  rpc.mock.calls.filter(([fn]) => fn !== 'svc_load');
+  rpc.mock.calls.filter(([fn]) => fn !== 'svc_load' && fn !== 'svc_ai_take');
 
 describe('partida · advance', () => {
   it('avanza del prólogo al viaje a D1', async () => {
@@ -248,7 +264,28 @@ describe('partida · advance', () => {
   });
 });
 
-describe('partida · choose / justify / reply', () => {
+const d1 = dilemmas.find((d) => d.id === 'd1');
+const d1A = d1?.opciones[0];
+const fallbackA = fallbacks.d1?.A?.[d1A?.objetor ?? ''];
+
+const afterChoice = (phase: Run['phase'], objection: string | null = null) =>
+  loaded(
+    { phase, currentDilemma: 'd1' },
+    {
+      answer: {
+        dilemmaId: 'd1',
+        choice: 'A',
+        justification: null,
+        objector: objection === null ? null : 'kaltz',
+        objection,
+        reply: null,
+        closing: null,
+        aiSource: null,
+      },
+    },
+  );
+
+describe('partida · choose / justify / reply (sin IA)', () => {
   it('aplica los deltas de la opción en el servidor y registra la rama', async () => {
     // D1 · B: CONFIANZA +10, PODER +5, rama d1-firme
     const { rpc } = await play(
@@ -279,28 +316,11 @@ describe('partida · choose / justify / reply', () => {
     expect(writes(rpc)).toEqual([]);
   });
 
-  const afterChoice = (phase: Run['phase']) =>
-    loaded(
-      { phase, currentDilemma: 'd1' },
-      {
-        answer: {
-          dilemmaId: 'd1',
-          choice: 'A',
-          justification: null,
-          objector: null,
-          objection: null,
-          reply: null,
-          closing: null,
-        },
-      },
-    );
-
   it('guarda la justificación limpia y la objeción de respaldo del objetor de la opción', async () => {
     const { rpc } = await play(
       { action: 'justify', dilemmaId: 'd1', text: '  Porque la vida\u0000 importa  ' },
       afterChoice('justification'),
     );
-    const d1A = dilemmas.find((d) => d.id === 'd1')?.opciones[0];
     expect(writes(rpc)[0]).toEqual([
       'svc_justify',
       {
@@ -308,10 +328,14 @@ describe('partida · choose / justify / reply', () => {
         p_dilemma: 'd1',
         p_text: 'Porque la vida importa',
         p_objector: d1A?.objetor,
-        p_objection: fallbacks.d1?.A?.[d1A?.objetor ?? '']?.objecion.normal,
+        p_objection: fallbackA?.objecion.normal,
         p_ai_source: 'respaldo',
+        p_quality: null,
+        p_concepts: [],
+        p_alert: false,
       },
     ]);
+    expect(rpc.mock.calls.some(([fn]) => fn === 'svc_ai_take')).toBe(false);
   });
 
   it('rechaza textos sin ninguna palabra', async () => {
@@ -325,9 +349,141 @@ describe('partida · choose / justify / reply', () => {
   it('guarda la réplica con el cierre de respaldo', async () => {
     const { rpc } = await play(
       { action: 'reply', dilemmaId: 'd1', text: 'No estoy de acuerdo' },
-      afterChoice('objection'),
+      afterChoice('objection', 'objeción previa'),
     );
-    expect(writes(rpc)[0]?.[0]).toBe('svc_reply');
-    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_text: 'No estoy de acuerdo' });
+    expect(writes(rpc)[0]).toEqual([
+      'svc_reply',
+      {
+        p_player_id: 'player-1',
+        p_dilemma: 'd1',
+        p_text: 'No estoy de acuerdo',
+        p_closing: fallbackA?.cierre.normal,
+        p_concepts: [],
+        p_alert: false,
+      },
+    ]);
+  });
+
+  it('marca una alerta privada si el texto muestra malestar, aunque no haya IA', async () => {
+    const { rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'Da igual, a veces me quiero morir' },
+      afterChoice('justification'),
+    );
+    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_alert: true });
+  });
+});
+
+describe('partida · con IA', () => {
+  const objection = {
+    calidad: 'solida' as const,
+    conceptos: ['verdad'],
+    objecion: 'Dices que la vida importa más, pero ¿qué vale una vida que renuncia a la verdad?',
+    alerta: false,
+  };
+
+  function aiWith(overrides: Partial<AiDialogue> = {}): AiDialogue {
+    return {
+      objection: vi.fn(() => Promise.resolve(objection)),
+      closing: vi.fn(() =>
+        Promise.resolve({ reaccion: 'Me haces dudar.', conceptos: ['dignidad'], alerta: false }),
+      ),
+      ...overrides,
+    };
+  }
+
+  it('usa la objeción de la IA y guarda calidad y conceptos', async () => {
+    const ai = aiWith();
+    const { rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'Porque la vida importa' },
+      afterChoice('justification'),
+      { ai },
+    );
+    expect(ai.objection).toHaveBeenCalledWith(
+      expect.objectContaining({ counselor: expect.objectContaining({ id: d1A?.objetor }) }),
+      'Porque la vida importa',
+    );
+    expect(writes(rpc)[0]?.[1]).toMatchObject({
+      p_objection: objection.objecion,
+      p_ai_source: 'ia',
+      p_quality: 'solida',
+      p_concepts: ['verdad'],
+    });
+  });
+
+  it('si la IA falla o tarda, usa el respaldo sin bloquear', async () => {
+    const ai = aiWith({ objection: vi.fn(() => Promise.resolve(null)) });
+    const { body, rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'Porque sí' },
+      afterChoice('justification'),
+      { ai },
+    );
+    expect(body.ok).toBe(true);
+    expect(writes(rpc)[0]?.[1]).toMatchObject({
+      p_objection: fallbackA?.objecion.normal,
+      p_ai_source: 'respaldo',
+    });
+  });
+
+  it('sin llamadas disponibles (límite o presupuesto) ni siquiera llama a la IA', async () => {
+    const ai = aiWith();
+    const { rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'Porque sí' },
+      afterChoice('justification'),
+      { ai, aiCalls: null },
+    );
+    expect(ai.objection).not.toHaveBeenCalled();
+    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_ai_source: 'respaldo' });
+  });
+
+  it('«vacía» en el primer intento pide más razones sin guardar nada', async () => {
+    const ai = aiWith({
+      objection: vi.fn(() => Promise.resolve({ ...objection, calidad: 'vacia' as const })),
+    });
+    const { body, rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'no sé' },
+      afterChoice('justification'),
+      { ai, aiCalls: 1 },
+    );
+    expect(body).toMatchObject({ ok: false, error: 'needs_more', run: { phase: 'justification' } });
+    expect(writes(rpc)).toEqual([]);
+  });
+
+  it('«vacía» en el reintento se archiva igualmente: nunca bloquea', async () => {
+    const ai = aiWith({
+      objection: vi.fn(() => Promise.resolve({ ...objection, calidad: 'vacia' as const })),
+    });
+    const { body, rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'no sé, la verdad' },
+      afterChoice('justification'),
+      { ai, aiCalls: 2 },
+    );
+    expect(body.ok).toBe(true);
+    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_quality: 'vacia', p_ai_source: 'ia' });
+  });
+
+  it('la alerta de la IA llega al docente', async () => {
+    const ai = aiWith({
+      objection: vi.fn(() => Promise.resolve({ ...objection, alerta: true })),
+    });
+    const { rpc } = await play(
+      { action: 'justify', dilemmaId: 'd1', text: 'Porque la vida importa' },
+      afterChoice('justification'),
+      { ai },
+    );
+    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_alert: true });
+  });
+
+  it('el cierre de la IA responde a la objeción guardada y a la réplica', async () => {
+    const ai = aiWith();
+    const { rpc } = await play(
+      { action: 'reply', dilemmaId: 'd1', text: 'Mi réplica' },
+      afterChoice('objection', 'objeción previa'),
+      { ai, aiCalls: 2 },
+    );
+    expect(ai.closing).toHaveBeenCalledWith(expect.anything(), 'objeción previa', 'Mi réplica');
+    expect(writes(rpc)[0]?.[1]).toMatchObject({
+      p_closing: 'Me haces dudar.',
+      p_concepts: ['dignidad'],
+    });
   });
 });

@@ -13,6 +13,7 @@ const t = ui.juego;
 export function Justification({ dilemma }: { readonly dilemma: Dilemma }) {
   const { act, answer } = useGameContext();
   const option = dilemma.opciones.find((o) => o.id === answer?.choice);
+  const objector = findCounselor(option?.objetor);
   const [min, max] = dilemma.justificacion.palabras;
   return (
     <>
@@ -32,8 +33,12 @@ export function Justification({ dilemma }: { readonly dilemma: Dilemma }) {
         range={dilemma.justificacion.palabras}
         maxChars={MAX_JUSTIFICATION_CHARS}
         submitLabel={t.justificacion.enviar}
+        pendingLabel={fmt(t.ia.leyendoArgumento, { nombre: objector?.nombre ?? '' })}
         onSubmit={async (text) => {
           const response = await act({ action: 'justify', dilemmaId: dilemma.id, text });
+          if (response?.ok === false && response.error === 'needs_more') {
+            return t.justificacion.necesitaMas;
+          }
           return response?.ok === true;
         }}
       />
@@ -64,6 +69,7 @@ export function Objection({ dilemma }: { readonly dilemma: Dilemma }) {
         range={dilemma.replica.palabras}
         maxChars={MAX_REPLY_CHARS}
         submitLabel={t.objecion.enviar}
+        pendingLabel={fmt(t.ia.leyendoReplica, { nombre: objector?.nombre ?? '' })}
         onSubmit={async (text) => {
           const response = await act({ action: 'reply', dilemmaId: dilemma.id, text });
           return response?.ok === true;

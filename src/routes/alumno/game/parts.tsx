@@ -138,8 +138,13 @@ type TextAnswerProps = {
   readonly range: readonly [number, number];
   readonly maxChars: number;
   readonly submitLabel: string;
-  /** Devuelve `true` si el servidor guardó el texto (entonces se borra el borrador). */
-  readonly onSubmit: (text: string) => Promise<boolean>;
+  /** Texto del botón mientras el servidor (y la IA, hasta 6 s) procesa el envío. */
+  readonly pendingLabel: string;
+  /**
+   * `true` si el servidor guardó el texto (se borra el borrador); un texto si hay que pedir
+   * algo al alumno sin perder lo escrito (p. ej., la IA no encuentra razones); `false` si falló.
+   */
+  readonly onSubmit: (text: string) => Promise<boolean | string>;
 };
 
 /**
@@ -153,12 +158,14 @@ export function TextAnswer({
   range,
   maxChars,
   submitLabel,
+  pendingLabel,
   onSubmit,
 }: TextAnswerProps) {
   const id = useId();
   const { pending } = useGameContext();
   const [text, setText] = useState(() => drafts.read(draftKey));
   const [warned, setWarned] = useState<WordCheck | null>(null);
+  const [request, setRequest] = useState<string | null>(null);
   const words = countWords(text);
   const check = checkWords(text, range);
   const [min, max] = range;
@@ -177,7 +184,9 @@ export function TextAnswer({
       setWarned(check);
       return;
     }
-    if (await onSubmit(text)) drafts.write(draftKey, '');
+    const result = await onSubmit(text);
+    if (result === true) drafts.write(draftKey, '');
+    setRequest(typeof result === 'string' ? result : null);
   }
 
   return (
@@ -201,6 +210,7 @@ export function TextAnswer({
             setText(event.target.value);
             drafts.write(draftKey, event.target.value);
             setWarned(null);
+            setRequest(null);
           }}
         />
         <p id={`${id}-help`} className="help">
@@ -212,8 +222,9 @@ export function TextAnswer({
       </div>
       <ActionBar>
         {warning !== null && <Notice tone="error">{warning}</Notice>}
+        {request !== null && <Notice tone="error">{request}</Notice>}
         <button className="btn" type="submit" disabled={pending} aria-busy={pending}>
-          {pending ? t.guardando : submitLabel}
+          {pending ? pendingLabel : submitLabel}
         </button>
       </ActionBar>
     </form>

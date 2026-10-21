@@ -198,6 +198,9 @@ export const blockedTermsSchema = z.strictObject({
   exactas: z.array(z.string().min(2)),
 });
 
+/** Indicios de malestar para el aviso privado al docente (content/alertas.json). */
+export const alertTermsSchema = z.object({ contiene: z.array(z.string().min(4)) });
+
 /** Respaldos: dilema → opción → consejero objetor → { objecion, cierre }. */
 export const fallbacksSchema = z.record(
   dilemmaId,
@@ -223,6 +226,7 @@ export type Rubric = z.infer<typeof rubricSchema>;
 export type ClassMode = z.infer<typeof classModeSchema>;
 export type Fallbacks = z.infer<typeof fallbacksSchema>;
 export type Aesthetic = (typeof AESTHETICS)[number];
+export type AlertTerms = z.infer<typeof alertTermsSchema>;
 export type ContentImage = z.infer<typeof imageSchema>;
 export type Track = z.infer<typeof trackSchema>;
 export type Ambient = z.infer<typeof ambientSchema>;

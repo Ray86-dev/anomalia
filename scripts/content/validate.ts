@@ -2,6 +2,7 @@ import { basename } from 'node:path';
 import { z } from 'zod';
 import { canonical, type BlockedTerms } from '../../shared/game/alias.ts';
 import {
+  alertTermsSchema,
   ambientsSchema,
   blockedTermsSchema,
   classModeSchema,
@@ -12,6 +13,7 @@ import {
   fallbacksSchema,
   rubricSchema,
   uiSchema,
+  type AlertTerms,
   type Ambients,
   type ClassMode,
   type Concept,
@@ -34,6 +36,7 @@ export type RawContent = {
   readonly fallbacks: unknown;
   readonly ui: unknown;
   readonly ambients: unknown;
+  readonly alerts: unknown;
 };
 
 export type Content = {
@@ -46,6 +49,7 @@ export type Content = {
   readonly blocked: BlockedTerms;
   readonly fallbacks: Fallbacks;
   readonly ambients: Ambients;
+  readonly alerts: AlertTerms;
   readonly dilemmas: readonly Dilemma[];
 };
 
@@ -147,6 +151,7 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   const blocked = parse(blockedTermsSchema, raw.blocked, 'alias-bloqueados.json');
   const fallbacks = parse(fallbacksSchema, raw.fallbacks, 'respaldos.json');
   const ambients = parse(ambientsSchema, raw.ambients, 'ambientes.json');
+  const alerts = parse(alertTermsSchema, raw.alerts, 'alertas.json');
   const dilemmas = raw.dilemmas.map(({ file, data }) => {
     const dilemma = parse(dilemmaSchema, data, file);
     if (dilemma && !basename(file).startsWith(`${dilemma.id}-`)) {
@@ -259,8 +264,17 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   }
 
   const complete =
-    ui && counselors && concepts && endings && rubric && modes && blocked && fallbacks && ambients
-      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks, ambients }
+    ui &&
+    counselors &&
+    concepts &&
+    endings &&
+    rubric &&
+    modes &&
+    blocked &&
+    fallbacks &&
+    ambients &&
+    alerts
+      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks, ambients, alerts }
       : null;
   const content =
     errors.length === 0 && complete

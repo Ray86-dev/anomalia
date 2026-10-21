@@ -4,11 +4,24 @@
  * shared/game y se escribe con funciones SQL atómicas. Nunca se registra en logs texto
  * escrito por el alumnado.
  */
+import { z } from 'zod';
 import { aliasProblem, cleanAlias, type BlockedTerms } from '../../../shared/game/alias.ts';
 import { nextPosition, samePosition, type FlowContext } from '../../../shared/game/flow.ts';
+import { mentionsDistress } from '../../../shared/game/privacy.ts';
 import { applyDeltas } from '../../../shared/game/world.ts';
 import { cleanText, countWords } from '../../../shared/game/words.ts';
-import type { Dilemma, Fallbacks } from '../../../shared/schemas/content.ts';
+import type {
+  AlertTerms,
+  Concept,
+  Counselor,
+  Dilemma,
+  Fallbacks,
+} from '../../../shared/schemas/content.ts';
+import {
+  AI_MAX_CALLS_PER_DILEMMA,
+  type ClosingOutput,
+  type ObjectionOutput,
+} from '../../../shared/schemas/ia.ts';
 import {
   partidaRequestSchema,
   svcJoinResultSchema,
@@ -21,10 +34,30 @@ import {
   type JoinResponse,
   type SvcState,
 } from '../../../shared/schemas/partida.ts';
+import type { DialogueContext } from '../_shared/ai/prompts.ts';
 import { bearerToken, corsHeaders, isForbiddenOrigin, jsonResponse } from '../_shared/http.ts';
 
 export type SvcFunction =
-  'svc_join' | 'svc_load' | 'svc_advance' | 'svc_choose' | 'svc_justify' | 'svc_reply';
+  | 'svc_join'
+  | 'svc_load'
+  | 'svc_advance'
+  | 'svc_choose'
+  | 'svc_justify'
+  | 'svc_reply'
+  | 'svc_ai_take';
+
+/** Diálogo con la IA; cada llamada devuelve `null` si falla y entonces se usa el respaldo. */
+export type AiDialogue = {
+  readonly objection: (
+    context: DialogueContext,
+    justification: string,
+  ) => Promise<ObjectionOutput | null>;
+  readonly closing: (
+    context: DialogueContext,
+    objection: string,
+    reply: string,
+  ) => Promise<ClosingOutput | null>;
+};
 
 export type PartidaDeps = {
   /** Verifica el JWT de la sesión y devuelve el uid, o null si no es válido. */
@@ -35,7 +68,12 @@ export type PartidaDeps = {
     readonly blockedTerms: BlockedTerms;
     readonly dilemmas: readonly Dilemma[];
     readonly fallbacks: Fallbacks;
+    readonly counselors: readonly Counselor[];
+    readonly concepts: readonly Concept[];
+    readonly alertTerms: AlertTerms;
   };
+  /** `null` si no hay proveedor de IA configurado: entonces todo sale de los respaldos. */
+  readonly ai: AiDialogue | null;
   readonly allowedOrigins: readonly string[];
 };
 
@@ -79,6 +117,20 @@ const failure = (error: GameError, state: SvcState | null): GameResponse => ({
 async function write(deps: PartidaDeps, fn: SvcFunction, args: Record<string, unknown>) {
   const result = svcWriteResultSchema.parse(await deps.rpc(fn, args));
   return result.status === 'ok' ? success(result.state) : failure('stale', result.state);
+}
+
+/** Reserva una llamada a la IA: cuántas lleva el alumno en este dilema, o `null` si no quedan. */
+async function takeAiCall(
+  deps: PartidaDeps,
+  playerId: string,
+  dilemmaId: string,
+): Promise<number | null> {
+  const result = await deps.rpc('svc_ai_take', {
+    p_player_id: playerId,
+    p_dilemma: dilemmaId,
+    p_max_calls: AI_MAX_CALLS_PER_DILEMMA,
+  });
+  return z.number().int().nullable().parse(result);
 }
 
 function flowContext(state: SvcState, deps: PartidaDeps): FlowContext {
@@ -149,22 +201,63 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
   const fallback = deps.content.fallbacks[dilemma.id]?.[option.id]?.[option.objetor];
   if (fallback === undefined) return failure('invalid', state);
 
+  // Indicios de malestar: aviso privado al docente aunque la IA falle (respaldo local).
+  let alert = mentionsDistress(text, deps.content.alertTerms.contiene);
+  const counselor = deps.content.counselors.find((c) => c.id === option.objetor);
+  const context: DialogueContext | null =
+    counselor === undefined
+      ? null
+      : { counselor, dilemma, option, concepts: deps.content.concepts };
+
   if (request.action === 'justify') {
-    // M1: objeción preescrita. En M2 la genera la IA (con este mismo respaldo si falla).
+    let objection = fallback.objecion.normal;
+    let source: 'ia' | 'respaldo' = 'respaldo';
+    let quality: ObjectionOutput['calidad'] | null = null;
+    let concepts: string[] = [];
+    if (deps.ai !== null && context !== null) {
+      const calls = await takeAiCall(deps, playerId, dilemma.id);
+      const output = calls === null ? null : await deps.ai.objection(context, text);
+      if (output !== null) {
+        // «Vacía»: un único reintento para que el alumno añada razones; el segundo envío se archiva.
+        if (output.calidad === 'vacia' && calls === 1) return failure('needs_more', state);
+        objection = output.objecion;
+        source = 'ia';
+        quality = output.calidad;
+        concepts = output.conceptos;
+        alert ||= output.alerta;
+      }
+    }
     return write(deps, 'svc_justify', {
       p_player_id: playerId,
       p_dilemma: dilemma.id,
       p_text: text,
       p_objector: option.objetor,
-      p_objection: fallback.objecion.normal,
-      p_ai_source: 'respaldo',
+      p_objection: objection,
+      p_ai_source: source,
+      p_quality: quality,
+      p_concepts: concepts,
+      p_alert: alert,
     });
+  }
+
+  let closing = fallback.cierre.normal;
+  let concepts: string[] = [];
+  if (deps.ai !== null && context !== null && answer?.objection != null) {
+    const calls = await takeAiCall(deps, playerId, dilemma.id);
+    const output = calls === null ? null : await deps.ai.closing(context, answer.objection, text);
+    if (output !== null) {
+      closing = output.reaccion;
+      concepts = output.conceptos;
+      alert ||= output.alerta;
+    }
   }
   return write(deps, 'svc_reply', {
     p_player_id: playerId,
     p_dilemma: dilemma.id,
     p_text: text,
-    p_closing: fallback.cierre.normal,
+    p_closing: closing,
+    p_concepts: concepts,
+    p_alert: alert,
   });
 }
 

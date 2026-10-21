@@ -48,6 +48,7 @@ const raw: RawContent = {
   fallbacks: readJson('respaldos.json'),
   ui: readJson('interfaz.json'),
   ambients: readJson('ambientes.json'),
+  alerts: readJson('alertas.json'),
 };
 
 const assetExists = (src: string) => existsSync(join(root, 'public', 'assets', src));
@@ -72,6 +73,7 @@ function emit(c: Content): string {
   return `// Generado por scripts/build-content.ts a partir de content/. NO EDITAR A MANO.
 import type { BlockedTerms } from '../game/alias.ts';
 import type {
+  AlertTerms,
   Ambients,
   ClassMode,
   Concept,
@@ -100,6 +102,8 @@ export const blockedTerms: BlockedTerms = ${json(c.blocked)};
 export const fallbacks: Fallbacks = ${json(c.fallbacks)};
 
 export const ambients: Ambients = ${json(c.ambients)};
+
+export const alertTerms: AlertTerms = ${json({ contiene: c.alerts.contiene })};
 
 export const dilemmas: readonly Dilemma[] = ${json(c.dilemmas)};
 `;

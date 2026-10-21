@@ -361,6 +361,10 @@ export type Database = {
         }
         Returns: Json
       }
+      svc_ai_take: {
+        Args: { p_dilemma: string; p_max_calls: number; p_player_id: string }
+        Returns: number
+      }
       svc_choose: {
         Args: {
           p_branch: string
@@ -381,10 +385,13 @@ export type Database = {
       svc_justify: {
         Args: {
           p_ai_source: string
+          p_alert: boolean
+          p_concepts: string[]
           p_dilemma: string
           p_objection: string
           p_objector: string
           p_player_id: string
+          p_quality: string
           p_text: string
         }
         Returns: Json
@@ -392,7 +399,9 @@ export type Database = {
       svc_load: { Args: { p_auth_uid: string }; Returns: Json }
       svc_reply: {
         Args: {
+          p_alert: boolean
           p_closing: string
+          p_concepts: string[]
           p_dilemma: string
           p_player_id: string
           p_text: string
