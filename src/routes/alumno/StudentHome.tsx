@@ -5,10 +5,10 @@ import { isAuthApiError } from '@supabase/supabase-js';
 import { useEffect, useState, type SubmitEvent } from 'react';
 import { joinClass, loadMyState } from '../../lib/api.ts';
 import { getClient } from '../../lib/supabase.ts';
-import { fmt } from '../../lib/text.ts';
 import { Field } from '../../ui/Field.tsx';
 import { Notice } from '../../ui/Notice.tsx';
 import { Screen } from '../../ui/Screen.tsx';
+import { Game } from './game/Game.tsx';
 
 type View = { kind: 'loading' } | { kind: 'join' } | { kind: 'connected'; state: MyState };
 
@@ -23,7 +23,7 @@ function authErrorMessage(error: unknown): string {
   return ui.app.errorRed;
 }
 
-/** Vista del alumnado (M0): unirse a una clase y ver la sesión activa. */
+/** Vista del alumnado: unirse a una clase y, después, la partida. */
 export function StudentHome() {
   const [view, setView] = useState<View>({ kind: 'loading' });
   const [classCode, setClassCode] = useState('');
@@ -93,16 +93,13 @@ export function StudentHome() {
   }
 
   if (view.kind === 'connected') {
-    const { player, class: schoolClass } = view.state;
     return (
-      <Screen kicker={ui.app.titulo} title={fmt(t.conectadoTitulo, { alias: player.alias })}>
-        <p>{fmt(t.conectadoClase, { clase: schoolClass.label })}</p>
-        {player.status === 'expelled' ? (
-          <Notice tone="error">{t.errores.expelled}</Notice>
-        ) : (
-          <Notice>{t.conectadoEspera}</Notice>
-        )}
-      </Screen>
+      <Game
+        initial={view.state}
+        onLost={() => {
+          window.location.reload();
+        }}
+      />
     );
   }
 

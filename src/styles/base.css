@@ -196,17 +196,19 @@ a {
   align-self: flex-start;
 }
 
-/* Aviso: borde fino y fondo tintado (rgba en lugar de color-mix para iOS 15) */
+/* Aviso: borde fino y fondo tintado sobre base opaca (no deja ver lo que hay detrás).
+   Capas rgba en lugar de color-mix para iOS 15. */
 .notice {
   padding: var(--space-3) var(--space-4);
   border: 1px solid rgba(127, 224, 208, 0.35);
   border-radius: var(--radius);
-  background: rgba(127, 224, 208, 0.08);
+  background:
+    linear-gradient(rgba(127, 224, 208, 0.08), rgba(127, 224, 208, 0.08)), var(--bg-raised);
 }
 
 .notice-error {
   border-color: rgba(255, 155, 143, 0.55);
-  background: rgba(255, 155, 143, 0.1);
+  background: linear-gradient(rgba(255, 155, 143, 0.1), rgba(255, 155, 143, 0.1)), var(--bg-raised);
 }
 
 /* ── Listas de tarjetas (consola) ────────────────────────────────────── */

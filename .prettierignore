@@ -9,3 +9,4 @@ content/
 docs/
 *.md
 src/lib/database.types.ts
+.impeccable/

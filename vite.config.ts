@@ -15,7 +15,7 @@ function contentSecurityPolicy(supabaseUrl: string | undefined): Plugin {
     "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
-    "media-src 'self' blob:",
+    "media-src 'self' blob: data:", // Howler desbloquea el audio móvil con un clip data: silencioso
     "font-src 'self'",
     `connect-src 'self' ${connect}`.trim(),
     "worker-src 'self' blob:",
