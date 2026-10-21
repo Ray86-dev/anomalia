@@ -3,25 +3,21 @@
  * Crea sus propios docentes, clases y alumnos con un sufijo aleatorio y los borra al final.
  *   npm run test:integration
  */
-import { randomBytes } from 'node:crypto';
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { Database } from '../../src/lib/database.types.ts';
-
-type Db = SupabaseClient<Database>;
-
-const url = process.env.VITE_SUPABASE_URL ?? '';
-const publishableKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
-const secretKey = process.env.SUPABASE_SECRET_KEY ?? '';
-const configured = url !== '' && publishableKey !== '' && secretKey !== '';
-
-const run = randomBytes(4).toString('hex');
-const password = `Rls-${randomBytes(12).toString('hex')}`;
-const createdUsers: string[] = [];
-const createdClasses: string[] = [];
-
-const newClient = (key = publishableKey): Db =>
-  createClient<Database>(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+import {
+  admin as adminClient,
+  anonymousStudent,
+  cleanup,
+  configured,
+  createClass,
+  createTeacher,
+  newClient,
+  partida,
+  publishableKey,
+  run,
+  url,
+  type Db,
+} from './helpers.ts';
 
 let admin: Db;
 let anon: Db;
@@ -34,57 +30,12 @@ let s4: Db; // sesión anónima que nunca llega a unirse
 let classA: { id: string; code: string };
 let classB: { id: string; code: string };
 
-async function createTeacher(name: string): Promise<Db> {
-  const email = `rls-${name}-${run}@anomalia.invalid`;
-  const { data, error } = await admin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-  });
-  if (error !== null) throw error;
-  createdUsers.push(data.user.id);
-  const insert = await admin
-    .from('teachers')
-    .insert({ id: data.user.id, display_name: `RLS ${name}` });
-  if (insert.error !== null) throw insert.error;
-  const client = newClient();
-  const signIn = await client.auth.signInWithPassword({ email, password });
-  if (signIn.error !== null) throw signIn.error;
-  return client;
-}
-
-async function createClass(teacher: Db, label: string) {
-  const { data, error } = await teacher.rpc('create_class', {
-    p_label: label,
-    p_chapter_1: ['d1', 'd2', 'd3'],
-    p_chapter_2: ['d4', 'd5'],
-    p_retention_days: 1,
-  });
-  if (error !== null) throw error;
-  const created = data as { id: string; code: string };
-  createdClasses.push(created.id);
-  return created;
-}
-
-async function anonymousStudent(): Promise<Db> {
-  const client = newClient();
-  const { data, error } = await client.auth.signInAnonymously();
-  if (error !== null) throw error;
-  if (data.user !== null) createdUsers.push(data.user.id);
-  return client;
-}
-
-async function join(client: Db, classCode: string, alias: string): Promise<unknown> {
-  const response = await client.functions.invoke<unknown>('partida', {
-    body: { action: 'join', classCode, alias },
-  });
-  if (response.error !== null) throw new Error('partida request failed');
-  return response.data;
-}
+const join = (client: Db, classCode: string, alias: string) =>
+  partida(client, { action: 'join', classCode, alias });
 
 describe.skipIf(!configured)('RLS y partida (integración)', () => {
   beforeAll(async () => {
-    admin = newClient(secretKey);
+    admin = adminClient();
     anon = newClient();
     teacherA = await createTeacher('a');
     teacherB = await createTeacher('b');
@@ -124,10 +75,7 @@ describe.skipIf(!configured)('RLS y partida (integración)', () => {
     if (alert.error !== null) throw alert.error;
   });
 
-  afterAll(async () => {
-    if (createdClasses.length > 0) await admin.from('classes').delete().in('id', createdClasses);
-    await Promise.all(createdUsers.map((id) => admin.auth.admin.deleteUser(id)));
-  });
+  afterAll(cleanup);
 
   describe('sin sesión (anon)', () => {
     it('no lee ninguna tabla', async () => {

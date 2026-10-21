@@ -1,6 +1,6 @@
 // Edge Function `partida`: punto único de escritura del alumnado (ver handler.ts).
 import { createClient } from '@supabase/supabase-js';
-import { blockedTerms } from '../../../shared/generated/content.ts';
+import { blockedTerms, dilemmas, fallbacks } from '../../../shared/generated/content.ts';
 import { requireEnv, secretKey } from '../_shared/env.ts';
 import { parseAllowedOrigins } from '../_shared/http.ts';
 import { handlePartida } from './handler.ts';
@@ -26,7 +26,7 @@ Deno.serve((request) =>
       if (result.error !== null) throw new Error(`${fn}: ${result.error.message}`);
       return result.data;
     },
-    blockedTerms,
+    content: { blockedTerms, dilemmas, fallbacks },
     allowedOrigins,
   }),
 );

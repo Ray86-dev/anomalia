@@ -1,6 +1,6 @@
 /** Resultado de la RPC `my_state()`: la partida del alumno y los ajustes de su clase. */
 import { z } from 'zod';
-import { DILEMMA_PHASES, GLOBAL_PHASES } from '../game/phases.ts';
+import { answerSnapshotSchema, runSnapshotSchema } from './partida.ts';
 
 export const myStateSchema = z
   .object({
@@ -11,19 +11,11 @@ export const myStateSchema = z
       chapter2: z.array(z.string()),
       chapterUnlocked: z.union([z.literal(1), z.literal(2)]),
     }),
-    run: z.object({
-      world: z.object({
-        poder: z.number(),
-        responsabilidad: z.number(),
-        equidad: z.number(),
-        confianza: z.number(),
-      }),
-      branches: z.array(z.string()),
-      currentDilemma: z.string().nullable(),
-      phase: z.enum([...GLOBAL_PHASES, ...DILEMMA_PHASES]),
+    run: runSnapshotSchema.extend({
       ending: z.string().nullable(),
       finishedAt: z.string().nullable(),
     }),
+    answer: answerSnapshotSchema.nullable(),
   })
   .nullable();
 

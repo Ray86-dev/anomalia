@@ -351,8 +351,52 @@ export type Database = {
       }
       my_state: { Args: never; Returns: Json }
       ping: { Args: never; Returns: string }
+      svc_advance: {
+        Args: {
+          p_from_dilemma: string
+          p_from_phase: string
+          p_player_id: string
+          p_to_dilemma: string
+          p_to_phase: string
+        }
+        Returns: Json
+      }
+      svc_choose: {
+        Args: {
+          p_branch: string
+          p_choice: string
+          p_confianza: number
+          p_dilemma: string
+          p_equidad: number
+          p_player_id: string
+          p_poder: number
+          p_responsabilidad: number
+        }
+        Returns: Json
+      }
       svc_join: {
         Args: { p_alias: string; p_auth_uid: string; p_code: string }
+        Returns: Json
+      }
+      svc_justify: {
+        Args: {
+          p_ai_source: string
+          p_dilemma: string
+          p_objection: string
+          p_objector: string
+          p_player_id: string
+          p_text: string
+        }
+        Returns: Json
+      }
+      svc_load: { Args: { p_auth_uid: string }; Returns: Json }
+      svc_reply: {
+        Args: {
+          p_closing: string
+          p_dilemma: string
+          p_player_id: string
+          p_text: string
+        }
         Returns: Json
       }
     }
