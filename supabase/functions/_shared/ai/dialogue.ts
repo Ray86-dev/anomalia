@@ -16,7 +16,7 @@ import {
   type ObjectionOutput,
 } from '../../../../shared/schemas/ia.ts';
 import type { AiConfig } from './config.ts';
-import { closingPrompt, objectionPrompt, type DialogueContext } from './prompts.ts';
+import { closingPrompt, MAX_CONCEPTS, objectionPrompt, type DialogueContext } from './prompts.ts';
 import { complete, type FetchLike } from './provider.ts';
 
 export type CallLog = {
@@ -53,7 +53,8 @@ function offensive(text: string, blocked: BlockedTerms): boolean {
 
 function knownConcepts(ids: readonly string[], context: DialogueContext): string[] {
   const allowed = new Set(context.concepts.map((c) => c.id));
-  return [...new Set(ids.map((id) => id.trim().toLowerCase()).filter((id) => allowed.has(id)))];
+  const known = ids.map((id) => id.trim().toLowerCase()).filter((id) => allowed.has(id));
+  return [...new Set(known)].slice(0, MAX_CONCEPTS);
 }
 
 async function run<T>(

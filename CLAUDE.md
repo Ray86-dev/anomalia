@@ -103,3 +103,4 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 | `npx supabase config push` | Sube la config de Auth de `supabase/config.toml`; **revisa el diff**: los valores locales sustituyen a los remotos |
 | `npm run teacher:add -- correo@dominio` | Añade un usuario de Auth existente a la lista blanca de docentes |
 | `npm run seed:demo` | Recrea la clase simulada PRUEBA con 30 alumnos |
+| `npm run ai:probe` | Prueba la IA real a través de `partida` (latencia, calidad, inyección, malestar); gasta llamadas reales y borra lo que crea |

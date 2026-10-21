@@ -11,6 +11,9 @@ import type {
 } from '../../../../shared/schemas/content.ts';
 import type { Completion } from './provider.ts';
 
+/** Conceptos por respuesta: pocos y explícitos, para que la constelación del Centro no meta ruido. */
+export const MAX_CONCEPTS = 3;
+
 export type DialogueContext = {
   readonly counselor: Counselor;
   readonly dilemma: Dilemma;
@@ -38,7 +41,9 @@ function persona({ counselor, dilemma, option }: DialogueContext): string {
 const RULES = [
   'Reglas:',
   '- Escribe en castellano de España, con tono respetuoso, cercano y retador. Trata al alumno de tú.',
+  '- Usa un lenguaje claro para estudiantes de 15–16 años: frases cortas, vocabulario sencillo y sin tecnicismos. Si mencionas una idea filosófica, que se entienda por el contexto.',
   '- Céntrate en el argumento concreto del alumno; no lo repitas ni lo resumas.',
+  '- Si el texto muestra malestar personal, no lo comentes ni hagas de terapeuta: responde con un tono especialmente amable, sin presionar, y céntrate en el dilema.',
   '- No digas nunca qué opción era la correcta ni si apruebas la decisión.',
   '- No inventes citas textuales de personas reales ni datos históricos que no estén en la situación.',
   '- No pidas ni repitas datos personales.',
@@ -48,7 +53,7 @@ const RULES = [
 function assessment(context: DialogueContext, what: string): string {
   return [
     `Además, analiza ${what}:`,
-    `- "conceptos": solo identificadores de esta lista que el alumno use o a los que aluda claramente: ${context.concepts.map((c) => c.id).join(', ')}. Puede ser una lista vacía.`,
+    `- "conceptos": como máximo ${String(MAX_CONCEPTS)} identificadores de esta lista, solo los que el alumno use de forma explícita o casi explícita en su texto (no los que tú le atribuyas): ${context.concepts.map((c) => c.id).join(', ')}. Puede ser una lista vacía.`,
     '- "alerta": true solo si el texto muestra indicios de malestar personal grave (autolesión, violencia, abuso) o contenido muy inapropiado; en cualquier otro caso, false.',
   ].join('\n');
 }
