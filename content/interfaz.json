@@ -74,11 +74,11 @@
       "ayuda": "Entre {min} y {max} palabras.",
       "contador": "{n} palabras",
       "enviar": "Archivar mi argumento",
-      "vacio": "Escribe tu argumento antes de archivarlo.",
-      "corto": "Mnemósine no puede archivar esto todavía: añade alguna razón más (mínimo {min} palabras). Si no se te ocurre nada más, pulsa otra vez y se archivará así.",
-      "largo": "Has pasado de {max} palabras. Intenta resumir lo esencial.",
+      "vacio": "Escribe tu argumento antes de enviarlo.",
+      "corto": "Te faltan razones: intenta llegar a {min} palabras. Si no, vuelve a pulsar y se archivará así.",
+      "largo": "Te has pasado de {max} palabras: intenta resumir. Si no, vuelve a pulsar y se archivará así.",
       "borrador": "Tu borrador se guarda en este móvil mientras escribes.",
-      "necesitaMas": "Mnemósine no puede archivar esto todavía: no encuentra ninguna razón en tu argumento. Explica por qué has elegido esta opción y vuelve a enviarlo."
+      "necesitaMas": "Mnemósine no encuentra razones en tu argumento: explica por qué eliges esta opción. Si no, vuelve a pulsar y se archivará así."
     },
     "objecion": {
       "titulo": "{nombre} te plantea una objeción",

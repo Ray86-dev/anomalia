@@ -2,7 +2,7 @@
 import { ui } from '@shared/generated/content.ts';
 import { checkWords, countWords, type WordCheck } from '@shared/game/words.ts';
 import type { Counselor } from '@shared/schemas/content.ts';
-import { useEffect, useId, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { audio } from '../../../engine/audio.ts';
 import { loadInkLines, type InkLine } from '../../../engine/ink.ts';
 import { fmt } from '../../../lib/text.ts';
@@ -150,6 +150,8 @@ type TextAnswerProps = {
 /**
  * Texto libre del alumno con contador de palabras. El aviso de «corto» o «largo» se puede
  * saltar con un segundo envío: el juego nunca bloquea definitivamente (§7.2).
+ * Los avisos van en línea bajo el contador (nunca tapan el texto) y desaparecen al volver a
+ * enviar o al editar.
  */
 export function TextAnswer({
   label,
@@ -164,29 +166,37 @@ export function TextAnswer({
   const id = useId();
   const { pending } = useGameContext();
   const [text, setText] = useState(() => drafts.read(draftKey));
-  const [warned, setWarned] = useState<WordCheck | null>(null);
-  const [request, setRequest] = useState<string | null>(null);
+  /** Aviso de longitud ya mostrado para este texto: el siguiente envío pasa. */
+  const [warnedFor, setWarnedFor] = useState<WordCheck | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const noticeRef = useRef<HTMLParagraphElement>(null);
   const words = countWords(text);
   const check = checkWords(text, range);
   const [min, max] = range;
 
-  const warning =
-    warned === 'empty'
-      ? t.justificacion.vacio
-      : warned === 'short'
-        ? fmt(t.justificacion.corto, { min })
-        : warned === 'long'
-          ? fmt(t.justificacion.largo, { max })
-          : null;
+  // Que el aviso quede a la vista (por encima de la barra inferior) sin mover nada más.
+  useEffect(() => {
+    if (notice !== null) noticeRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [notice]);
 
   async function submit() {
-    if (check === 'empty' || (check !== 'ok' && warned !== check)) {
-      setWarned(check);
+    if (check === 'empty') {
+      setNotice(t.justificacion.vacio);
       return;
     }
+    if (check !== 'ok' && warnedFor !== check) {
+      setWarnedFor(check);
+      setNotice(
+        check === 'short'
+          ? fmt(t.justificacion.corto, { min })
+          : fmt(t.justificacion.largo, { max }),
+      );
+      return;
+    }
+    setNotice(null);
     const result = await onSubmit(text);
     if (result === true) drafts.write(draftKey, '');
-    setRequest(typeof result === 'string' ? result : null);
+    if (typeof result === 'string') setNotice(result);
   }
 
   return (
@@ -209,8 +219,8 @@ export function TextAnswer({
           onChange={(event) => {
             setText(event.target.value);
             drafts.write(draftKey, event.target.value);
-            setWarned(null);
-            setRequest(null);
+            setWarnedFor(null);
+            setNotice(null);
           }}
         />
         <p id={`${id}-help`} className="help">
@@ -219,10 +229,13 @@ export function TextAnswer({
         <p id={`${id}-count`} className={`word-count word-count-${check}`} aria-live="polite">
           {fmt(t.justificacion.contador, { n: words })}
         </p>
+        {notice !== null && (
+          <p ref={noticeRef} className="inline-hint" role="status">
+            {notice}
+          </p>
+        )}
       </div>
       <ActionBar>
-        {warning !== null && <Notice tone="error">{warning}</Notice>}
-        {request !== null && <Notice tone="error">{request}</Notice>}
         <button className="btn" type="submit" disabled={pending} aria-busy={pending}>
           {pending ? pendingLabel : submitLabel}
         </button>
