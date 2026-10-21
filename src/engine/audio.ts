@@ -36,7 +36,7 @@ function load(): Promise<HowlerModule> {
   return loading;
 }
 
-function start(module: HowlerModule, src: string): void {
+function start(module: HowlerModule, src: string, volume: number): void {
   const previous = current;
   if (previous !== null) {
     previous.howl.fade(previous.howl.volume(), 0, FADE_MS);
@@ -44,7 +44,7 @@ function start(module: HowlerModule, src: string): void {
   }
   const howl = new module.Howl({ src: [src], loop: true, html5: true, volume: 0 });
   howl.once('play', () => {
-    howl.fade(0, VOLUME, FADE_MS);
+    howl.fade(0, volume, FADE_MS);
   });
   howl.play();
   current = { src, howl };
@@ -80,8 +80,9 @@ export const audio = {
   /**
    * Cambia la pista en bucle (`null` = silencio). Si Howler ya está cargado, empieza en el
    * mismo instante (necesario dentro del gesto que desbloquea el audio en móviles).
+   * `volume` permite un ambiente más bajo, como el del Centro de Control.
    */
-  play(src: string | null): void {
+  play(src: string | null, volume: number = VOLUME): void {
     wanted = src;
     if (current?.src === src) return;
     if (src === null) {
@@ -92,11 +93,11 @@ export const audio = {
       return;
     }
     if (howler !== null) {
-      start(howler, src);
+      start(howler, src, volume);
       return;
     }
     void load().then((module) => {
-      if (wanted === src && current?.src !== src) start(module, src);
+      if (wanted === src && current?.src !== src) start(module, src, volume);
     });
   },
 };

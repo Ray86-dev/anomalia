@@ -57,6 +57,8 @@ const wordRange = z
 const optionSchema = z.strictObject({
   id: z.enum(['A', 'B', 'C']),
   texto: textoSchema,
+  /** Etiqueta breve para la línea temporal, el teletipo y las leyendas del Centro de Control. */
+  corto: z.string().min(2).max(40),
   deltas: z.partialRecord(worldVar, z.number().int().min(-30).max(30)),
   rama: id.nullable(),
   objetor: id,

@@ -11,6 +11,8 @@ import { playAction } from '../../../lib/api.ts';
 
 export type Game = {
   readonly alias: string;
+  /** Clave de rescate para recuperar la partida en otro móvil (solo la ve su dueño). */
+  readonly rescueKey: string;
   readonly run: RunSnapshot;
   readonly answer: AnswerSnapshot | null;
   readonly pending: boolean;
@@ -66,6 +68,7 @@ export function useGameState(initial: MyState, onLost: () => void): Omit<Game, '
 
   return {
     alias: initial.player.alias,
+    rescueKey: initial.player.rescueKey,
     run,
     answer,
     pending,

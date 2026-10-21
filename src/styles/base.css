@@ -211,6 +211,17 @@ a {
   background: linear-gradient(rgba(255, 155, 143, 0.1), rgba(255, 155, 143, 0.1)), var(--bg-raised);
 }
 
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* ── Listas de tarjetas (consola) ────────────────────────────────────── */
 
 .card-list {
@@ -257,6 +268,37 @@ a {
   font-size: var(--text-small);
 }
 
+.row-start {
+  justify-content: flex-start;
+}
+
+.tag-ok {
+  border-color: var(--line);
+  color: var(--text-muted);
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.danger-zone {
+  border-color: rgba(255, 155, 143, 0.4);
+}
+
+.alert-card.unseen {
+  border-color: var(--danger);
+}
+
+.alert-text {
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: calc(var(--radius) / 2);
+  background: var(--bg-input);
+  white-space: pre-wrap;
+}
+
 .code-display {
   font-family: var(--font-mono);
   font-size: clamp(2.25rem, 12vw, 3.25rem);
@@ -285,10 +327,6 @@ a {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-}
-
-.centro-clock {
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 /* ── Accesibilidad ───────────────────────────────────────────────────── */

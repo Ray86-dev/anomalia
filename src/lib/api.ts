@@ -1,11 +1,18 @@
 import {
   gameResponseSchema,
   joinResponseSchema,
+  recoverResponseSchema,
   type GameRequest,
   type GameResponse,
   type JoinResponse,
+  type RecoverResponse,
 } from '@shared/schemas/partida.ts';
-import { myStateSchema, type MyState } from '@shared/schemas/state.ts';
+import {
+  myRecoverySchema,
+  myStateSchema,
+  type MyRecovery,
+  type MyState,
+} from '@shared/schemas/state.ts';
 import { getClient } from './supabase.ts';
 
 /** Fallo de red o de protocolo: la interfaz muestra un aviso y permite reintentar. */
@@ -31,6 +38,33 @@ export async function joinClass(classCode: string, alias: string): Promise<JoinR
     await invokePartida({ action: 'join', classCode, alias }),
   );
   if (!parsed.success) throw new NetworkError('Unexpected response from partida');
+  return parsed.data;
+}
+
+/** Recupera un alias desde este móvil: con la clave de rescate, al instante (D-33). */
+export async function recoverPlayer(
+  classCode: string,
+  alias: string,
+  rescueKey: string,
+): Promise<RecoverResponse> {
+  const parsed = recoverResponseSchema.safeParse(
+    await invokePartida({
+      action: 'recover',
+      classCode,
+      alias,
+      ...(rescueKey.trim() === '' ? {} : { rescueKey }),
+    }),
+  );
+  if (!parsed.success) throw new NetworkError('Unexpected response from partida');
+  return parsed.data;
+}
+
+/** Estado de la última solicitud de recuperación de esta sesión. */
+export async function loadMyRecovery(): Promise<MyRecovery> {
+  const { data, error } = await getClient('student').rpc('my_recovery');
+  if (error !== null) throw new NetworkError(error.message);
+  const parsed = myRecoverySchema.safeParse(data);
+  if (!parsed.success) throw new NetworkError('Unexpected response from my_recovery');
   return parsed.data;
 }
 

@@ -24,6 +24,7 @@
     "functions:deploy": "node scripts/sb.mjs functions deploy partida --use-api",
     "teacher:add": "tsx scripts/add-teacher.ts",
     "seed:demo": "tsx scripts/seed-demo.ts",
+    "simular": "tsx scripts/simular-partidas.ts",
     "db:types": "node scripts/gen-types.mjs",
     "ai:probe": "tsx scripts/ai-probe.ts"
   },

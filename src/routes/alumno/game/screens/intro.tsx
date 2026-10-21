@@ -6,13 +6,13 @@ import { audio } from '../../../../engine/audio.ts';
 import { countTo } from '../../../../engine/motion.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
-import { texto } from '../helpers.ts';
+import { formatRescueKey, texto } from '../helpers.ts';
 import { ActionBar, AdvanceButton, InkReader } from '../parts.tsx';
 
 const t = ui.juego;
 
 export function Prologue() {
-  const { setStep } = useGameContext();
+  const { setStep, rescueKey } = useGameContext();
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -27,6 +27,11 @@ export function Prologue() {
           {ui.app.titulo}
         </h1>
         <p className="lead">{t.comenzarAyuda}</p>
+        <div className="rescue-key">
+          <p className="rescue-key-label">{t.clave.titulo}</p>
+          <p className="rescue-key-value">{formatRescueKey(rescueKey)}</p>
+          <p className="help">{t.clave.texto}</p>
+        </div>
         <ActionBar>
           <button
             className="btn"

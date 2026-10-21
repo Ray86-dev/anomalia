@@ -118,3 +118,38 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
 - Detalle del modelo de snapshots del Centro (M3).
 - Mapeo de la rúbrica con el currículo, título definitivo y revisión de los textos históricos (§15). Las marcas `TODO(verificar)` de D1 están en `content/dilemas/d1-galileo.ink` y en el contexto para la IA.
 - Consulta al DPD de la Consejería sobre el uso de una IA externa y sobre las alertas de malestar (datos sensibles de menores, art. 9 RGPD).
+
+## 2026-10-21 · M3 (Centro de Control y consola)
+
+### Tomadas por el docente
+- **D-33 · Recuperación con clave de rescate y aprobación.** Cada alias recibe una clave de 6 caracteres (`K7P-2MX`, sin 0/O/1/I).
+  - El alumno la ve en el botón ⓘ del juego («Información: clave de rescate y créditos») y debe apuntarla en el cuaderno.
+  - Con la clave, la partida se recupera al instante desde otro móvil (sin distinguir mayúsculas y con o sin guion).
+  - Sin clave, o con una clave incorrecta, queda una solicitud pendiente que el docente aprueba o rechaza en `/consola`.
+  - Motivo: iOS borra los datos del sitio tras 7 días sin visitarlo y no conviene aprobar 10 solicitudes a mano en mitad de una clase.
+- **D-34 · Alertas de malestar: nada visible para el alumno.** Solo el docente las ve en la consola, con el texto que las motivó, y puede marcarlas como vistas.
+
+### Propuestas técnicas
+- **D-35 · Snapshots del Centro** (`class_snapshot(class_id, force)`), con k = 5:
+  - **En directo** (conectados, progreso por anomalía, fases): se recalcula en cada petición y no revela decisiones. Los grupos de 1 a 4 personas llegan como `null` y se muestran como «<5».
+  - **Resultados** (decisiones, mundo medio, conceptos, finales): solo se recalculan con un lote de ≥ 5 decisiones nuevas, cuando bajan (alumno retirado) o al pulsar R. Las distribuciones solo existen con ≥ 5 respuestas.
+  - **Riesgo residual aceptado:** pulsar R publica al momento, así que quien lo pulse justo después de una única respuesta nueva podría aislarla. Lo controla solo el docente y el Centro nunca muestra quién respondió.
+- **D-36 · Aviso en directo por Realtime Broadcast privado** (`class:<id>`).
+  - Un trigger en `runs` y `answers` envía solo «changed», sin datos. Únicamente el docente de la clase puede suscribirse (política en `realtime.messages`).
+  - El Centro agrupa los avisos (1,5 s) y pide el snapshot; si la red del centro corta los WebSocket, sondea cada 20 s.
+- **D-37 · Vista proyectable** (`/centro?clase=<id>`, 16:9): reloj, conectados, seis paneles y teletipo.
+  - Las decisiones están ocultas hasta pulsar R. Atajos: R, ← →, Esc, F, M y H.
+  - La línea temporal se retuerce según el Desnivel medio y a partir de +25 se vuelve inestable (discontinua, en rojo).
+  - Ambiente sonoro a volumen bajo; de momento reutiliza la pista del 2077.
+  - Con movimiento reducido, el teletipo queda fijo.
+- **D-38 · Etiqueta breve por opción** (`corto`, como mucho 40 caracteres) para la línea temporal, el teletipo y las leyendas.
+- **D-39 · Simulador de clase** (`npm run simular`): hasta 30 alumnos `sim-vivo-NN@anomalia.invalid` que juegan a la vez.
+  - Por defecto escribe con las mismas `svc_*` que `partida`, sin IA (textos de relleno y respaldos).
+  - Con `--api` pasa por la Edge Function y gasta llamadas reales.
+
+### Pendientes (no bloquean M3)
+- El panel de finales se llenará en el M4, cuando el epílogo calcule y guarde el final de cada partida.
+- Contenido de D2–D5 (M5): hasta entonces el Centro las muestra como «D2»… y sin datos.
+- Ambiente sonoro propio del Centro de Control.
+- Consulta al DPD sobre la IA externa y las alertas (sigue abierta).
+

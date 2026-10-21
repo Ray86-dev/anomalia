@@ -1,7 +1,10 @@
 import { ambients, dilemmas, ui } from '@shared/generated/content.ts';
 import { useRef } from 'react';
+import { useGameContext } from './GameContext.ts';
+import { formatRescueKey } from './helpers.ts';
 
 const t = ui.juego.creditos;
+const clave = ui.juego.clave;
 
 type Credit = { readonly key: string; readonly text: string; readonly url: string | undefined };
 
@@ -22,6 +25,7 @@ function allCredits(): Credit[] {
 export function Credits() {
   const dialog = useRef<HTMLDialogElement>(null);
   const credits = allCredits();
+  const { rescueKey } = useGameContext();
   return (
     <>
       <button
@@ -47,6 +51,11 @@ export function Credits() {
         className="confirm-dialog credits-dialog"
         aria-labelledby="creditos-titulo"
       >
+        <div className="rescue-key">
+          <p className="rescue-key-label">{clave.titulo}</p>
+          <p className="rescue-key-value">{formatRescueKey(rescueKey)}</p>
+          <p className="help">{clave.texto}</p>
+        </div>
         <h2 id="creditos-titulo">{t.titulo}</h2>
         <p className="help">{t.texto}</p>
         <ul className="credits-list">

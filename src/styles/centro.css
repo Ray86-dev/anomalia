@@ -1,0 +1,440 @@
+/* Centro de Control: vista para proyector 16:9, legible desde el fondo del aula. */
+
+.cc-root {
+  --cc-gap: clamp(0.5rem, 1vw, 1.25rem);
+  --cc-panel: rgb(20 26 38 / 0.82);
+  --cc-track: rgb(43 53 73 / 0.7);
+
+  /* Altura fija (no flex: 1) para que las filas 1fr de la rejilla no crezcan con su contenido. */
+  flex: none;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cc-gap);
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--cc-gap);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: clamp(var(--text-small), 1.15vw, 1.75rem);
+  line-height: 1.35;
+  background: radial-gradient(ellipse at 50% 30%, #10202a 0%, var(--bg) 75%);
+}
+
+.cc-muted {
+  color: var(--text-muted);
+}
+
+/* ── Cabecera ─────────────────────────────────────────────────────────── */
+
+.cc-header {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--cc-gap) * 2);
+}
+
+.cc-title {
+  margin-right: auto;
+  font-size: 1.6em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.cc-class {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--text);
+}
+
+.cc-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.cc-stat-label {
+  font-size: 0.75em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cc-stat-value {
+  font-size: 1.6em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cc-stat-value .cc-muted {
+  font-size: 0.55em;
+}
+
+/* ── Rejilla de paneles: 3 × 2; ←/→ destaca uno a pantalla completa ─── */
+
+.cc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: var(--cc-gap);
+  min-height: 0;
+}
+
+.cc-has-featured > .cc-panel:not(.cc-featured) {
+  display: none;
+}
+
+.cc-panel.cc-featured {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  font-size: 1.5em;
+}
+
+.cc-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  min-height: 0;
+  padding: 0.9em 1em;
+  overflow: hidden;
+  background: var(--cc-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.cc-panel-title {
+  font-size: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.cc-panel svg {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+}
+
+.cc-panel ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cc-hidden {
+  margin: auto;
+  font-size: 1.15em;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* ── Barras: finas, extremos redondeados y 2 px de separación ────────── */
+
+.cc-row-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cc-row-value {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.cc-bar {
+  display: flex;
+  gap: 2px;
+  height: 0.6em;
+  overflow: hidden;
+  background: var(--cc-track);
+  border-radius: 4px;
+}
+
+.cc-bar > span {
+  flex: none;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.cc-bar-done {
+  background: var(--accent);
+}
+
+.cc-bar-here {
+  background: rgb(127 224 208 / 0.45);
+}
+
+.cc-bar-masked {
+  background: repeating-linear-gradient(135deg, var(--text-muted) 0 2px, transparent 2px 6px);
+}
+
+.cc-progress li,
+.cc-meters li {
+  display: grid;
+  grid-template-columns: minmax(0, 9em) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.cc-progress li {
+  grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) 4.5em;
+}
+
+.cc-progress .cc-row-value {
+  text-align: right;
+}
+
+.cc-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
+.cc-swatch {
+  width: 1em;
+  height: 0.6em;
+  border-radius: 4px;
+}
+
+.cc-swatch + .cc-swatch {
+  margin-left: 0.8em;
+}
+
+.cc-phases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em 1.4em;
+  margin: auto 0 0;
+  font-size: 0.85em;
+}
+
+.cc-phases div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+.cc-phases dt {
+  color: var(--text-muted);
+}
+
+.cc-phases dd {
+  margin: 0;
+  font-size: 1.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Decisiones */
+
+.cc-decisions {
+  overflow: auto;
+}
+
+.cc-decisions > li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+}
+
+.cc-option {
+  display: grid;
+  grid-template-columns: 1.2em minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 0.6em;
+  row-gap: 0.2em;
+  font-size: 0.9em;
+}
+
+.cc-option .cc-bar {
+  grid-column: 2 / -1;
+  grid-row: 2;
+}
+
+.cc-option-letter {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.cc-option .cc-row-value {
+  text-align: right;
+}
+
+/* Mundo y desnivel */
+
+.cc-gap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+}
+
+.cc-gap-value {
+  font-size: 2.6em;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.cc-gap[data-level='mid'] .cc-gap-value {
+  color: var(--focus);
+}
+
+.cc-gap[data-level='high'] .cc-gap-value {
+  color: var(--danger);
+}
+
+.cc-gap-label {
+  color: var(--text-muted);
+}
+
+/* Línea temporal */
+
+.cc-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.cc-line-unstable {
+  stroke: var(--danger);
+  stroke-dasharray: 14 6;
+  animation: cc-flicker 1.6s linear infinite;
+}
+
+.cc-node {
+  fill: var(--bg);
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.cc-year {
+  font-size: 22px;
+  font-weight: 700;
+  fill: var(--text);
+}
+
+.cc-node-label {
+  font-size: 17px;
+  fill: var(--text-muted);
+}
+
+/* Constelación */
+
+.cc-panel .cc-cloud {
+  flex: 1;
+  flex-flow: row wrap;
+  align-items: baseline;
+  align-content: center;
+  justify-content: center;
+  gap: 0.15em 0.75em;
+  line-height: 1.15;
+  color: var(--accent);
+}
+
+/* ── Teletipo y ayuda ─────────────────────────────────────────────────── */
+
+.cc-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-width: 0;
+}
+
+.cc-pending {
+  font-size: 0.8em;
+}
+
+.cc-ticker {
+  overflow: hidden;
+  padding: 0.45em 0;
+  border-block: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.cc-ticker-track {
+  display: inline-flex;
+  animation: cc-scroll 30s linear infinite;
+}
+
+.cc-ticker-item {
+  padding-right: 4em;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.cc-ticker-item::before {
+  content: '▸ ';
+  color: var(--text-muted);
+}
+
+.cc-help {
+  position: fixed;
+  right: var(--cc-gap);
+  bottom: calc(var(--cc-gap) * 5);
+  z-index: 2;
+  padding: 1em 1.25em;
+  background: var(--bg-raised);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.cc-help h2 {
+  margin-bottom: 0.5em;
+  font-size: 1em;
+  color: var(--accent);
+}
+
+.cc-help ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cc-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@keyframes cc-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes cc-flicker {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+/* Sin movimiento: el teletipo queda fijo y se ve cada mensaje una sola vez. */
+@media (prefers-reduced-motion: reduce) {
+  .cc-ticker {
+    white-space: normal;
+  }
+
+  .cc-ticker-track {
+    flex-wrap: wrap;
+    animation: none;
+  }
+
+  .cc-ticker-item[aria-hidden='true'] {
+    display: none;
+  }
+
+  .cc-line-unstable {
+    animation: none;
+  }
+}

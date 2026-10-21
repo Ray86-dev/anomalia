@@ -8,7 +8,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { applyDeltas, INITIAL_WORLD } from '../shared/game/world.ts';
 import { classModes, concepts, dilemmas, fallbacks } from '../shared/generated/content.ts';
 import type { Database } from '../src/lib/database.types.ts';
-import { adminClient, findUserByEmail, requireEnv } from './lib/admin.ts';
+import { adminClient, check, findUserByEmail, requireEnv } from './lib/admin.ts';
 
 const CLASS_CODE = 'PRUEBA';
 const DEMO_TEACHER = 'docente.demo@anomalia.invalid';
@@ -64,15 +64,6 @@ const pick = <T>(items: readonly T[]): T => {
   if (item === undefined) throw new Error('pick() on an empty list');
   return item;
 };
-
-type Result<T> = { data: T; error: null } | { data: unknown; error: { message: string } };
-
-/** Espera una respuesta de supabase-js y lanza si trae error. */
-async function check<T>(label: string, promise: PromiseLike<Result<T>>): Promise<T> {
-  const result = await promise;
-  if (result.error !== null) throw new Error(`${label}: ${result.error.message}`);
-  return result.data;
-}
 
 async function ensureUser(admin: Admin, email: string, password: string): Promise<string> {
   const existing = await findUserByEmail(admin, email);

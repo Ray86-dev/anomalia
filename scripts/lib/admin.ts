@@ -40,3 +40,12 @@ export async function findUserByEmail(
     if (data.users.length < 200) return null;
   }
 }
+
+type Result<T> = { data: T; error: null } | { data: unknown; error: { message: string } };
+
+/** Espera una respuesta de supabase-js y lanza si trae error. */
+export async function check<T>(label: string, promise: PromiseLike<Result<T>>): Promise<T> {
+  const result = await promise;
+  if (result.error !== null) throw new Error(`${label}: ${result.error.message}`);
+  return result.data;
+}

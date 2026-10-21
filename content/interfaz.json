@@ -30,6 +30,29 @@
       "is_teacher": "Esta sesión pertenece a una cuenta docente.",
       "anonymous_disabled": "El acceso de alumnado no está activado todavía. Avisa a tu docente.",
       "rate_limited": "Demasiados intentos seguidos desde esta red. Espera un minuto y vuelve a probar."
+    },
+    "recuperar": {
+      "enlace": "¿Ya tenías partida en otro móvil? Recupérala",
+      "esMio": "Es mi alias: recuperar mi partida",
+      "titulo": "Recupera tu partida",
+      "ayuda": "Escribe el código de clase, tu alias y tu clave de rescate. Si no tienes la clave, tu docente puede aprobarlo desde su consola.",
+      "claveEtiqueta": "Clave de rescate (si la tienes)",
+      "claveAyuda": "Son 6 letras y números, por ejemplo K7P-2MX.",
+      "boton": "Recuperar mi partida",
+      "recuperando": "Buscando tu partida…",
+      "volver": "Volver",
+      "esperandoTitulo": "Esperando a tu docente",
+      "esperandoTexto": "Tu docente tiene que aprobar la recuperación de «{alias}» desde su consola. Esta pantalla se actualizará sola.",
+      "rechazada": "Tu docente no ha aprobado la recuperación. Pídele ayuda.",
+      "errores": {
+        "invalid_code": "Ese código no corresponde a ninguna clase activa. Revísalo.",
+        "unknown_alias": "No hay ningún alias así en esta clase. Revisa cómo lo escribiste.",
+        "expelled": "Tu docente ha retirado este alias. Pídele ayuda.",
+        "already_in_other_class": "Este móvil ya está jugando con otro alias. Pide ayuda a tu docente.",
+        "is_teacher": "Esta sesión pertenece a una cuenta docente.",
+        "wrong_key": "La clave no coincide. Hemos avisado a tu docente para que lo apruebe.",
+        "pending": "Hemos avisado a tu docente para que lo apruebe."
+      }
     }
   },
   "juego": {
@@ -127,7 +150,7 @@
       "expulsado": "Tu docente ha retirado este alias. Pídele ayuda."
     },
     "creditos": {
-      "abrir": "Créditos de imágenes y música",
+      "abrir": "Información: clave de rescate y créditos",
       "titulo": "Créditos",
       "texto": "Imágenes y música de dominio público o con licencia libre. Más detalles en el archivo de licencias del proyecto.",
       "licencia": "Ver la licencia",
@@ -136,6 +159,10 @@
     "ia": {
       "leyendoArgumento": "{nombre} está leyendo tu argumento…",
       "leyendoReplica": "{nombre} está leyendo tu réplica…"
+    },
+    "clave": {
+      "titulo": "Tu clave de rescate",
+      "texto": "Apúntala en tu cuaderno: si cambias de móvil, con ella recuperas tu partida."
     }
   },
   "consola": {
@@ -176,14 +203,84 @@
       "expelled": "Retirado"
     },
     "abrirCentro": "Abrir el Centro de Control",
-    "volver": "Volver a mis clases"
+    "volver": "Volver a mis clases",
+    "capituloII": "Capítulo II",
+    "capituloCerrado": "Cerrado: el alumnado espera al terminar el capítulo I.",
+    "capituloAbierto": "Abierto.",
+    "sinCapituloII": "Esta clase no tiene capítulo II (modo una sesión).",
+    "abrirCapitulo": "Abrir el capítulo II",
+    "cerrarCapitulo": "Volver a cerrarlo",
+    "confirmarAbrir": "¿Abrir ya el capítulo II para toda la clase?",
+    "alertasTitulo": "Alertas privadas ({n} sin ver)",
+    "sinAlertas": "No hay alertas.",
+    "alertaAyuda": "Textos con indicios de malestar. Solo tú los ves; actúa según el protocolo del centro.",
+    "alertaRespuesta": "Réplica",
+    "marcarVista": "Marcar como vista",
+    "vista": "Vista",
+    "solicitudesTitulo": "Recuperaciones pendientes ({n})",
+    "sinSolicitudes": "No hay solicitudes.",
+    "solicitudAyuda": "Alguien pide continuar con este alias en otro móvil. Aprueba solo si sabes que es esa persona.",
+    "aprobar": "Aprobar",
+    "rechazar": "Rechazar",
+    "renombrar": "Renombrar",
+    "renombrarPregunta": "Nuevo alias para «{alias}» (3–16 caracteres):",
+    "aliasNoValido": "Ese alias no es válido o ya existe en la clase.",
+    "retirar": "Retirar",
+    "readmitir": "Readmitir",
+    "confirmarRetirar": "¿Retirar a «{alias}»? Ya no podrá seguir jugando ni contará en el Centro de Control.",
+    "peligro": "Zona de borrado",
+    "borrar": "Borrar todos los datos de esta clase",
+    "borrarAyuda": "Se borran el alumnado, sus partidas y textos y las alertas. No se puede deshacer.",
+    "confirmarBorrar": "Para confirmar, escribe el código de la clase ({codigo}):",
+    "borrada": "Clase borrada."
   },
   "centro": {
     "titulo": "Centro de Control",
     "requiereDocente": "El Centro de Control necesita una sesión docente.",
     "irConsola": "Ir a la consola",
-    "proximamente": "Los paneles en directo llegarán en el hito M3.",
-    "reloj": "Reloj de sesión"
+    "elegirClase": "Elige la clase que vas a proyectar",
+    "sinClases": "No tienes clases. Créalas desde la consola.",
+    "reloj": "Sesión",
+    "conectados": "Cronistas conectados",
+    "deTotal": "de {total}",
+    "progreso": "Progreso por anomalía",
+    "aqui": "en curso",
+    "hechos": "cerradas",
+    "prologo": "En el prólogo",
+    "espera": "Esperando el capítulo II",
+    "final": "En el epílogo",
+    "menosDeK": "<{k}",
+    "decisiones": "Decisiones de la clase",
+    "ocultas": "Ocultas · pulsa R para revelar",
+    "faltan": "Faltan respuestas (mínimo {k})",
+    "respuestas": "{n} respuestas",
+    "mundo": "El 2077 de la clase",
+    "desnivel": "Desnivel prometeico",
+    "sinDatos": "Aún no hay {k} decisiones",
+    "linea": "Línea temporal de la clase",
+    "conceptos": "Constelación de conceptos",
+    "sinConceptos": "Los conceptos aparecerán cuando haya {k} respuestas.",
+    "finales": "Finales",
+    "sinFinales": "Los finales aparecerán al terminar la partida.",
+    "pendientes": "{n} decisiones nuevas sin publicar (se publican de {k} en {k})",
+    "ayudaTitulo": "Atajos de teclado",
+    "ayuda": {
+      "r": "R · revelar u ocultar las decisiones",
+      "flechas": "← → · destacar un panel",
+      "f": "F · pantalla completa",
+      "m": "M · sonido",
+      "h": "H · mostrar u ocultar esta ayuda",
+      "esc": "Esc · volver a todos los paneles"
+    },
+    "teletipo": {
+      "mayoria": "ANOMALÍA EN {anio}: la mayoría elige «{opcion}»",
+      "empate": "ANOMALÍA EN {anio}: la clase está dividida",
+      "desnivel": "DESNIVEL PROMETEICO DE LA CLASE: {valor}",
+      "inestable": "ALERTA: el 2077 de la clase se vuelve inestable",
+      "concepto": "CONCEPTO MÁS INVOCADO: {concepto}",
+      "conectados": "{n} CRONISTAS CONECTADOS",
+      "espera": "ESPERANDO A LOS CRONISTAS…"
+    }
   },
   "fases": {
     "prologue": "Prólogo",

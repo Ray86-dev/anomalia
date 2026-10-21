@@ -14,6 +14,11 @@ export function findCounselor(id: string | null | undefined): Counselor | undefi
   return counselors.find((c) => c.id === id);
 }
 
+/** «K7P2MX» → «K7P-2MX» (más fácil de copiar a mano). */
+export function formatRescueKey(key: string): string {
+  return `${key.slice(0, 3)}-${key.slice(3)}`;
+}
+
 /** Iniciales para el avatar del consejero («Inés Kaltz» → «IK»). */
 export function initials(name: string): string {
   return name

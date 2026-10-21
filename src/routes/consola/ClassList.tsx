@@ -11,7 +11,7 @@ const t = ui.consola;
 
 export type ClassSummary = Pick<
   Database['public']['Tables']['classes']['Row'],
-  'id' | 'label' | 'code' | 'chapter_unlocked' | 'expires_at'
+  'id' | 'label' | 'code' | 'chapter_unlocked' | 'chapter_2' | 'expires_at'
 >;
 
 const createdSchema = z.object({ id: z.string(), code: z.string() });
@@ -19,7 +19,7 @@ const createdSchema = z.object({ id: z.string(), code: z.string() });
 async function fetchClasses(): Promise<readonly ClassSummary[]> {
   const { data, error } = await getClient('teacher')
     .from('classes')
-    .select('id, label, code, chapter_unlocked, expires_at')
+    .select('id, label, code, chapter_unlocked, chapter_2, expires_at')
     .order('created_at', { ascending: false });
   if (error !== null) throw new Error(error.message);
   return data;
@@ -124,6 +124,7 @@ function CreateClassForm({ onCreated }: { readonly onCreated: (c: ClassSummary) 
         code: created.data.code,
         label: label.trim(),
         chapter_unlocked: 1,
+        chapter_2: selected.capitulo2,
         expires_at: expires,
       });
     } catch {

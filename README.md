@@ -29,6 +29,19 @@ El proyecto «anomalia» (ref `kicpndzbcswxchxiejje`, región eu-west-1) ya est�
 4. CORS de las Edge Functions: `npx supabase secrets set ALLOWED_ORIGINS=https://ray86-dev.github.io,http://localhost:5173`.
 5. Docentes: crea el usuario en Authentication → Users → Add user, marcando *Auto Confirm User*. Después añádelo a la lista blanca con `npm run teacher:add -- tu@correo "Tu nombre"`.
 6. Datos de prueba: `npm run seed:demo` recrea la clase **PRUEBA** con 30 alumnos simulados. Su docente de demostración es `docente.demo@anomalia.invalid`, con la contraseña `DEMO_TEACHER_PASSWORD` de `.env.local`.
+7. Clase en directo: `npm run simular` pone a 25 alumnos simulados a jugar a la vez en PRUEBA (o en `--clase CODIGO`). Abre a la vez `/centro?clase=<id>` para ver cómo se mueve. Con `--borrar` los quitas.
+
+## Centro de Control
+
+Ábrelo en el ordenador del aula con tu sesión docente, desde el botón «Abrir el Centro de Control» de cada clase en la consola. Atajos:
+
+| Tecla | Acción |
+|---|---|
+| R | Revela u oculta las decisiones de la clase |
+| ← → / Esc | Destaca un panel a pantalla completa / vuelve a la vista general |
+| F | Pantalla completa |
+| M | Activa o silencia el ambiente sonoro |
+| H | Muestra u oculta la ayuda |
 
 ## Calidad
 

@@ -34,6 +34,7 @@
     {
       "id": "A",
       "texto": { "normal": "Aconsejarle abjurar para salvar la vida y seguir investigando." },
+      "corto": "Abjurar y seguir investigando",
       "deltas": { "confianza": -5, "responsabilidad": 5 },
       "rama": null,
       "objetor": "kaltz",
@@ -47,6 +48,7 @@
     {
       "id": "B",
       "texto": { "normal": "Aconsejarle mantenerse firme en público." },
+      "corto": "Mantenerse firme",
       "deltas": { "confianza": 10, "poder": 5 },
       "rama": "d1-firme",
       "objetor": "novak",
@@ -60,6 +62,7 @@
     {
       "id": "C",
       "texto": { "normal": "Difundir en secreto sus escritos fuera de Italia." },
+      "corto": "Difundir en secreto",
       "deltas": { "poder": 10, "equidad": 5 },
       "rama": null,
       "objetor": "jonas",

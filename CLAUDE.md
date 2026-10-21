@@ -75,7 +75,8 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
   - el docente (tiene fila en `teachers`) accede a sus clases por RLS y por RPC con comprobación de propiedad;
   - las funciones auxiliares van en el esquema `private`.
 - **Sesiones separadas:** dos clientes de Supabase con `storageKey` distinto: `anomalia-alumno` para `/` y `anomalia-docente` para `/consola` y `/centro`.
-- **Centro de Control:** solo snapshots agregados (k = 5) publicados por lotes. Ver `docs/decisiones.md`.
+- **Centro de Control** (`src/routes/centro/`): solo consume `class_snapshot` (agregados con k = 5, resultados publicados por lotes o al pulsar R; D-35) y se actualiza por Realtime Broadcast privado con sondeo de respaldo (D-36).
+  - Nunca le pases alias, textos libres ni filas individuales, y no importes nada de `alumno` ni de `consola` (regla de ESLint).
 
 ## Convenciones
 
@@ -103,4 +104,5 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 | `npx supabase config push` | Sube la config de Auth de `supabase/config.toml`; **revisa el diff**: los valores locales sustituyen a los remotos |
 | `npm run teacher:add -- correo@dominio` | Añade un usuario de Auth existente a la lista blanca de docentes |
 | `npm run seed:demo` | Recrea la clase simulada PRUEBA con 30 alumnos |
+| `npm run simular` | Simula una clase jugando a la vez para probar el Centro (`--clase`, `--alumnos`, `--ritmo`, `--reiniciar`, `--borrar`, `--api`) |
 | `npm run ai:probe` | Prueba la IA real a través de `partida` (latencia, calidad, inyección, malestar); gasta llamadas reales y borra lo que crea |
