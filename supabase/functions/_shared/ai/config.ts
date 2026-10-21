@@ -55,7 +55,8 @@ export function readAiConfig(env: (name: string) => string | undefined): AiConfi
   const preset = PRESETS[provider];
   if (preset === undefined) return null;
 
-  const baseUrl = (env('AI_BASE_URL')?.trim() || preset.baseUrl).replace(/\/+$/, '');
+  const customUrl = env('AI_BASE_URL')?.trim() ?? '';
+  const baseUrl = (customUrl === '' ? preset.baseUrl : customUrl).replace(/\/+$/, '');
   if (baseUrl === '') return null;
 
   let extraBody: Record<string, unknown> = { ...preset.extraBody };

@@ -6,6 +6,8 @@ import { asData, objectionPrompt, type DialogueContext } from './prompts.ts';
 import type { FetchLike } from './provider.ts';
 
 const env = (vars: Record<string, string>) => (name: string) => vars[name];
+/** Cuerpo de la petición enviada al proveedor (siempre es un string JSON). */
+const bodyOf = (init: RequestInit | undefined) => (typeof init?.body === 'string' ? init.body : '');
 
 describe('readAiConfig', () => {
   it('sin proveedor, modelo o clave no hay IA (solo respaldos)', () => {
@@ -66,7 +68,6 @@ const d1 = dilemmas.find((d) => d.id === 'd1');
 const novak = counselors.find((c) => c.id === 'novak');
 if (d1 === undefined || novak === undefined) throw new Error('falta contenido de D1');
 const optionB = d1.opciones[1];
-if (optionB === undefined) throw new Error('falta la opción B');
 const context: DialogueContext = { counselor: novak, dilemma: d1, option: optionB, concepts };
 
 const config: AiConfig = {
@@ -108,13 +109,13 @@ describe('generateObjection', () => {
     await generateObjection(deps(fetchImpl), context, 'Mi argumento');
     const [url, init] = vi.mocked(fetchImpl).mock.calls[0] ?? [];
     expect(url).toBe('https://api.deepseek.com/chat/completions');
-    const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
+    const body = JSON.parse(bodyOf(init)) as Record<string, unknown>;
     expect(body).toMatchObject({
       model: 'deepseek-flash',
       response_format: { type: 'json_object' },
       thinking: { type: 'disabled' },
     });
-    expect(String(init?.body)).not.toContain('secreto');
+    expect(bodyOf(init)).not.toContain('secreto');
     expect(new Headers(init?.headers).get('authorization')).toBe('Bearer secreto');
   });
 
@@ -169,7 +170,7 @@ describe('generateObjection', () => {
       context,
       'Mi correo es ana@gmail.com y mi móvil 612345678',
     );
-    const body = String(vi.mocked(fetchImpl).mock.calls[0]?.[1]?.body);
+    const body = bodyOf(vi.mocked(fetchImpl).mock.calls[0]?.[1]);
     expect(body).not.toContain('ana@gmail.com');
     expect(body).not.toContain('612345678');
   });

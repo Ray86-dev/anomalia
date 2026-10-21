@@ -399,7 +399,9 @@ describe('partida · con IA', () => {
       { ai },
     );
     expect(ai.objection).toHaveBeenCalledWith(
-      expect.objectContaining({ counselor: expect.objectContaining({ id: d1A?.objetor }) }),
+      expect.objectContaining({
+        counselor: expect.objectContaining({ id: d1A?.objetor }) as unknown,
+      }),
       'Porque la vida importa',
     );
     expect(writes(rpc)[0]?.[1]).toMatchObject({
