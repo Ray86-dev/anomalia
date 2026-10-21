@@ -1,0 +1,30 @@
+{
+  "niveles": ["Insuficiente", "Suficiente", "Notable", "Sobresaliente"],
+  "criterios": [
+    {
+      "id": "C1",
+      "nombre": "Comprensión de posturas",
+      "descripcion": "Identifica y explica correctamente las posturas de los consejeros."
+    },
+    {
+      "id": "C2",
+      "nombre": "Argumentación",
+      "descripcion": "Las justificaciones dan razones, no solo opiniones; son coherentes con la decisión."
+    },
+    {
+      "id": "C3",
+      "nombre": "Diálogo crítico",
+      "descripcion": "La réplica responde de verdad a la objeción (concede, matiza o refuta)."
+    },
+    {
+      "id": "C4",
+      "nombre": "Ciencia y filosofía",
+      "descripcion": "La reflexión final distingue lo que la ciencia puede explicar de lo que debemos hacer."
+    },
+    {
+      "id": "C5",
+      "nombre": "Uso de conceptos y casos",
+      "descripcion": "Emplea con precisión conceptos de la unidad y conecta casos históricos (y Gattaca)."
+    }
+  ]
+}

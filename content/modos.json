@@ -1,0 +1,16 @@
+[
+  {
+    "id": "dos-sesiones",
+    "etiqueta": "Dos sesiones",
+    "descripcion": "Capítulo I: D1, D2 y D3. Capítulo II, que desbloqueas tú en la segunda sesión: D4 y D5.",
+    "capitulo1": ["d1", "d2", "d3"],
+    "capitulo2": ["d4", "d5"]
+  },
+  {
+    "id": "una-sesion",
+    "etiqueta": "Una sesión",
+    "descripcion": "D1, D3 y D4, sin D5. La reflexión final queda como tarea.",
+    "capitulo1": ["d1", "d3", "d4"],
+    "capitulo2": []
+  }
+]

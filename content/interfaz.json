@@ -1,0 +1,101 @@
+{
+  "app": {
+    "titulo": "ANOMALÍA",
+    "sinJavascript": "ANOMALÍA necesita JavaScript para funcionar.",
+    "cargando": "Cargando…",
+    "errorConfiguracion": "Falta configurar la conexión con el servidor. Avisa a tu docente.",
+    "errorRed": "No hay conexión con el Archivo. Comprueba la wifi e inténtalo de nuevo.",
+    "errorInesperado": "Algo ha fallado. Inténtalo de nuevo.",
+    "errorCarga": "Hay una versión nueva del juego. Recarga para continuar.",
+    "recargar": "Recargar",
+    "paginaNoEncontrada": "Esta página no existe en ninguna línea temporal.",
+    "volverInicio": "Volver al inicio"
+  },
+  "alumno": {
+    "bienvenida": "Año 2077. El Archivo de Mnemósine ha detectado una anomalía y necesita Cronistas.",
+    "unirseTitulo": "Únete como Cronista",
+    "codigoEtiqueta": "Código de clase",
+    "codigoAyuda": "Te lo da tu docente: 6 letras y números.",
+    "aliasEtiqueta": "Tu alias",
+    "aliasAyuda": "De 3 a 16 caracteres: letras, números, «-» o «_». No uses tu nombre real.",
+    "unirseBoton": "Entrar en el Archivo",
+    "uniendose": "Abriendo el Archivo…",
+    "conectadoTitulo": "Conectado como {alias}",
+    "conectadoClase": "Clase: {clase}",
+    "conectadoEspera": "Tu primer viaje empezará aquí muy pronto.",
+    "errores": {
+      "invalid_code": "Ese código no corresponde a ninguna clase activa. Revísalo.",
+      "alias_taken": "Ese alias ya está en uso en tu clase. Elige otro.",
+      "alias_format": "El alias debe tener de 3 a 16 caracteres: letras, números, «-» o «_».",
+      "alias_blocked": "Ese alias no está permitido. Elige otro.",
+      "already_in_other_class": "Este móvil ya está unido a otra clase. Pide ayuda a tu docente.",
+      "expelled": "Tu docente ha retirado este alias. Pídele ayuda.",
+      "is_teacher": "Esta sesión pertenece a una cuenta docente.",
+      "anonymous_disabled": "El acceso de alumnado no está activado todavía. Avisa a tu docente.",
+      "rate_limited": "Demasiados intentos seguidos desde esta red. Espera un minuto y vuelve a probar."
+    }
+  },
+  "consola": {
+    "titulo": "Consola docente",
+    "accesoTitulo": "Acceso docente",
+    "emailEtiqueta": "Correo",
+    "contrasenaEtiqueta": "Contraseña",
+    "entrar": "Entrar",
+    "entrando": "Entrando…",
+    "salir": "Cerrar sesión",
+    "errorCredenciales": "Correo o contraseña incorrectos.",
+    "noDocente": "Esta cuenta no está autorizada como docente.",
+    "misClases": "Mis clases",
+    "sinClases": "Todavía no has creado ninguna clase.",
+    "crearTitulo": "Nueva clase",
+    "nombreClaseEtiqueta": "Nombre de la clase",
+    "nombreClaseAyuda": "Por ejemplo, «4.º ESO B». Sin datos personales.",
+    "modoEtiqueta": "Modo",
+    "retencionEtiqueta": "Borrar los datos pasados (días)",
+    "retencionAyuda": "Entre 1 y 90. Después se borra todo automáticamente.",
+    "crearBoton": "Crear clase",
+    "creando": "Creando…",
+    "codigoClase": "Código de la clase",
+    "caduca": "Los datos se borran el {fecha}",
+    "capituloDesbloqueado": "Capítulo desbloqueado: {n}",
+    "alumnadoTitulo": "Alumnado ({n})",
+    "sinAlumnado": "Nadie se ha unido todavía.",
+    "actualizar": "Actualizar",
+    "nunca": "—",
+    "columnas": {
+      "alias": "Alias",
+      "fase": "Fase",
+      "ultimaConexion": "Última conexión",
+      "estado": "Estado"
+    },
+    "estados": {
+      "active": "Activo",
+      "expelled": "Retirado"
+    },
+    "abrirCentro": "Abrir el Centro de Control",
+    "volver": "Volver a mis clases"
+  },
+  "centro": {
+    "titulo": "Centro de Control",
+    "requiereDocente": "El Centro de Control necesita una sesión docente.",
+    "irConsola": "Ir a la consola",
+    "proximamente": "Los paneles en directo llegarán en el hito M3.",
+    "reloj": "Reloj de sesión"
+  },
+  "fases": {
+    "prologue": "Prólogo",
+    "waiting": "Esperando el capítulo II",
+    "epilogue": "Epílogo",
+    "reflection": "Reflexión final",
+    "dossier": "Expediente",
+    "done": "Terminada",
+    "travel": "Viaje",
+    "scene": "Escena",
+    "council": "Consejo",
+    "decision": "Decisión",
+    "justification": "Justificación",
+    "objection": "Objeción",
+    "ripples": "Ondas temporales",
+    "archive": "Archivo real"
+  }
+}

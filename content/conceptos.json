@@ -1,0 +1,18 @@
+[
+  { "id": "dignidad", "etiqueta": "Dignidad" },
+  { "id": "utilidad", "etiqueta": "Utilidad" },
+  { "id": "consecuencias", "etiqueta": "Consecuencias" },
+  { "id": "consentimiento", "etiqueta": "Consentimiento" },
+  { "id": "responsabilidad", "etiqueta": "Responsabilidad" },
+  { "id": "prudencia", "etiqueta": "Prudencia" },
+  { "id": "libertad", "etiqueta": "Libertad" },
+  { "id": "justicia", "etiqueta": "Justicia" },
+  { "id": "igualdad", "etiqueta": "Igualdad" },
+  { "id": "progreso", "etiqueta": "Progreso" },
+  { "id": "verdad", "etiqueta": "Verdad" },
+  { "id": "autoridad", "etiqueta": "Autoridad" },
+  { "id": "evidencia", "etiqueta": "Evidencia" },
+  { "id": "neutralidad", "etiqueta": "Neutralidad" },
+  { "id": "riesgo", "etiqueta": "Riesgo" },
+  { "id": "determinismo", "etiqueta": "Determinismo" }
+]

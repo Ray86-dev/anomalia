@@ -1,0 +1,22 @@
+{
+  "d1": {
+    "A": {
+      "kaltz": {
+        "objecion": { "normal": "TODO(contenido): objeción preescrita de Inés Kaltz a la opción A (M1)." },
+        "cierre": { "normal": "TODO(contenido): cierre preescrito de Inés Kaltz (M1)." }
+      }
+    },
+    "B": {
+      "novak": {
+        "objecion": { "normal": "TODO(contenido): objeción preescrita de Dex Novak a la opción B (M1)." },
+        "cierre": { "normal": "TODO(contenido): cierre preescrito de Dex Novak (M1)." }
+      }
+    },
+    "C": {
+      "jonas": {
+        "objecion": { "normal": "TODO(contenido): objeción preescrita de Hana Jonás a la opción C (M1)." },
+        "cierre": { "normal": "TODO(contenido): cierre preescrito de Hana Jonás (M1)." }
+      }
+    }
+  }
+}

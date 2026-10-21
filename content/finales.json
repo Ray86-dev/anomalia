@@ -1,0 +1,52 @@
+[
+  {
+    "id": "tecnocracia",
+    "titulo": { "normal": "Tecnocracia genómica" },
+    "condicion": {
+      "todas": [
+        { "var": "desnivel", "op": ">=", "valor": 25 },
+        { "var": "equidad", "op": "<", "valor": 40 }
+      ]
+    },
+    "resumen": { "normal": "Mundo Gattaca: válidos y no válidos." },
+    "texto": { "normal": "TODO(contenido): texto del final (M5)." },
+    "assets": {}
+  },
+  {
+    "id": "cuidado",
+    "titulo": { "normal": "Era del cuidado" },
+    "condicion": {
+      "todas": [
+        { "var": "responsabilidad", "op": ">=", "valor": 65 },
+        { "var": "equidad", "op": ">=", "valor": 60 }
+      ]
+    },
+    "resumen": { "normal": "Ciencia lenta, compartida y vigilada." },
+    "texto": { "normal": "TODO(contenido): texto del final (M5)." },
+    "assets": {}
+  },
+  {
+    "id": "fractura",
+    "titulo": { "normal": "Fractura" },
+    "condicion": { "todas": [{ "var": "confianza", "op": "<", "valor": 35 }] },
+    "resumen": { "normal": "Sociedad que ya no cree a nadie." },
+    "texto": { "normal": "TODO(contenido): texto del final (M5)." },
+    "assets": {}
+  },
+  {
+    "id": "estancamiento",
+    "titulo": { "normal": "Estancamiento" },
+    "condicion": { "todas": [{ "var": "poder", "op": "<", "valor": 35 }] },
+    "resumen": { "normal": "Mundo prudente pero sin capacidad de responder a crisis." },
+    "texto": { "normal": "TODO(contenido): texto del final (M5)." },
+    "assets": {}
+  },
+  {
+    "id": "equilibrio",
+    "titulo": { "normal": "Equilibrio frágil" },
+    "condicion": null,
+    "resumen": { "normal": "Nada resuelto; todo depende del siguiente paso." },
+    "texto": { "normal": "TODO(contenido): texto del final (M5)." },
+    "assets": {}
+  }
+]
