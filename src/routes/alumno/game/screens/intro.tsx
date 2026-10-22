@@ -9,7 +9,7 @@ import { countTo } from '../../../../engine/motion.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { formatRescueKey, storyFor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, InkReader } from '../parts.tsx';
+import { ActionBar, AdvanceButton, InkReader, Listen } from '../parts.tsx';
 
 const t = ui.juego;
 
@@ -98,6 +98,10 @@ export function Travel({ dilemma }: { readonly dilemma: Dilemma }) {
       </h1>
       <p className="lead">{texto(dilemma.titulo)}</p>
       <p>{texto(dilemma.rolCronista)}</p>
+      <Listen
+        auto
+        text={`${fmt(t.viaje.destino, { lugar: dilemma.lugar, anio: dilemma.anio })}. ${texto(dilemma.titulo)}. ${texto(dilemma.rolCronista)}`}
+      />
       <ActionBar>
         <AdvanceButton label={t.viaje.llegar} />
       </ActionBar>

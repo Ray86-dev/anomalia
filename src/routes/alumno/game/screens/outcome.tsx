@@ -14,7 +14,7 @@ import { assetUrl } from '../../../../engine/backdrop/Backdrop.tsx';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, AriMessage, Avatar } from '../parts.tsx';
+import { ActionBar, AdvanceButton, AriMessage, Avatar, Listen } from '../parts.tsx';
 
 const t = ui.juego;
 
@@ -98,6 +98,7 @@ export function Ripples({ dilemma }: { readonly dilemma: Dilemma }) {
           <Avatar counselor={objector} />
           <p>{answer.closing}</p>
         </blockquote>
+        <Listen auto text={`${objector.nombre}. ${answer.closing}`} />
         <ActionBar>
           <button
             className="btn"
@@ -123,6 +124,10 @@ export function Ripples({ dilemma }: { readonly dilemma: Dilemma }) {
           </h1>
           <p className="lead">{texto(option.ondas.texto)}</p>
           <AriMessage text={texto(option.ondas.ari)} />
+          <Listen
+            auto
+            text={`${texto(option.ondas.titular)}. ${texto(option.ondas.texto)} ${t.ari.remitente}: ${texto(option.ondas.ari)}`}
+          />
         </>
       )}
       <WorldMeters world={run.world} deltas={option?.deltas ?? {}} />
@@ -143,6 +148,7 @@ export function Archive({ dilemma }: { readonly dilemma: Dilemma }) {
       </h1>
       <article className="archive-card">
         <p className="archive-text">{texto(dilemma.archivoReal.texto)}</p>
+        <Listen auto text={texto(dilemma.archivoReal.texto)} />
         {image !== undefined && (
           <figure>
             <img src={assetUrl(image.src)} alt={image.pie ? texto(image.pie) : ''} loading="lazy" />

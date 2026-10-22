@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from 'react';
 import { audio } from '../../../engine/audio.ts';
+import { speech } from '../../../engine/speech.ts';
 import { assetUrl, Backdrop } from '../../../engine/backdrop/Backdrop.tsx';
 import { animateIn } from '../../../engine/motion.ts';
 import { reading } from '../../../lib/reading.ts';
@@ -20,7 +21,7 @@ import { Achievements } from './Achievements.tsx';
 import { Credits } from './Credits.tsx';
 import { GameContext, useGameState } from './GameContext.ts';
 import { findDilemma } from './helpers.ts';
-import { AudioToggle, ReadingToggle } from './parts.tsx';
+import { AudioToggle, ReadingToggle, VoiceToggle } from './parts.tsx';
 import { Council, Decision } from './screens/council.tsx';
 import { Lab } from './screens/lab.tsx';
 import { Twist } from './screens/twist.tsx';
@@ -78,11 +79,23 @@ export function Game({ initial, onLost }: GameProps) {
     audio.play(trackUrl);
   }, [trackUrl]);
 
+  // La música baja mientras se lee en voz alta.
+  useEffect(() => {
+    speech.onSpeakingChange((speaking) => {
+      audio.setDucked(speaking);
+    });
+    return () => {
+      speech.onSpeakingChange(null);
+      speech.stop();
+    };
+  }, []);
+
   // Cada fase nueva: entrada suave y foco en el título (lectores de pantalla).
   const main = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
     const element = main.current;
     if (element === null) return;
+    speech.stop();
     element.querySelector<HTMLElement>('[data-focus]')?.focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
     void animateIn(element);
@@ -135,6 +148,7 @@ export function Game({ initial, onLost }: GameProps) {
             <Achievements />
             <span className="game-bar-actions">
               <ReadingToggle />
+              <VoiceToggle />
               <Credits />
               <AudioToggle />
             </span>

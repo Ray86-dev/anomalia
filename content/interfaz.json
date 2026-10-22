@@ -163,6 +163,7 @@
     "logros": {
       "abrir": "Tus logros: {puntos} puntos, rango {rango}",
       "puntos": "{n} pts",
+      "puntosCorto": "{n}",
       "titulo": "Tus logros",
       "nota": "Los logros son parte del juego: no forman parte de la nota.",
       "cerrar": "Cerrar",
@@ -304,6 +305,19 @@
       "activar": "Activar la lectura fácil",
       "desactivar": "Desactivar la lectura fácil"
     },
+    "voz": {
+      "activar": "Activar la lectura en voz alta",
+      "desactivar": "Desactivar la lectura en voz alta",
+      "escuchar": "Escuchar",
+      "activada": "Lectura en voz alta activada."
+    },
+    "ajustes": {
+      "titulo": "Ajustes",
+      "tamano": "Tamaño del texto",
+      "tamanos": { "normal": "Normal", "grande": "Grande", "muy-grande": "Muy grande" },
+      "movimiento": "Reducir el movimiento",
+      "movimientoAyuda": "Quita animaciones y efectos. Se activa solo si tu móvil ya lo pide."
+    },
     "audio": {
       "silenciar": "Silenciar el sonido",
       "activar": "Activar el sonido"
@@ -314,7 +328,7 @@
       "expulsado": "Tu docente ha retirado este alias. Pídele ayuda."
     },
     "creditos": {
-      "abrir": "Información: clave de rescate y créditos",
+      "abrir": "Información, ajustes y créditos",
       "titulo": "Créditos",
       "texto": "Imágenes y música de dominio público o con licencia libre. Más detalles en el archivo de licencias del proyecto.",
       "licencia": "Ver la licencia",

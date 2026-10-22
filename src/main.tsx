@@ -5,6 +5,8 @@ import { RouterProvider } from 'react-router/dom';
 import { installChunkReload } from './lib/chunk-reload.ts';
 import { clientEnv } from './lib/env.ts';
 import { registerServiceWorker } from './lib/pwa.ts';
+// Aplica el tamaño del texto y el movimiento reducido guardados antes de pintar nada.
+import './lib/settings.ts';
 import { router } from './router.tsx';
 import { ConfigError } from './routes/system.tsx';
 import './styles/tokens.css';

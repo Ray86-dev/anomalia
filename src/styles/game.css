@@ -60,7 +60,74 @@
 .game-bar-actions {
   display: flex;
   flex: none;
+  gap: 6px;
+}
+
+/* La barra no crece con el tamaño del texto: cuatro botones y el emblema caben en 360 px. */
+.game-bar .icon-button {
+  width: 46px;
+  height: 46px;
+}
+
+.game-bar .rewards-button {
+  min-height: 46px;
+  font-size: 18px;
+}
+
+/* «Escuchar» (lectura en voz alta): discreto, justo debajo del texto que lee. */
+.listen-button {
+  display: inline-flex;
+  align-items: center;
   gap: var(--space-2);
+  align-self: flex-start;
+  width: auto;
+}
+
+.settings {
+  margin-bottom: var(--space-5);
+}
+
+.settings-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.settings-sizes legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-weight: 700;
+}
+
+.size-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.size-choice:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.size-choice input {
+  accent-color: var(--accent);
+}
+
+.size-grande span {
+  font-size: 1.1em;
+}
+
+.size-muy-grande span {
+  font-size: 1.25em;
 }
 
 .game-bar-row {

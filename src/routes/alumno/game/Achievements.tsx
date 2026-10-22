@@ -249,7 +249,7 @@ export function Achievements() {
         }}
       >
         <Emblem pieces={pieces} />
-        <span className="rewards-points">{fmt(t.puntos, { n: summary.points })}</span>
+        <span className="rewards-points">{fmt(t.puntosCorto, { n: summary.points })}</span>
       </button>
       <dialog ref={dialog} className="confirm-dialog rewards-dialog" aria-labelledby={`${ids}-t`}>
         <header className="rewards-head">

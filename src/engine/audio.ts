@@ -3,6 +3,7 @@
  * - El audio se desbloquea con el toque en «Comenzar»: por eso conviene llamar a `preload()`
  *   antes, para que Howler ya esté cargado cuando llegue el gesto.
  * - El silencio se recuerda en este dispositivo y el juego se entiende sin sonido.
+ * - Mientras se lee en voz alta, la música baja (`setDucked`).
  */
 import type { Howl } from 'howler';
 
@@ -11,10 +12,13 @@ type HowlerModule = typeof import('howler');
 const STORAGE_KEY = 'anomalia:silencio';
 const VOLUME = 0.45;
 const FADE_MS = 1200;
+/** Volumen relativo de la música mientras se lee en voz alta. */
+const DUCKED = 0.3;
 
 let howler: HowlerModule | null = null;
 let loading: Promise<HowlerModule> | null = null;
-let current: { readonly src: string; readonly howl: Howl } | null = null;
+let current: { readonly src: string; readonly howl: Howl; readonly volume: number } | null = null;
+let ducked = false;
 let wanted: string | null = null;
 let muted = readMuted();
 const listeners = new Set<() => void>();
@@ -44,10 +48,10 @@ function start(module: HowlerModule, src: string, volume: number): void {
   }
   const howl = new module.Howl({ src: [src], loop: true, html5: true, volume: 0 });
   howl.once('play', () => {
-    howl.fade(0, volume, FADE_MS);
+    howl.fade(0, ducked ? volume * DUCKED : volume, FADE_MS);
   });
   howl.play();
-  current = { src, howl };
+  current = { src, howl, volume };
 }
 
 export const audio = {
@@ -75,6 +79,14 @@ export const audio = {
     }
     howler?.Howler.mute(value);
     for (const listener of listeners) listener();
+  },
+
+  /** Baja la música mientras se lee en voz alta y la recupera al terminar. */
+  setDucked(value: boolean): void {
+    ducked = value;
+    if (current === null) return;
+    const { howl, volume } = current;
+    howl.fade(howl.volume(), value ? volume * DUCKED : volume, 400);
   },
 
   /**

@@ -8,7 +8,7 @@ import { fmt } from '../../../../lib/text.ts';
 import { Notice } from '../../../../ui/Notice.tsx';
 import { useGameContext } from '../GameContext.ts';
 import { drafts, findCounselor, texto } from '../helpers.ts';
-import { Avatar, TextAnswer } from '../parts.tsx';
+import { Avatar, Listen, TextAnswer } from '../parts.tsx';
 
 const t = ui.juego;
 
@@ -28,6 +28,7 @@ export function Justification({ dilemma }: { readonly dilemma: Dilemma }) {
         </p>
       )}
       <p className="prompt">{texto(dilemma.justificacion.pregunta)}</p>
+      <Listen auto text={texto(dilemma.justificacion.pregunta)} />
       <TextAnswer
         label={t.justificacion.etiqueta}
         help={fmt(t.justificacion.ayuda, { min, max })}
@@ -75,6 +76,9 @@ export function Objection({ dilemma }: { readonly dilemma: Dilemma }) {
           <Avatar counselor={objector} />
           <p>{answer.objection}</p>
         </blockquote>
+      )}
+      {answer?.objection != null && (
+        <Listen auto text={`${objector?.nombre ?? ''}. ${answer.objection}`} />
       )}
       {answer?.objection == null && <Notice tone="error">{ui.app.errorInesperado}</Notice>}
       <fieldset className="stance-group">

@@ -5,7 +5,7 @@ import { useId, useState, type ReactNode } from 'react';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, Avatar } from '../parts.tsx';
+import { ActionBar, AdvanceButton, Avatar, Listen } from '../parts.tsx';
 
 const t = ui.juego;
 
@@ -60,6 +60,9 @@ export function Council({ dilemma }: { readonly dilemma: Dilemma }) {
                 </div>
               </div>
               <p className="counselor-phrase">{texto(entry.frase)}</p>
+              <Listen
+                text={`${counselor.nombre}. ${texto(entry.frase)} ${texto(entry.argumento)}`}
+              />
               <MoreText>
                 <p className="counselor-idea">{texto(counselor.ideaFuerza)}</p>
                 <p>{texto(entry.argumento)}</p>

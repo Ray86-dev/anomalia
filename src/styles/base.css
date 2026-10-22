@@ -331,6 +331,15 @@ a {
 
 /* ── Accesibilidad ───────────────────────────────────────────────────── */
 
+/* Tamaño del texto (§10.3): todo está en rem, así que basta con cambiar la raíz. */
+html[data-text='grande'] {
+  font-size: 112.5%;
+}
+
+html[data-text='muy-grande'] {
+  font-size: 125%;
+}
+
 /* `hidden` gana siempre, aunque una clase fije `display` (p. ej. «Leer más» del Consejo). */
 [hidden] {
   display: none !important;

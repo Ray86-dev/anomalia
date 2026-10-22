@@ -6,13 +6,94 @@ import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNod
 import { audio } from '../../../engine/audio.ts';
 import { loadInkLines, type InkLine, type InkVariables } from '../../../engine/ink.ts';
 import { prefersReducedMotion } from '../../../engine/motion.ts';
+import { speech } from '../../../engine/speech.ts';
 import { reading } from '../../../lib/reading.ts';
+import { voice } from '../../../lib/settings.ts';
 import { fmt } from '../../../lib/text.ts';
 import { Notice } from '../../../ui/Notice.tsx';
 import { useGameContext } from './GameContext.ts';
 import { drafts, initials } from './helpers.ts';
 
 const t = ui.juego;
+const subscribeVoice = (listener: () => void) => voice.subscribe(listener);
+const isVoiceOn = () => voice.get() === 'si';
+
+/** Lectura en voz alta activada (y disponible en este navegador). */
+export function useVoice(): boolean {
+  return useSyncExternalStore(subscribeVoice, isVoiceOn) && speech.supported;
+}
+
+/**
+ * Texto que se lee en voz alta (M7): con `auto`, en cuanto aparece; siempre, con el botón
+ * «Escuchar». Sin la lectura en voz alta activada no se ve nada.
+ */
+export function Listen({ text, auto = false }: { readonly text: string; readonly auto?: boolean }) {
+  const on = useVoice();
+  useEffect(() => {
+    if (on && auto) speech.speak(text);
+  }, [on, auto, text]);
+  if (!on) return null;
+  return (
+    <button
+      className="btn btn-small btn-secondary listen-button"
+      type="button"
+      onClick={() => {
+        speech.speak(text);
+      }}
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" />
+        <path
+          d="M16 8.5a5 5 0 0 1 0 7"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+      {t.voz.escuchar}
+    </button>
+  );
+}
+
+/** Botón de la barra (NEAE): un toque activa la lectura en voz alta en todo el juego. */
+export function VoiceToggle() {
+  const on = useVoice();
+  if (!speech.supported) return null;
+  return (
+    <button
+      className="icon-button"
+      type="button"
+      aria-pressed={on}
+      aria-label={on ? t.voz.desactivar : t.voz.activar}
+      onClick={() => {
+        voice.set(on ? 'no' : 'si');
+        // Dentro del toque: en iOS la primera lectura tiene que nacer de un gesto.
+        if (on) speech.stop();
+        else speech.speak(t.voz.activada);
+      }}
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path
+          d="M9 3a4 4 0 0 1 4 4v3a4 4 0 0 1-8 0V7a4 4 0 0 1 4-4zM3 10a6 6 0 0 0 12 0M9 16v4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+        <path
+          d="M17.5 7.5a4 4 0 0 1 0 5M20 5a7.5 7.5 0 0 1 0 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          opacity={on ? 1 : 0.35}
+        />
+      </svg>
+    </button>
+  );
+}
+
 const subscribeAudio = (listener: () => void) => audio.subscribe(listener);
 const isMuted = () => audio.isMuted();
 
@@ -73,6 +154,7 @@ export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReade
   const [failed, setFailed] = useState(false);
   const [shown, setShown] = useState(1);
   const end = useRef<HTMLDivElement>(null);
+  const voiceOn = useVoice();
 
   useEffect(() => {
     let active = true;
@@ -101,6 +183,12 @@ export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReade
     // onStep/onDone vienen de la pantalla padre y pueden cambiar en cada render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shown, lines]);
+
+  // Con la lectura en voz alta, cada línea se lee al aparecer.
+  useEffect(() => {
+    const line = lines?.[shown - 1];
+    if (voiceOn && line !== undefined) speech.speak(line.text);
+  }, [voiceOn, lines, shown]);
 
   // Cada «Siguiente» deja a la vista la línea nueva y el botón, sin desplazar a mano.
   useEffect(() => {

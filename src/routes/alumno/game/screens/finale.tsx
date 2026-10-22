@@ -10,7 +10,7 @@ import { Notice } from '../../../../ui/Notice.tsx';
 import { dossierFileName, dossierPdfInput, endingFor } from '../dossier.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, AriMessage, TextAnswer } from '../parts.tsx';
+import { ActionBar, AdvanceButton, AriMessage, Listen, TextAnswer } from '../parts.tsx';
 import { WorldMeters } from './outcome.tsx';
 
 const t = ui.juego;
@@ -51,6 +51,10 @@ export function Epilogue() {
         <p>{texto(ending.texto)}</p>
       </section>
       <AriMessage text={texto(ending.ari)} />
+      <Listen
+        auto
+        text={`${texto(ending.titulo)}. ${texto(ending.texto)} ${t.ari.remitente}: ${texto(ending.ari)}`}
+      />
       <WorldMeters world={run.world} />
       <ActionBar>
         <AdvanceButton label={t.epilogo.continuar} />
@@ -104,6 +108,7 @@ export function Reflection() {
       <p className="lead">{t.reflexion.intro}</p>
       <p className="prompt">{texto(reflection.pregunta)}</p>
       <p className="help">{texto(reflection.pista)}</p>
+      <Listen auto text={`${texto(reflection.pregunta)} ${texto(reflection.pista)}`} />
       {dossier !== undefined && dossier !== null && <MyDecisions dossier={dossier} />}
       <TextAnswer
         label={t.reflexion.etiqueta}

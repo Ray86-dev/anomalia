@@ -6,7 +6,7 @@ import { vibrate } from '../../../../engine/motion.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { texto } from '../helpers.ts';
-import { ActionBar } from '../parts.tsx';
+import { ActionBar, Listen } from '../parts.tsx';
 
 const t = ui.juego;
 
@@ -30,6 +30,10 @@ export function Twist({ dilemma }: { readonly dilemma: Dilemma }) {
         </article>
       )}
       <p className="muted">{t.giro.texto}</p>
+      <Listen
+        auto
+        text={`${twist === undefined ? '' : `${texto(twist.titulo)}. ${texto(twist.texto)} `}${t.giro.texto}`}
+      />
       <fieldset className="option-list option-fieldset">
         <legend id={groupId} className="visually-hidden">
           {t.giro.tuEleccion}

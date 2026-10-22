@@ -1,10 +1,57 @@
 import { ambients, dilemmas, ui } from '@shared/generated/content.ts';
-import { useRef } from 'react';
+import { useId, useRef, useSyncExternalStore } from 'react';
+import { motion, textSize, TEXT_SIZES } from '../../../lib/settings.ts';
 import { useGameContext } from './GameContext.ts';
 import { formatRescueKey } from './helpers.ts';
 
 const t = ui.juego.creditos;
 const clave = ui.juego.clave;
+const a = ui.juego.ajustes;
+
+/** Tamaño del texto y movimiento reducido (§10.3), guardados en este móvil. */
+function Settings() {
+  const name = useId();
+  const size = useSyncExternalStore(
+    (listener) => textSize.subscribe(listener),
+    () => textSize.get(),
+  );
+  const reduced = useSyncExternalStore(
+    (listener) => motion.subscribe(listener),
+    () => motion.get() === 'reducido',
+  );
+  return (
+    <section className="settings stack" aria-labelledby={`${name}-t`}>
+      <h2 id={`${name}-t`}>{a.titulo}</h2>
+      <fieldset className="settings-sizes">
+        <legend>{a.tamano}</legend>
+        {TEXT_SIZES.map((value) => (
+          <label key={value} className={`size-choice size-${value}`}>
+            <input
+              type="radio"
+              name={name}
+              checked={size === value}
+              onChange={() => {
+                textSize.set(value);
+              }}
+            />
+            <span>{a.tamanos[value]}</span>
+          </label>
+        ))}
+      </fieldset>
+      <label className="lab-check">
+        <input
+          type="checkbox"
+          checked={reduced}
+          onChange={(event) => {
+            motion.set(event.target.checked ? 'reducido' : 'sistema');
+          }}
+        />
+        <span>{a.movimiento}</span>
+      </label>
+      <p className="help">{a.movimientoAyuda}</p>
+    </section>
+  );
+}
 
 type Credit = { readonly key: string; readonly text: string; readonly url: string | undefined };
 
@@ -56,6 +103,7 @@ export function Credits() {
           <p className="rescue-key-value">{formatRescueKey(rescueKey)}</p>
           <p className="help">{clave.texto}</p>
         </div>
+        <Settings />
         <h2 id="creditos-titulo">{t.titulo}</h2>
         <p className="help">{t.texto}</p>
         <ul className="credits-list">

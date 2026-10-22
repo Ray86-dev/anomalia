@@ -11,7 +11,7 @@ import { Crispr } from '../labs/Crispr.tsx';
 import { Microscope } from '../labs/Microscope.tsx';
 import { Probability } from '../labs/Probability.tsx';
 import { Telescope } from '../labs/Telescope.tsx';
-import { ActionBar, AdvanceButton } from '../parts.tsx';
+import { ActionBar, AdvanceButton, Listen } from '../parts.tsx';
 
 const t = ui.juego;
 const NEWLINE = '\n';
@@ -55,11 +55,13 @@ export function Lab({ dilemma }: { readonly dilemma: Dilemma }) {
             {paragraph}
           </p>
         ))}
+      <Listen auto text={texto(experiment.instrucciones)} />
       <Experiment done={done} onDone={onDone} />
       {done && (
         <article ref={result} className="panel stack lab-result" role="status">
           <p className="kicker">{t.laboratorio.dato}</p>
           <p className="lead">{texto(experiment.dato)}</p>
+          <Listen auto text={texto(experiment.dato)} />
           <p className="help">{t.laboratorio.datoAyuda}</p>
         </article>
       )}
