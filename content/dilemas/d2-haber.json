@@ -138,5 +138,16 @@
     "Ni Clara Immerwahr ni Fritz Haber tienen frases entre comillas.",
     "No se describen con detalle los efectos del gas sobre las personas."
   ],
-  "assets": { "capas": [], "stems": [] }
+  "assets": {
+    "capas": [],
+    "archivo": {
+      "src": "img/d2/haber-orlik.webp",
+      "credito": "Aguafuerte: Emil Orlik, 1922 (Science History Institute). Dominio público.",
+      "pie": {
+        "normal": "Fritz Haber en un aguafuerte de Emil Orlik, 1922.",
+        "facil": "Retrato de Fritz Haber, hecho en 1922."
+      }
+    },
+    "stems": []
+  }
 }

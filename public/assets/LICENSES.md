@@ -19,6 +19,12 @@ Cada entrada indica el archivo, la obra y su autoría, la fuente, la licencia (v
 - **Licencia:** dominio público (PD-Art: reproducción fiel de una obra bidimensional en dominio público).
 - **Modificaciones:** escalado y conversión a WebP.
 
+### `img/d2/haber-orlik.webp`
+- **Obra:** *Retrato de Fritz Haber*, Emil Orlik (1870–1932), aguafuerte, 1922. Ejemplar firmado por Haber. Science History Institute (Filadelfia).
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:Autographed_etching_of_Fritz_Haber_-_DPLA_-_6e2889b98aad264ed25931f79c5dbad8.jpg>
+- **Licencia:** dominio público. Se publicó en 1922 y el autor murió en 1932, más de 80 años antes, así que también lo es en España (verificado el 22/10/2026).
+- **Modificaciones:** recorte de la cabeza y los hombros (sin los márgenes del papel ni una mancha de humedad), escalado y conversión a WebP.
+
 ### `img/2077/tng-andromeda.webp`
 - **Obra:** *TNG and Andromeda*, Gianni0088, fotografía, 2011.
 - **Fuente:** <https://commons.wikimedia.org/wiki/File:TNG_and_Andromeda.jpg>
