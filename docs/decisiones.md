@@ -249,3 +249,49 @@ Datos que no están en el documento de diseño (marcados `TODO(verificar)`). Ade
 - **D4:** CRISPR existe desde 2012.
 - **D5:** el mito de los metales (Platón, *La República*); la Declaración de la UNESCO de 1997 y el Convenio de Oviedo.
 
+## 2026-10-22 · M6 (jugabilidad)
+
+Tras jugar D1–D3, el docente concluye que el juego hace pensar pero se lee como «una novela de texto»: mucho que leer y escribir, y nada inesperado. Plan aprobado: menos texto y más juego, con la misma privacidad.
+
+### Tomadas por el docente
+- **D-61 · Nueva numeración de hitos:** M6 Jugabilidad; M7 Recursos y pulido (imágenes y música, también las del Archivo de D3–D5, efectos del Desnivel, PWA y voz); M8 Prueba real. Sustituye a D-54: las imágenes y la música de D2–D5 pasan al M7.
+- **D-62 · Menos texto** (cambio sobre §6 y D-43):
+  - justificación de 25–50 palabras, réplica de 15–35 y reflexión final de 100–180 (antes 40–80, 30–60 y 150–250);
+  - escenas de D1–D4 con título, tres líneas y la pregunta;
+  - cada consejero tiene una `frase` (una sola frase, como mucho 20 palabras) y su argumento completo queda tras «Leer más»;
+  - la IA pide 45 palabras para la objeción y 35 para el cierre; los respaldos no pasan de 50 y 40 (lo comprueba el validador).
+- **D-63 · Réplica guiada:** el alumno elige postura (le doy parte de razón, matizo, la rebato) y completa un comienzo de frase editable. Enviar el comienzo sin añadir nada cuenta como vacío. La postura llega a la IA como valor enumerado (nunca como texto libre) y se guarda en `answers.reply_stance`.
+- **D-64 · Decisión en dos pasos con un giro:**
+  - `choose` guarda una elección provisional (fase `twist`, `runs.pending_choice`) sin tocar el mundo; `confirm` aplica los deltas una sola vez y crea la respuesta con `first_choice`.
+  - Se quita el diálogo «Alterar la historia»: el giro hace de reconsideración.
+  - Los cinco giros son ficción (`fuente: ficcion`) y neutrales: mantener o cambiar valen lo mismo, también en puntos.
+  - El Centro solo cuenta decisiones confirmadas (test de integración).
+- **D-65 · Laboratorio antes del Consejo** (fase `lab`): un experimento corto por dilema para comprobar un dato antes de decidir con razones.
+  - D1 telescopio (lunas de Júpiter), D2 reactor de amoníaco, D3 microscopio (dos cultivos), D4 guía de CRISPR sobre un ADN de ejemplo, D5 umbral de un Índice Ω inventado.
+  - Sin temporizador ni forma de fallar; «Ir al ágora» aparece al terminar, con el «Dato del laboratorio».
+  - Cuidados: D3 nombra a Henrietta Lacks con respeto; D4 nunca edita un embrión ni plantea «ganar»; D5 usa un índice ficticio, no una enfermedad.
+- **D-66 · Ari:** 15 años, vive en el 2077 que construye el alumno y le escribe en el prólogo (`# ari`), tras cada decisión (`ondas.ari`) y en el epílogo (`finales[].ari`). Habla en primera persona sin marcas de género.
+- **D-67 · Ecos y D5 más breve:**
+  - las escenas de D2–D4 empiezan con una línea `# eco` que recuerda la decisión del último dilema jugado (variables Ink `eleccion_dN`); el validador solo admite ecos de dilemas anteriores;
+  - D5 muestra el mundo y una sola consecuencia, por prioridad: desigualdad, desconfianza, denuncia de 1915 y Galileo firme;
+  - ninguna escena pasa de 6 líneas con ninguna combinación de mundo y decisiones (test en `src/engine/ink.test.ts`).
+- **D-68 · Logros y recompensas** (al estilo de «Diálogo Socrático»):
+  - 10 movimientos que reconoce la IA (lista cerrada, como mucho 3 por texto y solo si el alumno los hace de verdad) y 9 hitos con reglas fijas (`content/logros.json`). Si la IA falla, no hay movimientos.
+  - +10 la primera vez, +3 cada repetición y +5 por cada concepto nuevo (estrella de la constelación).
+  - Rangos por anomalía de la clase: Aprendiz del Archivo 0, Cronista 15, Voz del Ágora 30, Memoria del Archivo 45 y Leyenda del Tiempo 60. Calibrados con `npm run simular` (25 alumnos: mediana de 47 puntos por anomalía) y `npm run ai:probe` (unos 2 movimientos por texto).
+  - Fichas secretas del Archivo (2 por dilema) y emblema personalizable (8 símbolos y 6 colores que se abren con puntos).
+- **D-69 · Los puntos no evalúan:** no premian ninguna opción, no hay clasificación y nada de esto llega al Centro ni a la consola. El PDF lo recoge en una última página, «Logros del cronista», que dice que no forma parte de la nota. Cambiar el emblema no avisa al Centro (`runs_notify` solo salta con fase, dilema, mundo, final y cierre).
+- **D-70 · Barra del juego:** emblema y puntos a la izquierda (abren el panel de logros: Logros, Constelación, Fichas y Emblema); los avisos de logros salen como una fila dentro de la barra, nunca encima del texto; el rótulo del lugar baja a la pantalla.
+- **Descartado por el docente:** el momento ágora colectivo y los logros de clase en el proyector.
+
+### Propuestas técnicas
+- **D-71 · Progreso en cada estado** (`private.run_progress`, `run.progress`): el móvil calcula logros, avisos, rango y recompensas con `shared/game/achievements.ts`. `partida` usa la misma función para validar que el emblema elegido está desbloqueado.
+
+### Pendiente de verificación por el docente (M6)
+Los giros, los ecos, Ari y el Índice Ω son ficción. Llevan `TODO(verificar)`:
+- **Datos del laboratorio** (`laboratorio.dato`, con `verificado: false` en D1–D4):
+  - D1: Galileo observó las lunas de Júpiter con su telescopio;
+  - D2: la química del nitrógeno sirve también para fabricar explosivos;
+  - D3: las células normales mueren en pocos días y las de la muestra siguen dividiéndose;
+  - D4: CRISPR puede cortar también en sitios parecidos, y en un embrión el cambio pasaría a todas sus células y a sus hijos.
+- **Las 10 fichas secretas** (`content/fichas.json`, todas con `verificado: false`).

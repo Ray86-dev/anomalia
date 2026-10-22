@@ -168,9 +168,9 @@
   ],
   "rangos": [
     { "id": "aprendiz", "etiqueta": "Aprendiz del Archivo", "puntosPorAnomalia": 0 },
-    { "id": "cronista", "etiqueta": "Cronista", "puntosPorAnomalia": 8 },
-    { "id": "voz", "etiqueta": "Voz del Ágora", "puntosPorAnomalia": 16 },
-    { "id": "memoria", "etiqueta": "Memoria del Archivo", "puntosPorAnomalia": 24 },
-    { "id": "leyenda", "etiqueta": "Leyenda del Tiempo", "puntosPorAnomalia": 32 }
+    { "id": "cronista", "etiqueta": "Cronista", "puntosPorAnomalia": 15 },
+    { "id": "voz", "etiqueta": "Voz del Ágora", "puntosPorAnomalia": 30 },
+    { "id": "memoria", "etiqueta": "Memoria del Archivo", "puntosPorAnomalia": 45 },
+    { "id": "leyenda", "etiqueta": "Leyenda del Tiempo", "puntosPorAnomalia": 60 }
   ]
 }

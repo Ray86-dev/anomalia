@@ -93,6 +93,15 @@ describe.skipIf(!configured)('Centro de Control y consola (integración)', () =>
       expect(data.pendingAnswers).toBe(4);
     });
 
+    it('una elección provisional (aún en el giro) no cuenta como decisión', async () => {
+      const fifth = students[4];
+      if (fifth) await partida(fifth, { action: 'choose', dilemmaId: 'd1', choice: 'B' });
+      const data = (await snapshot()).data as Snapshot;
+      expect(data.results.decisions.d1).toBeUndefined();
+      expect(data.pendingAnswers).toBe(4);
+      expect(data.live.dilemmas.d1?.here).toBe(6);
+    });
+
     it('al llegar a 5 decisiones nuevas se publica el lote', async () => {
       const fifth = students[4];
       if (fifth) await choose(fifth, 'B');

@@ -34,7 +34,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 
 ## Forma de trabajar
 
-- **Hitos M0 → M7** (§14 del diseño). Al cerrar cada uno:
+- **Hitos M0 → M8** (§14 del diseño, renumerados en D-61). Al cerrar cada uno:
   - `npm run check` y, si aplica, `npm run test:integration`;
   - lista breve de pruebas en el móvil;
   - **parar hasta que el docente confirme**.
@@ -58,12 +58,15 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 
 - **Contenido:** `content/` (JSON + Ink) → `npm run content` (`scripts/build-content.ts`) valida con zod, compila Ink con `inkjs/full` y genera `shared/generated/` (`content.ts` y `ink/<id>.json`). Esos archivos no se versionan ni se editan a mano.
   - Nudos Ink obligatorios: `prologo` en `content/prologo.ink` y `escena` en cada dilema.
-  - Etiquetas Ink: `# titulo` y `# pregunta`.
+  - Etiquetas Ink: `# titulo`, `# pregunta`, `# eco` (recuerdo de una decisión anterior) y `# ari` (mensaje de Ari).
+  - Variables que el juego pasa a las escenas: el mundo, `desnivel`, `rama_<id>` y `eleccion_dN` (decisión final de cada dilema jugado). Ninguna escena pasa de 6 líneas (test en `src/engine/ink.test.ts`).
+  - Logros, fichas secretas y emblemas: `content/logros.json`, `fichas.json` y `emblemas.json`.
 - **Recursos:** imágenes y música en `public/assets/`, siempre con su entrada en `public/assets/LICENSES.md` y `credito` (más `licenciaUrl` si es CC BY) en el JSON que las declara.
   - Solo CC0, CC BY o dominio público; las tipografías, con licencia SIL OFL.
   - Imágenes en WebP de unos 1050×1400 (recorte vertical); música en MP3 de unos 128 kbps.
 - **Juego del alumno** (`src/routes/alumno/game/`): una pantalla por fase. El servidor es la autoridad: el cliente adopta siempre el estado que devuelve `partida`.
   - Motor en `src/engine/`: Ink, Pixi, Howler y GSAP, todo cargado bajo demanda.
+  - Laboratorios en `labs/` (modelos puros en `labs/models.ts`, con tests). Logros, avisos y rango se calculan en el móvil con `shared/game/achievements.ts` a partir de `run.progress`; nunca llegan al Centro ni a la consola (D-69).
   - **Lectura fácil** (D-10, D-58): `texto()` y `storyFor()` de `helpers.ts` eligen la versión. Todo texto nuevo del contenido necesita su `facil` (lo exige `content:strict`), y cada escena, su `lectura-facil/<archivo>.ink`.
   - **Escenas con variables** (D5): la escena recibe el estado del mundo y las ramas (`rama_<id>`); declara con `VAR` solo las que use.
 - **`shared/`:** TS puro, sin DOM ni APIs de Node o Deno. Lo importan la app (alias `@shared`) y las Edge Functions (rutas relativas).

@@ -15,7 +15,7 @@ describe('summarize', () => {
     const s = summarize(progress(), catalog);
     expect(s.points).toBe(0);
     expect(s.rank.id).toBe('aprendiz');
-    expect(s.nextRank?.points).toBe(40); // 8 por anomalía × 5
+    expect(s.nextRank?.points).toBe(75); // 15 por anomalía × 5
     expect(s.symbols).toEqual(['estrella', 'reloj']);
     expect(s.colors).toEqual(['turquesa', 'ambar']);
   });
@@ -80,9 +80,15 @@ describe('summarize', () => {
 
 describe('newlyEarned', () => {
   it('anuncia logros nuevos, repetidos, estrellas, rangos y fichas', () => {
-    const before = summarize(progress({ moves: ['da-razones'], choices: { d1: 'A' } }), catalog);
+    // Clase de tres anomalías: «Cronista» pide 45 puntos (15 por anomalía).
+    const classDilemmas = ['d1', 'd2', 'd3'];
+    const before = summarize(
+      progress({ classDilemmas, moves: ['da-razones'], choices: { d1: 'A' } }),
+      catalog,
+    );
     const after = summarize(
       progress({
+        classDilemmas,
         moves: ['da-razones', 'da-razones', 'pone-ejemplo', 'distingue', 'contraejemplo'],
         concepts: ['dignidad'],
         choices: { d1: 'A' },
