@@ -311,3 +311,30 @@ Los giros, los ecos, Ari y el Índice Ω son ficción. Llevan `TODO(verificar)`:
   - portada con cielo estrellado, órbitas temporales, sello del emblema con rango y puntos, y la ruta temporal con un nodo por anomalía del color de su época;
   - cada anomalía con su año, la decisión en una insignia, la objeción en un recuadro con el color del consejero y el Archivo real en un recuadro dorado;
   - indicador circular del Desnivel, tarjeta oscura del final, reflexión entre comillas grandes, rúbrica con cabecera oscura y página de logros con rombos y la constelación.
+
+## 2026-10-22 · M7 (recursos y pulido)
+
+### Tomadas por el docente
+- **D-77 · Lectura en voz alta con la voz del móvil** (Web Speech API, §10.3): sin servidor ni coste.
+  - Botón en la barra (un toque, pensado para el alumnado NEAE): lee cada línea de las escenas al aparecer y el texto principal de cada pantalla al llegar, con botones «Escuchar» para repetir.
+  - La música baja mientras se lee.
+  - Solo lee textos del juego (contenido, objeciones y cierres de la IA), nunca lo que escribe el alumno. Sin voces disponibles, el botón no aparece.
+- **D-78 · PWA instalable y con caché:**
+  - manifiesto con los textos de `content/` e iconos propios;
+  - service worker propio, sin librerías (`pwa/service-worker.js`, se rellena en el build): guarda la app al instalarse (unos 490 kB comprimidos, sin el PDF);
+  - los archivos con hash se sirven de caché, así que un despliegue durante una clase no deja a los móviles sin sus archivos;
+  - páginas primero de la red y, sin red, de la caché; la música siempre por streaming;
+  - sin `skipWaiting`: una versión nueva entra al volver a abrir la app, nunca a mitad de partida.
+- **D-79 · Música por época y disonancia generada:**
+  - una pista libre por época: Frescobaldi (1633), «Marte» de Holst (1915, CC0), «Cool Vibes» (1951) y «Lightless Dawn» (2018) de Kevin MacLeod (CC BY 3.0), y el bucle del 2077;
+  - el Centro tiene su propio ambiente («Floating Cities», CC BY 3.0, con el crédito en su ayuda);
+  - en lugar de capas (stems), una disonancia generada con Web Audio (segunda menor y tritono) que crece con el Desnivel: nada hasta +5 y el máximo a partir de +40. En el Centro sigue al Desnivel medio de la clase (agregado con k ≥ 5).
+- **D-80 · Imágenes sin rostros de personas reales** en el Archivo real de D3–D5: células HeLa (NIH), la doble hélice (NHGRI) y un cariotipo humano (NHGRI), todas de dominio público. El retrato conocido de Henrietta Lacks no tiene licencia libre y no se usa ninguna foto de He Jiankui. Se descartó una foto del Palacio de Europa por la libertad de panorama limitada en Francia.
+
+### Propuestas técnicas
+- **D-81 · Ajustes de accesibilidad** en el panel «i» (§10.3): tamaño del texto (normal, grande, muy grande) y movimiento reducido manual (`html[data-motion="reduced"]`), recordados en el móvil y aplicados antes de pintar. La barra tiene tamaño fijo para que quepan el emblema y cuatro botones a 360 px.
+- **D-82 · Efectos del Desnivel** (§10.1):
+  - ruido, partículas más rápidas y rojizas, y fallos de imagen cada vez más frecuentes (de cada 8 s a cada 2 s);
+  - un velo rojizo estático, que también funciona sin animaciones y sin WebGL;
+  - el titular de las ondas suena a alarma desde +25.
+- **D-83 · Fondos de época** para D2–D4 (instituto de Haber en 1913, Hospital Johns Hopkins hacia 1900 y un laboratorio de genética del NHGRI), con el año real de cada foto en su pie.
