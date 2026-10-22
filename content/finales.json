@@ -16,6 +16,7 @@
       "normal": "Tu 2077 tiene una técnica asombrosa y muy poca justicia. Un análisis decide desde la cuna quién es «válido» y quién no, y las mejoras genéticas solo están al alcance de quien puede pagarlas. La ciencia predice con mucha precisión, pero ya nadie discute si debe ser ella la que decida. Mnemósine archiva una pregunta: quién eligió que un dato valiera más que una persona.",
       "facil": "Tu 2077 tiene inventos asombrosos, pero poca justicia. Un análisis decide desde que naces si eres «válido» o no. Solo quien tiene dinero puede mejorar sus genes. Nadie se pregunta ya si eso está bien."
     },
+    "ari": {"normal": "Quería estudiar Medicina, pero mi índice no es de los buenos y el sistema dice que no es para mí. ¿Quién decidió que un dato valga más que yo?", "facil": "Quería estudiar Medicina, pero mi análisis de genes no es de los buenos. No me dejan."},
     "assets": {}
   },
   {
@@ -35,6 +36,7 @@
       "normal": "En tu 2077 la ciencia avanza más despacio, pero nadie se queda atrás. Cada nuevo poder se discute en público antes de usarse y sus beneficios se reparten. No es un paraíso: muchas cosas tardan más en llegar. Pero aquí los datos informan y las decisiones se toman con razones, entre todos.",
       "facil": "En tu 2077 la ciencia avanza más despacio, pero llega a todo el mundo. Antes de usar un invento nuevo, se discute en público. Algunas cosas tardan más, pero las decisiones se toman entre todos y con razones."
     },
+    "ari": {"normal": "Este verano haré prácticas en un laboratorio público. Allí cada proyecto se discute antes de empezar. Es lento, pero siento que también es mío.", "facil": "Este verano iré a un laboratorio público. Allí se habla de cada proyecto antes de empezar. Es lento, pero también es mío."},
     "assets": {}
   },
   {
@@ -53,6 +55,7 @@
       "normal": "Tu 2077 es un mundo que ya no cree a nadie. Cada descubrimiento se recibe con sospecha y cada grupo defiende sus propios «datos». Sin confianza, la ciencia no puede ayudar aunque sepa cómo hacerlo, y las discusiones acaban en gritos en lugar de razones. Reconstruir esa confianza llevará generaciones.",
       "facil": "En tu 2077 nadie se fía de nadie. La gente no cree a los científicos. Cada grupo tiene sus propios «datos». Sin confianza, la ciencia no puede ayudar, y la gente grita en lugar de dar razones."
     },
+    "ari": {"normal": "En casa ya no vemos las noticias: cada canal tiene sus propios «datos». Me gustaría saber en quién puedo confiar.", "facil": "En casa ya no vemos las noticias. Cada canal dice una cosa distinta. No sé de quién fiarme."},
     "assets": {}
   },
   {
@@ -71,6 +74,7 @@
       "normal": "Tu 2077 es prudente y tranquilo, quizá demasiado. Se frenaron tantos avances que, cuando llegan las crisis (una epidemia, una erupción, un clima cada vez más duro), faltan herramientas para responder. La prudencia evitó muchos daños, pero también dejó problemas sin resolver.",
       "facil": "Tu 2077 es tranquilo y prudente, quizá demasiado. Se pararon tantos inventos que, cuando hay un problema grave, como una epidemia o un volcán, no hay herramientas para responder."
     },
+    "ari": {"normal": "Aquí todo es tranquilo, hasta que pasa algo. Con la última ola de calor, el hospital no tenía con qué responder. A veces me pregunto qué nos falta.", "facil": "Aquí todo es tranquilo. Pero con la última ola de calor, el hospital no supo qué hacer."},
     "assets": {}
   },
   {
@@ -85,6 +89,7 @@
       "normal": "Tu 2077 no es una utopía ni una distopía. Hay avances e injusticias, confianza y dudas. Nada está resuelto: todo depende del siguiente paso. Mnemósine cierra el Archivo con una certeza: los datos seguirán diciendo cómo son las cosas, pero qué hacer con ellos habrá que decidirlo siempre con razones.",
       "facil": "Tu 2077 no es ni muy bueno ni muy malo. Hay avances y hay injusticias. Nada está resuelto. Los datos dirán cómo son las cosas, pero qué hacer con ellos habrá que decidirlo siempre con razones."
     },
+    "ari": {"normal": "Mi 2077 no es perfecto, pero todavía se puede cambiar. Mañana debatimos en clase qué hacer con la ciencia. ¿Me ayudas a preparar mis razones?", "facil": "Mi 2077 no es perfecto, pero se puede cambiar. Mañana debatimos en clase. ¿Me ayudas con mis razones?"},
     "assets": {}
   }
 ]

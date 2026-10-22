@@ -72,7 +72,8 @@
         "texto": {
           "normal": "En esta línea temporal, los laboratorios aprendieron a obedecer sin preguntar para qué servía su trabajo. Hay técnicas asombrosas, pero mucha gente desconfía de la ciencia: la ve como un arma más.",
           "facil": "Los laboratorios aprendieron a obedecer sin preguntar para qué sirve su trabajo. Hay inventos asombrosos, pero mucha gente ve la ciencia como un arma."
-        }
+        },
+        "ari": {"normal": "Cerca de casa hay una fábrica que nadie sabe qué hace. Cuando pregunto, me dicen que no es asunto mío. Ya no me fío mucho de los laboratorios.", "facil": "Cerca de casa hay una fábrica. Nadie sabe qué hace. Si pregunto, me dicen que no es asunto mío."}
       }
     },
     {
@@ -93,7 +94,8 @@
         "texto": {
           "normal": "Tu renuncia no paró la guerra, pero no se olvidó. Hoy, en Canarias, quien estudia ciencias aprende que puede negarse a investigar algo que va contra su conciencia. La técnica avanza un poco más despacio.",
           "facil": "Tu renuncia no paró la guerra, pero nadie la olvidó. Hoy, en Canarias, quien estudia ciencias sabe que puede negarse a investigar algo que le parece mal. La técnica avanza un poco más despacio."
-        }
+        },
+        "ari": {"normal": "En el instituto nos han explicado que, si estudio ciencias, podré negarme a investigar algo que vaya contra mi conciencia. Me ha gustado saberlo.", "facil": "En el instituto nos han dicho que puedes decir que no a un trabajo de ciencia si crees que está mal."}
       }
     },
     {
@@ -114,7 +116,8 @@
         "texto": {
           "normal": "Contaste lo que se preparaba y pagaste un precio: te apartaron del laboratorio. Pero desde entonces la gente exige saber en qué se investiga. En Canarias hay leyes que protegen a quien denuncia un peligro.",
           "facil": "Contaste el secreto y te castigaron: te echaron del laboratorio. Pero desde entonces la gente quiere saber qué se investiga. En Canarias hay leyes que protegen a quien avisa de un peligro."
-        }
+        },
+        "ari": {"normal": "Mi madre trabaja en un laboratorio y cada año tiene que explicar en público qué investiga. Dice que es un rollo, pero que así nadie esconde nada.", "facil": "Mi madre trabaja en un laboratorio. Cada año cuenta en público lo que investiga. Así nadie esconde nada."}
       }
     }
   ],

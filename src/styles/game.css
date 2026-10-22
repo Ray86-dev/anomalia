@@ -137,6 +137,33 @@
   color: var(--accent);
 }
 
+/* Ari (M6): mensajes de móvil desde el 2077. En el prólogo llegan como línea `# ari`. */
+.ari-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.ari-from {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.ari-bubble,
+.ink-ari {
+  align-self: flex-start;
+  max-width: 92%;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(127, 224, 208, 0.45);
+  border-radius: 18px 18px 18px 4px;
+  background:
+    linear-gradient(rgba(127, 224, 208, 0.12), rgba(127, 224, 208, 0.12)), var(--bg-raised);
+}
+
 /* Eco (M6): el recuerdo de una decisión anterior, separado del resto de la escena. */
 .ink-eco {
   padding-left: var(--space-3);

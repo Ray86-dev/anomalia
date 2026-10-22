@@ -10,7 +10,7 @@ import { Notice } from '../../../../ui/Notice.tsx';
 import { dossierFileName, dossierPdfInput, endingFor } from '../dossier.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, TextAnswer } from '../parts.tsx';
+import { ActionBar, AdvanceButton, AriMessage, TextAnswer } from '../parts.tsx';
 import { WorldMeters } from './outcome.tsx';
 
 const t = ui.juego;
@@ -50,6 +50,7 @@ export function Epilogue() {
         <p className="headline">{texto(ending.resumen)}</p>
         <p>{texto(ending.texto)}</p>
       </section>
+      <AriMessage text={texto(ending.ari)} />
       <WorldMeters world={run.world} />
       <ActionBar>
         <AdvanceButton label={t.epilogo.continuar} />

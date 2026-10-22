@@ -64,7 +64,8 @@
         "texto": {
           "normal": "En esta línea temporal, la medicina avanzó deprisa usando muestras de pacientes sin preguntarles. Hay curas que salvan millones de vidas, pero muchas familias no saben que una parte de su historia está en un laboratorio, y desconfían de los hospitales.",
           "facil": "La medicina avanzó rápido usando muestras sin pedir permiso. Hay curas que salvan millones de vidas. Pero muchas familias no se fían de los hospitales."
-        }
+        },
+        "ari": {"normal": "Me he enterado de que una muestra de mi bisabuela está en un laboratorio y nadie nos preguntó. En mi familia ya no quieren ir al hospital si no es urgente.", "facil": "Una muestra de mi bisabuela está en un laboratorio y nadie nos preguntó. En mi familia ya no se fían de los hospitales."}
       }
     },
     {
@@ -85,7 +86,8 @@
         "texto": {
           "normal": "Esperar el permiso retrasó algunas investigaciones. A cambio, en Canarias nadie entra en un estudio médico sin entender para qué sirve: dar el consentimiento es tan normal como vacunarse.",
           "facil": "Pedir permiso hizo que algunas investigaciones tardaran más. Pero hoy, en Canarias, nadie participa en un estudio médico sin saber para qué sirve."
-        }
+        },
+        "ari": {"normal": "Hoy me han pedido participar en un estudio médico. Me lo han explicado todo y he podido decir que sí o que no. Aquí es lo normal.", "facil": "Hoy me han pedido entrar en un estudio médico. Me lo han explicado todo y he podido elegir."}
       }
     },
     {
@@ -106,7 +108,8 @@
         "texto": {
           "normal": "Las células se usaron y la familia lo supo desde el principio. Hoy, quien dona una muestra recibe información y una parte de los beneficios, y los hospitales cuentan con la confianza de todos los barrios.",
           "facil": "Las células se usaron y la familia lo supo desde el principio. Hoy, quien da una muestra recibe información y una parte de lo que se gana. La gente confía en los hospitales."
-        }
+        },
+        "ari": {"normal": "Mi familia donó una muestra y cada año nos cuentan para qué ha servido. Con lo que se ganó, arreglaron el centro de salud del barrio.", "facil": "Mi familia dio una muestra. Cada año nos cuentan para qué ha servido. Con lo que se ganó, arreglaron el centro de salud."}
       }
     }
   ],

@@ -134,7 +134,7 @@ function missingEasyReading(value: unknown, path: string[] = []): string[] {
 }
 
 /** Menos texto (M6): la frase de cada consejero y los respaldos de la IA tienen tope. */
-const MAX_WORDS = { frase: 20, objecion: 50, cierre: 40, giro: 45 } as const;
+const MAX_WORDS = { frase: 20, objecion: 50, cierre: 40, giro: 45, ari: 35 } as const;
 
 /** Dilemas a los que mira una escena con sus ecos (`eleccion_d1`…). */
 const echoesIn = (source: string) =>
@@ -268,6 +268,11 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
         if (fallbacks[d.id]?.[o.id]?.[o.objetor] === undefined) {
           errors.push(`respaldos.json › ${d.id}.${o.id}.${o.objetor}: falta el respaldo de la objeción`);
         }
+      }
+    }
+    for (const o of d.opciones) {
+      for (const variant of tooLong(o.ondas.ari, MAX_WORDS.ari)) {
+        errors.push(`${file} › opciones.${o.id}.ondas.ari.${variant}: más de ${String(MAX_WORDS.ari)} palabras`);
       }
     }
     if (d.giro !== undefined) {

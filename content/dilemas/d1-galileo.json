@@ -61,7 +61,8 @@
         "texto": {
           "normal": "En esta línea temporal, los científicos aprendieron a ceder en público y a seguir trabajando en privado. El conocimiento avanzó con cuidado, pero mucha gente sospecha que los expertos dicen solo lo que conviene.",
           "facil": "Los científicos aprendieron a callar en público y a investigar en secreto. La ciencia avanzó, pero mucha gente cree que los expertos solo dicen lo que les conviene."
-        }
+        },
+        "ari": {"normal": "Hoy en clase nos han dicho: «Eso no os lo puedo contar». Mi abuela dice que los expertos solo cuentan lo que les conviene. ¿Será verdad?", "facil": "Hoy en clase nos han dicho: «Eso no os lo puedo contar». Mi abuela dice que los expertos solo cuentan lo que les conviene."}
       }
     },
     {
@@ -82,7 +83,8 @@
         "texto": {
           "normal": "La firmeza de aquella noche se convirtió en un ejemplo que se enseña en todas las escuelas, también en las de Canarias. La gente confía más en la ciencia… pero el Archivo guarda una pregunta abierta: cuánto le costó a Galileo esa firmeza.",
           "facil": "Su firmeza se enseña en todas las escuelas, también en Canarias. La gente confía más en la ciencia. Pero queda una pregunta: cuánto le costó a Galileo."
-        }
+        },
+        "ari": {"normal": "Hoy hemos estudiado a Galileo. Todo el mundo dice que fue muy valiente, pero nadie sabe decirme cuánto le costó. ¿Tú lo sabes?", "facil": "Hoy hemos estudiado a Galileo. Dicen que fue muy valiente. Pero nadie sabe decirme cuánto le costó. ¿Tú lo sabes?"}
       }
     },
     {
@@ -103,7 +105,8 @@
         "texto": {
           "normal": "Los escritos viajaron a escondidas y se copiaron lejos de Roma. La técnica avanzó más deprisa y llegó a más gente. Nadie recuerda ya quiénes se arriesgaron para que fuera posible.",
           "facil": "Los escritos viajaron escondidos y se copiaron lejos de Roma. La técnica avanzó más rápido y llegó a más gente. Nadie recuerda a quienes se arriesgaron."
-        }
+        },
+        "ari": {"normal": "Aquí hay inventos que llegaron de todas partes, copiados de mano en mano. Me pregunto quién se arriesgó para traerlos. Nadie recuerda sus nombres.", "facil": "Aquí hay inventos que llegaron de muchos países. Alguien se arriesgó para traerlos. Nadie recuerda sus nombres."}
       }
     }
   ],

@@ -63,7 +63,8 @@ const optionSchema = z.strictObject({
   deltas: z.partialRecord(worldVar, z.number().int().min(-30).max(30)),
   rama: id.nullable(),
   objetor: id,
-  ondas: z.strictObject({ titular: textoSchema, texto: textoSchema }),
+  /** `ari`: mensaje de Ari desde el 2077 que deja esta opción (M6). */
+  ondas: z.strictObject({ titular: textoSchema, texto: textoSchema, ari: textoSchema }),
 });
 
 export const dilemmaSchema = z
@@ -167,6 +168,8 @@ export const endingSchema = z.strictObject({
   /** «Imagen de 2077» de la tabla §5.6. */
   resumen: textoSchema,
   texto: textoSchema,
+  /** Lo que cuenta Ari de su vida en ese 2077 (M6). */
+  ari: textoSchema,
   assets: z.strictObject({ imagen: z.string().optional(), musica: z.string().optional() }),
 });
 

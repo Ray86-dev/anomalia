@@ -77,7 +77,8 @@
         "texto": {
           "normal": "La ley se aprobó. Desde el colegio, un índice genómico decide quién estudia qué y quién trabaja dónde. Todo funciona con eficiencia… para quien tiene buenos genes. Los demás aprenden pronto lo que no podrán ser.",
           "facil": "La ley se aprobó. Desde el colegio, un análisis de genes decide qué estudias y en qué trabajas. Todo funciona bien para quien tiene «buenos» genes. Los demás saben pronto lo que no podrán ser."
-        }
+        },
+        "ari": {"normal": "Hoy me han dado mi índice genómico. Dice qué puedo estudiar y qué no. Mi mejor amigo y yo ya no iremos a la misma clase.", "facil": "Hoy me han dado mi análisis de genes. Dice qué puedo estudiar. Mi mejor amigo y yo ya no iremos juntos a clase."}
       }
     },
     {
@@ -98,7 +99,8 @@
         "texto": {
           "normal": "La edición genética se usa solo para curar enfermedades graves, en hospitales públicos y sin pagar. Nadie puede comprar mejoras. Las listas de espera son largas, pero nadie se queda fuera por su dinero ni por sus genes.",
           "facil": "Los genes solo se cambian para curar enfermedades graves, en hospitales públicos y gratis. Nadie puede comprar mejoras. Hay que esperar, pero nadie se queda fuera."
-        }
+        },
+        "ari": {"normal": "A mi prima la van a curar de una enfermedad genética en el hospital público. Hay lista de espera, pero no hemos tenido que pagar nada.", "facil": "A mi prima la van a curar de una enfermedad de los genes. Hay que esperar, pero es gratis."}
       }
     },
     {
@@ -119,7 +121,8 @@
         "texto": {
           "normal": "Canarias detuvo toda edición genética. No hay mejoras ni discriminación genética, pero tampoco nuevas curas: algunas familias viajan a otros países a buscar tratamientos que aquí están prohibidos.",
           "facil": "En Canarias ya no se cambian genes. No hay mejoras ni separación por genes, pero tampoco curas nuevas. Algunas familias viajan a otros países para curarse."
-        }
+        },
+        "ari": {"normal": "Aquí no se puede editar ningún gen. La familia de mi vecina se ha ido a otro país a buscar un tratamiento. No sé si volverán.", "facil": "Aquí no se pueden cambiar los genes. La familia de mi vecina se ha ido a otro país a buscar una cura."}
       }
     }
   ],

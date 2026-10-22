@@ -14,7 +14,7 @@ import { assetUrl } from '../../../../engine/backdrop/Backdrop.tsx';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, Avatar } from '../parts.tsx';
+import { ActionBar, AdvanceButton, AriMessage, Avatar } from '../parts.tsx';
 
 const t = ui.juego;
 
@@ -122,6 +122,7 @@ export function Ripples({ dilemma }: { readonly dilemma: Dilemma }) {
             {texto(option.ondas.titular)}
           </h1>
           <p className="lead">{texto(option.ondas.texto)}</p>
+          <AriMessage text={texto(option.ondas.ari)} />
         </>
       )}
       <WorldMeters world={run.world} deltas={option?.deltas ?? {}} />

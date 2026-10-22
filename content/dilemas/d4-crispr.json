@@ -64,7 +64,8 @@
         "texto": {
           "normal": "Tras aquel primer paso, editar embriones se volvió habitual: primero para evitar enfermedades y después para elegir rasgos. En Canarias ya hay clínicas que ofrecen «mejoras» a quien pueda pagarlas.",
           "facil": "Después de aquel experimento, cambiar los genes de los bebés se volvió normal. Primero, para evitar enfermedades. Después, para elegir cómo serán. Hay clínicas que lo hacen a quien pueda pagar."
-        }
+        },
+        "ari": {"normal": "En mi clase hay quien presume de sus «mejoras». Mi familia no pudo pagarlas. A veces noto que me miran de otra manera.", "facil": "En mi clase hay quien presume de sus «mejoras». Mi familia no pudo pagarlas. A veces me miran raro."}
       }
     },
     {
@@ -85,7 +86,8 @@
         "texto": {
           "normal": "Tu denuncia frenó el experimento a tiempo. La edición de embriones se discutió en público durante años antes de permitir nada. Hoy solo se usa con normas estrictas, y la gente confía en quienes las vigilan.",
           "facil": "Tu aviso paró el experimento a tiempo. Durante años se discutió en público antes de permitir nada. Hoy hay normas muy claras y la gente confía en quienes las vigilan."
-        }
+        },
+        "ari": {"normal": "Hoy hemos debatido en clase si está bien editar genes. No nos hemos puesto de acuerdo, pero sabemos quién vigila las normas. Eso me da tranquilidad.", "facil": "Hoy hemos hablado en clase de cambiar genes. No nos pusimos de acuerdo, pero sabemos quién vigila las normas."}
       }
     },
     {
@@ -106,7 +108,8 @@
         "texto": {
           "normal": "Callaste, y otros también callaron. Cuando se supo lo que había pasado, la gente se preguntó cuántos científicos lo sabían. Desde entonces, cada anuncio de un avance genético se recibe con sospecha.",
           "facil": "Te callaste, y otros también. Cuando se supo, la gente se preguntó cuántos científicos lo sabían. Desde entonces, nadie se fía de los anuncios sobre genes."
-        }
+        },
+        "ari": {"normal": "Ha salido otro avance genético en las noticias y en casa nadie se lo cree. Mi padre dice que seguro que nos esconden algo.", "facil": "Han anunciado otro avance con genes. En casa nadie se lo cree. Mi padre dice que nos esconden algo."}
       }
     }
   ],

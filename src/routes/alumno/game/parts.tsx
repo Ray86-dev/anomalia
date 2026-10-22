@@ -127,6 +127,16 @@ export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReade
   );
 }
 
+/** Mensaje de Ari (M6): burbuja de móvil desde el 2077 que va construyendo el alumno. */
+export function AriMessage({ text }: { readonly text: string }) {
+  return (
+    <figure className="ari-message" aria-label={t.ari.mensaje}>
+      <figcaption className="ari-from">{t.ari.remitente}</figcaption>
+      <p className="ari-bubble">{text}</p>
+    </figure>
+  );
+}
+
 export function Avatar({ counselor }: { readonly counselor: Counselor }) {
   return (
     <span className="avatar" style={{ backgroundColor: counselor.color }} aria-hidden="true">
