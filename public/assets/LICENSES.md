@@ -48,6 +48,13 @@ Cada entrada indica el archivo, la obra y su autoría, la fuente, la licencia (v
 - **Licencia:** CC0, dominio público.
 - **Modificaciones:** recodificada a 128 kbps.
 
+## Iconos de la app
+
+### `icons/icon-192.png`, `icons/icon-512.png`, `icons/icon-maskable-512.png` y `icons/apple-touch-icon.png`
+- **Obra:** reloj de arena sobre el cielo del 2077, a partir del favicon del juego. Obra propia del proyecto (M7).
+- **Licencia:** CC0 1.0 (dominio público).
+- **Nota:** están en `public/icons/`, fuera de `assets/`, porque los usa el manifiesto de la PWA.
+
 ## Tipografías
 
 ### `fonts/AtkinsonHyperlegible-Regular.ttf` y `fonts/AtkinsonHyperlegible-Bold.ttf`

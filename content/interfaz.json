@@ -1,6 +1,7 @@
 {
   "app": {
     "titulo": "ANOMALÍA",
+    "descripcion": "Viaja a cinco momentos de la historia de la ciencia y decide con razones.",
     "sinJavascript": "ANOMALÍA necesita JavaScript para funcionar.",
     "cargando": "Cargando…",
     "errorConfiguracion": "Falta configurar la conexión con el servidor. Avisa a tu docente.",

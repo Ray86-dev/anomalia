@@ -4,12 +4,14 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router/dom';
 import { installChunkReload } from './lib/chunk-reload.ts';
 import { clientEnv } from './lib/env.ts';
+import { registerServiceWorker } from './lib/pwa.ts';
 import { router } from './router.tsx';
 import { ConfigError } from './routes/system.tsx';
 import './styles/tokens.css';
 import './styles/base.css';
 
 installChunkReload();
+registerServiceWorker();
 document.title = ui.app.titulo;
 
 const root = document.getElementById('root');

@@ -55,6 +55,11 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
   },
   {
+    // Plantilla del service worker (PWA): se ejecuta en el navegador, fuera de la página.
+    files: ['pwa/**/*.js'],
+    languageOptions: { globals: globals.serviceworker },
+  },
+  {
     files: ['**/*.{js,mjs}'],
     extends: [js.configs.recommended, tseslint.configs.disableTypeChecked],
     languageOptions: { globals: globals.node },
