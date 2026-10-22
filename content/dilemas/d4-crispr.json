@@ -148,5 +148,26 @@
     "He Jiankui no habla en el juego: el investigador de la escena no tiene nombre ni frases suyas.",
     "Las niñas reales no se nombran y no se habla de su salud."
   ],
-  "assets": { "capas": [], "stems": [] }
+  "assets": {
+    "capas": [
+      {
+        "src": "img/d4/nhgri-pipeta.webp",
+        "credito": "Foto: Maggie Bartlett, National Human Genome Research Institute, 2004. Dominio público.",
+        "pie": {
+          "normal": "Unas manos con guantes toman ADN de un tubo con una pipeta, en un laboratorio de genética.",
+          "facil": "Unas manos con guantes toman ADN de un tubo."
+        },
+        "foco": "45% 40%"
+      }
+    ],
+    "archivo": {
+      "src": "img/d4/adn-nhgri.webp",
+      "credito": "Ilustración: National Human Genome Research Institute (NHGRI). Dominio público.",
+      "pie": {
+        "normal": "La doble hélice del ADN: la molécula que CRISPR corta y cambia.",
+        "facil": "La doble hélice del ADN."
+      }
+    },
+    "stems": []
+  }
 }

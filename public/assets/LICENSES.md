@@ -25,6 +25,45 @@ Cada entrada indica el archivo, la obra y su autoría, la fuente, la licencia (v
 - **Licencia:** dominio público. Se publicó en 1922 y el autor murió en 1932, más de 80 años antes, así que también lo es en España (verificado el 22/10/2026).
 - **Modificaciones:** recorte de la cabeza y los hombros (sin los márgenes del papel ni una mancha de humedad), escalado y conversión a WebP.
 
+### `img/d2/kwi-dahlem-1913.webp`
+- **Obra:** Instituto Kaiser Wilhelm de Física-Química y Electroquímica, Berlín-Dahlem, fotografía de 1913. Autor desconocido.
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:KWI_f_phys_Ch_u_ECh_1913.jpg>
+- **Licencia:** dominio público (obra anónima publicada hace más de 70 años), verificada el 22/10/2026.
+- **Modificaciones:** recorte vertical, escalado y conversión a WebP. En el juego se tiñe con la paleta de la época.
+
+### `img/d3/johns-hopkins-1900.webp`
+- **Obra:** *Johns Hopkins Hospital, Baltimore*, Detroit Publishing Company, hacia 1900. Library of Congress.
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:Johns_Hopkins_Hospital_in_Baltimore_1900s.jpg>
+- **Licencia:** dominio público (publicada en EE. UU. antes de 1930), verificada el 22/10/2026.
+- **Modificaciones:** recorte vertical, escalado y conversión a WebP. En el juego se tiñe con la paleta de la época.
+- **Nota de rigor:** la foto es de hacia 1900, no de 1951; el pie lo indica.
+
+### `img/d3/hela-nih.webp`
+- **Obra:** *HeLa-III*, imagen de fluorescencia multifotónica de células HeLa (microtúbulos en magenta y ADN en azul verdoso). National Institutes of Health (NIH).
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:HeLa-III.jpg>
+- **Licencia:** dominio público (obra del Gobierno de EE. UU.), verificada el 22/10/2026.
+- **Modificaciones:** escalado a 900 px y conversión a WebP.
+- **Nota de sensibilidad:** se muestran las células, no a Henrietta Lacks: su retrato conocido no tiene licencia libre (decisión del docente: sin rostros).
+
+### `img/d4/nhgri-pipeta.webp`
+- **Obra:** *NHGRI researcher uses a pipette to remove DNA from a micro test tube*, Maggie Bartlett, NHGRI, 2004.
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:NHGRI_researcher_uses_a_pipette_to_remove_DNA_from_a_micro_test_tube.jpg>
+- **Licencia:** dominio público (obra del Gobierno de EE. UU.), verificada el 22/10/2026.
+- **Modificaciones:** recorte vertical, escalado y conversión a WebP.
+
+### `img/d4/adn-nhgri.webp`
+- **Obra:** *DNA Double Helix*, National Human Genome Research Institute (NHGRI).
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:DNA_Double_Helix_by_NHGRI.jpg>
+- **Licencia:** dominio público (obra del Gobierno de EE. UU.), verificada el 22/10/2026.
+- **Modificaciones:** escalado a 900 px y conversión a WebP.
+- **Nota de sensibilidad:** sin retrato del investigador real (decisión del docente: sin rostros).
+
+### `img/d5/cariotipo-nhgri.webp`
+- **Obra:** *Human male karyotype*, National Human Genome Research Institute (NHGRI).
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:NHGRI_human_male_karyotype.png>
+- **Licencia:** dominio público (obra del Gobierno de EE. UU.), verificada el 22/10/2026.
+- **Modificaciones:** escalado a 900 px, fondo blanco y conversión a WebP.
+
 ### `img/2077/tng-andromeda.webp`
 - **Obra:** *TNG and Andromeda*, Gianni0088, fotografía, 2011.
 - **Fuente:** <https://commons.wikimedia.org/wiki/File:TNG_and_Andromeda.jpg>

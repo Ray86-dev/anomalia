@@ -161,5 +161,16 @@
     "Es ficción: el 2077, el Consejo de Canarias y la Ley del Genoma no se presentan como hechos reales.",
     "La escena cambia según el estado del mundo y las ramas abiertas (variables de Ink)."
   ],
-  "assets": { "capas": [], "stems": [] }
+  "assets": {
+    "capas": [],
+    "archivo": {
+      "src": "img/d5/cariotipo-nhgri.webp",
+      "credito": "Imagen: National Human Genome Research Institute (NHGRI). Dominio público.",
+      "pie": {
+        "normal": "Cariotipo humano: los cromosomas de una persona, ordenados por parejas. En ellos está su genoma.",
+        "facil": "Los cromosomas de una persona, ordenados por parejas."
+      }
+    },
+    "stems": []
+  }
 }

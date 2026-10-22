@@ -158,7 +158,18 @@
     "No se describen con detalle los efectos del gas sobre las personas."
   ],
   "assets": {
-    "capas": [],
+    "capas": [
+      {
+        "src": "img/d2/kwi-dahlem-1913.webp",
+        "credito": "Foto: Instituto Kaiser Wilhelm de Física-Química y Electroquímica, Berlín-Dahlem, 1913 (autor desconocido). Dominio público.",
+        "pie": {
+          "normal": "El instituto de física-química de Berlín-Dahlem en 1913. Lo dirigía Fritz Haber. TODO(verificar)",
+          "facil": "El instituto de química de Fritz Haber, en Berlín, en 1913. TODO(verificar)"
+        },
+        "foco": "50% 50%",
+        "tinte": true
+      }
+    ],
     "archivo": {
       "src": "img/d2/haber-orlik.webp",
       "credito": "Aguafuerte: Emil Orlik, 1922 (Science History Institute). Dominio público.",

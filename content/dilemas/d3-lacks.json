@@ -149,5 +149,27 @@
     "La escena ocurre cuando llega la muestra y ella está viva y en tratamiento (decisión del docente).",
     "No se describe la enfermedad con detalle ni se habla de su muerte."
   ],
-  "assets": { "capas": [], "stems": [] }
+  "assets": {
+    "capas": [
+      {
+        "src": "img/d3/johns-hopkins-1900.webp",
+        "credito": "Foto: Detroit Publishing Company, hacia 1900 (Library of Congress). Dominio público.",
+        "pie": {
+          "normal": "El Hospital Johns Hopkins de Baltimore en una foto de hacia 1900.",
+          "facil": "El Hospital Johns Hopkins, en Baltimore, hacia 1900."
+        },
+        "foco": "50% 45%",
+        "tinte": true
+      }
+    ],
+    "archivo": {
+      "src": "img/d3/hela-nih.webp",
+      "credito": "Imagen: National Institutes of Health (NIH). Dominio público.",
+      "pie": {
+        "normal": "Células HeLa vistas con un microscopio de fluorescencia: en magenta, el esqueleto de cada célula; en azul verdoso, su ADN.",
+        "facil": "Células HeLa vistas al microscopio. El azul verdoso es su ADN."
+      }
+    },
+    "stems": []
+  }
 }
