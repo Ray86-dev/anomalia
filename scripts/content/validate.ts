@@ -77,6 +77,11 @@ export type ValidationOptions = {
 
 /** Historias Ink del juego: id → archivo y nudos que debe tener. */
 export const PROLOGUE_INK = { id: 'prologo', path: 'prologo.ink', knots: ['prologo'] } as const;
+export const PROLOGUE_EASY_INK = {
+  id: 'prologo-facil',
+  path: 'lectura-facil/prologo.ink',
+  knots: ['prologo'],
+} as const;
 export const SCENE_KNOTS = ['escena'] as const;
 
 export type ValidationResult = {
@@ -166,6 +171,9 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   });
 
   checkInk(PROLOGUE_INK.id, PROLOGUE_INK.path, PROLOGUE_INK.knots, 'prólogo');
+  if (options.readText(PROLOGUE_EASY_INK.path) !== null || options.strict) {
+    checkInk(PROLOGUE_EASY_INK.id, PROLOGUE_EASY_INK.path, PROLOGUE_EASY_INK.knots, 'prólogo');
+  }
 
   /** Imágenes y pistas declaradas deben existir en public/assets/ (si faltan, el juego usa el fondo procedural). */
   function checkAssets(owner: string, assets: { src: string }[]): void {

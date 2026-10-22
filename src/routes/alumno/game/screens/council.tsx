@@ -11,7 +11,7 @@ import { ActionBar, AdvanceButton, Avatar } from '../parts.tsx';
 const t = ui.juego;
 
 export function Council({ dilemma }: { readonly dilemma: Dilemma }) {
-  const total = dilemma.consejeros.length;
+  const total = dilemma.consejeros.length + dilemma.voces.length;
   return (
     <>
       <h1 tabIndex={-1} data-focus>
@@ -41,6 +41,21 @@ export function Council({ dilemma }: { readonly dilemma: Dilemma }) {
             </li>
           );
         })}
+        {/* Voces de la historia: se describe su postura, nunca con frases inventadas (§5). */}
+        {dilemma.voces.map((voice, index) => (
+          <li
+            key={voice.nombre}
+            className="counselor-card voice-card"
+            aria-label={fmt(t.consejo.tarjeta, {
+              n: dilemma.consejeros.length + index + 1,
+              total,
+            })}
+          >
+            <p className="kicker">{t.consejo.voz}</p>
+            <h2>{voice.nombre}</h2>
+            <p>{texto(voice.postura)}</p>
+          </li>
+        ))}
       </ul>
       <ActionBar>
         <AdvanceButton label={t.consejo.decidir} />

@@ -211,3 +211,41 @@ Revisión del contenido frente a los materiales que el docente trabajó antes de
 - **Coherencia con la ficha de *Gattaca*:** CRISPR desde 2012 y el caso de 2018, condenado por la comunidad científica y con pena de prisión.
 - **Lectura fácil y textos de los finales:** frases literales y sin metáforas en todo lo que indique qué hay que hacer.
 
+## 2026-10-22 · M5 (contenido completo)
+
+### Tomadas por el docente
+- **D-53 · D3: el permiso se le pide a Henrietta Lacks** (cambio sobre §5). En 1951 estaba viva y en tratamiento cuando se tomó la muestra. La escena ocurre cuando la muestra llega al laboratorio:
+  - B) no usarlas hasta pedirle permiso a ella y explicarle para qué;
+  - C) usarlas, pero informarla a ella y a su familia y compartir los beneficios.
+- **D-54 · Imágenes y música de D2–D5 en el M6.** Hasta entonces, cada época usa su fondo generado y la música del 2077.
+
+### Propuestas de contenido
+- **D-55 · Personas reales:**
+  - **Clara Immerwahr (D2):** aparece como «Voz de la historia», en una tarjeta aparte en el Consejo. Solo se describe su postura, sin frases inventadas y sin mencionar su muerte.
+  - **He Jiankui (D4):** solo se le nombra en el Archivo real; en la escena es «un investigador», sin frases suyas.
+  - **Henrietta Lacks (D3):** no habla y siempre se la nombra por su nombre.
+- **D-56 · D5 es dinámica.** El juego pasa a Ink `poder`, `responsabilidad`, `equidad`, `confianza`, `desnivel` y `rama_<id>`.
+  - La escena cambia con Desnivel ≥ 25 o ≥ 10, equidad < 40, confianza < 35 y las ramas `d1-firme` y `d2-denuncia`. Esta última es nueva: la abre la opción C de D2.
+  - Cierra con el eco del mito de los metales de Platón trabajado en clase.
+- **D-57 · Consejero que objeta en cada opción** (el que más se opone a ella):
+  - D2: A Gil, B Calvo, C Novak.
+  - D3: A Kaltz, B Calvo, C Jonás.
+  - D4: A Jonás, B Novak, C Gil.
+  - D5: A Kaltz, B Novak, C Calvo.
+- **D-58 · Lectura fácil activable por el alumno:**
+  - Botón con icono de libro en la barra del juego. Se recuerda en el móvil y cambia al momento todos los textos.
+  - Las escenas pasan a su versión `<id>-facil`, y también el prólogo (`lectura-facil/prologo.ink`).
+  - El expediente PDF usa la versión activa.
+  - Todo el contenido tiene ya su versión `facil`: `npm run content:strict` solo falla por las marcas pendientes de verificar.
+- **D-59 · Archivo real de D5:** el 2077 es ficción, así que se cuenta el marco real del debate: la Declaración Universal sobre el Genoma Humano y los Derechos Humanos (UNESCO, 1997) y el Convenio de Oviedo (1997, ratificado por España). Está marcado `TODO(verificar)`.
+- **D-60 · Textos de los cinco finales**, en versión normal y fácil. «Equilibrio frágil» cierra con la idea de la unidad: los datos dicen cómo son las cosas, pero qué hacer con ellos se decide con razones.
+- **`npm run ai:probe -- --dilema dN`** prueba la IA real en cualquier dilema. Se probó D2–D5.
+
+### Pendiente de verificación por el docente
+Datos que no están en el documento de diseño (marcados `TODO(verificar)`). Además, los cinco Archivos reales siguen con `verificado: false`.
+- **D1:** motivo del proceso; dibujos de la Luna y de las manchas solares; los *Discorsi* y los planos inclinados.
+- **D2:** la Primera Guerra Mundial en 1915; el amoníaco obtenido a partir del nitrógeno del aire.
+- **D3:** antes de HeLa, las células humanas no sobrevivían mucho tiempo en el laboratorio; la segregación racial en los hospitales de Estados Unidos en 1951.
+- **D4:** CRISPR existe desde 2012.
+- **D5:** el mito de los metales (Platón, *La República*); la Declaración de la UNESCO de 1997 y el Convenio de Oviedo.
+

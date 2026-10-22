@@ -64,6 +64,8 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
   - Imágenes en WebP de unos 1050×1400 (recorte vertical); música en MP3 de unos 128 kbps.
 - **Juego del alumno** (`src/routes/alumno/game/`): una pantalla por fase. El servidor es la autoridad: el cliente adopta siempre el estado que devuelve `partida`.
   - Motor en `src/engine/`: Ink, Pixi, Howler y GSAP, todo cargado bajo demanda.
+  - **Lectura fácil** (D-10, D-58): `texto()` y `storyFor()` de `helpers.ts` eligen la versión. Todo texto nuevo del contenido necesita su `facil` (lo exige `content:strict`), y cada escena, su `lectura-facil/<archivo>.ink`.
+  - **Escenas con variables** (D5): la escena recibe el estado del mundo y las ramas (`rama_<id>`); declara con `VAR` solo las que use.
 - **`shared/`:** TS puro, sin DOM ni APIs de Node o Deno. Lo importan la app (alias `@shared`) y las Edge Functions (rutas relativas).
   - Los imports relativos llevan extensión `.ts`.
   - Solo puede depender de `zod`.
@@ -115,4 +117,4 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 | `npm run teacher:add -- correo@dominio` | Añade un usuario de Auth existente a la lista blanca de docentes |
 | `npm run seed:demo` | Recrea la clase simulada PRUEBA con 30 alumnos |
 | `npm run simular` | Simula una clase jugando a la vez para probar el Centro (`--clase`, `--alumnos`, `--ritmo`, `--reiniciar`, `--borrar`, `--api`) |
-| `npm run ai:probe` | Prueba la IA real a través de `partida` (latencia, calidad, inyección, malestar); gasta llamadas reales y borra lo que crea |
+| `npm run ai:probe` | Prueba la IA real a través de `partida` (latencia, calidad, inyección, malestar); `-- --dilema d3` prueba otro dilema. Gasta llamadas reales y borra lo que crea |

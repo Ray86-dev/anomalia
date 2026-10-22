@@ -1,12 +1,14 @@
 /** Prólogo, viaje temporal y escena (fases 1–2 del bucle §6). */
 import { ui } from '@shared/generated/content.ts';
+import { desnivel } from '@shared/game/world.ts';
 import type { Dilemma } from '@shared/schemas/content.ts';
+import type { RunSnapshot } from '@shared/schemas/partida.ts';
 import { useEffect, useState } from 'react';
 import { audio } from '../../../../engine/audio.ts';
 import { countTo } from '../../../../engine/motion.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
-import { formatRescueKey, texto } from '../helpers.ts';
+import { formatRescueKey, storyFor, texto } from '../helpers.ts';
 import { ActionBar, AdvanceButton, InkReader } from '../parts.tsx';
 
 const t = ui.juego;
@@ -53,7 +55,7 @@ export function Prologue() {
         {ui.app.titulo}
       </h1>
       <InkReader
-        storyId="prologo"
+        storyId={storyFor('prologo')}
         knot="prologo"
         onStep={setStep}
         onDone={() => {
@@ -103,8 +105,20 @@ export function Travel({ dilemma }: { readonly dilemma: Dilemma }) {
   );
 }
 
+/**
+ * Lo que una escena puede consultar (D5 cambia según el mundo construido): las cuatro
+ * variables, el Desnivel y las ramas abiertas como `rama_d1_firme`.
+ */
+function sceneVariables({ world, branches }: Pick<RunSnapshot, 'world' | 'branches'>) {
+  return {
+    ...world,
+    desnivel: desnivel(world),
+    ...Object.fromEntries(branches.map((b) => [`rama_${b.replaceAll('-', '_')}`, true])),
+  };
+}
+
 export function Scene({ dilemma }: { readonly dilemma: Dilemma }) {
-  const { setStep } = useGameContext();
+  const { setStep, run } = useGameContext();
   const [done, setDone] = useState(false);
   return (
     <>
@@ -112,8 +126,9 @@ export function Scene({ dilemma }: { readonly dilemma: Dilemma }) {
         {texto(dilemma.titulo)}
       </h1>
       <InkReader
-        storyId={dilemma.id}
+        storyId={storyFor(dilemma.id)}
         knot="escena"
+        variables={sceneVariables(run)}
         onStep={setStep}
         onDone={() => {
           setDone(true);

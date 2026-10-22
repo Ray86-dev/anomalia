@@ -1,0 +1,133 @@
+{
+  "id": "d4",
+  "capitulo": 2,
+  "orden": 1,
+  "anio": 2018,
+  "lugar": "Shenzhen",
+  "titulo": {
+    "normal": "Los primeros bebés editados con CRISPR",
+    "facil": "Los primeros bebés con genes cambiados"
+  },
+  "tema": {
+    "normal": "Límites de la edición genética: curar o mejorar, y el riesgo de la eugenesia.",
+    "facil": "¿Hay que hacer todo lo que la ciencia puede hacer? ¿Dónde está el límite entre curar y mejorar?"
+  },
+  "rolCronista": {
+    "normal": "Eres un colega científico al que se consulta antes de implantar los embriones.",
+    "facil": "Eres un científico. Un compañero te pide tu opinión antes de seguir con su experimento."
+  },
+  "estetica": "clinico",
+  "escena": { "ink": "dilemas/d4-crispr.ink", "inkFacil": "lectura-facil/d4-crispr.ink" },
+  "consejeros": [
+    {
+      "id": "novak",
+      "argumento": {
+        "normal": "Imagina un mundo sin VIH. Esta técnica puede proteger de una enfermedad grave a personas que todavía no han nacido. Cada año de espera tiene un coste. La ciencia avanza probando, con cuidado, pero probando: frenarla por miedo es el verdadero riesgo.",
+        "facil": "Imagina un mundo sin VIH. Esta técnica puede proteger a bebés de una enfermedad grave. Esperar también tiene un precio. Frenar la ciencia por miedo es el mayor peligro."
+      }
+    },
+    {
+      "id": "jonas",
+      "argumento": {
+        "normal": "Este cambio no se puede deshacer y pasará a las siguientes generaciones. Nadie sabe qué efectos tendrá dentro de veinte o cincuenta años, y quienes lo van a vivir no han podido opinar. Cuando el daño posible es irreversible, la prudencia no es cobardía: es una obligación.",
+        "facil": "Este cambio no se puede deshacer. Pasará a los hijos y a los nietos. Nadie sabe qué efectos tendrá, y ellos no han podido opinar. Si un daño no tiene arreglo, hay que tener mucho cuidado."
+      }
+    },
+    {
+      "id": "gil",
+      "argumento": {
+        "normal": "Sabemos cambiar un gen en un laboratorio, pero no somos capaces de imaginar qué significa para la vida entera de una persona, ni para una sociedad que empiece a elegir genes. Hoy es el VIH; mañana, quizá la estatura o la inteligencia. La técnica va mucho más deprisa que nuestra capacidad de pensar en ella.",
+        "facil": "Sabemos cambiar un gen, pero no imaginamos lo que eso significa para toda una vida. Hoy es para evitar una enfermedad. Mañana quizá sea para elegir la altura o la inteligencia. La técnica va más rápido que nuestras ideas."
+      }
+    }
+  ],
+  "voces": [],
+  "opciones": [
+    {
+      "id": "A",
+      "texto": {
+        "normal": "Apoyar el experimento: proteger frente al VIH es un bien.",
+        "facil": "Apoyar el experimento: proteger a los bebés del VIH es bueno."
+      },
+      "corto": "Apoyar el experimento",
+      "deltas": { "poder": 15, "responsabilidad": -10 },
+      "rama": null,
+      "objetor": "jonas",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · Bebés a la carta",
+          "facil": "2077 · Bebés por encargo"
+        },
+        "texto": {
+          "normal": "Tras aquel primer paso, editar embriones se volvió habitual: primero para evitar enfermedades y después para elegir rasgos. En Canarias ya hay clínicas que ofrecen «mejoras» a quien pueda pagarlas.",
+          "facil": "Después de aquel experimento, cambiar los genes de los bebés se volvió normal. Primero, para evitar enfermedades. Después, para elegir cómo serán. Hay clínicas que lo hacen a quien pueda pagar."
+        }
+      }
+    },
+    {
+      "id": "B",
+      "texto": {
+        "normal": "Denunciarlo antes de que ocurra.",
+        "facil": "Avisar a las autoridades antes de que siga adelante."
+      },
+      "corto": "Denunciarlo",
+      "deltas": { "responsabilidad": 15, "confianza": 5, "poder": -5 },
+      "rama": null,
+      "objetor": "novak",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · La línea que se respetó",
+          "facil": "2077 · El límite que se respetó"
+        },
+        "texto": {
+          "normal": "Tu denuncia frenó el experimento a tiempo. La edición de embriones se discutió en público durante años antes de permitir nada. Hoy solo se usa con normas estrictas, y la gente confía en quienes las vigilan.",
+          "facil": "Tu aviso paró el experimento a tiempo. Durante años se discutió en público antes de permitir nada. Hoy hay normas muy claras y la gente confía en quienes las vigilan."
+        }
+      }
+    },
+    {
+      "id": "C",
+      "texto": {
+        "normal": "Callar y no implicarte.",
+        "facil": "No decir nada y no meterte."
+      },
+      "corto": "Callar",
+      "deltas": { "confianza": -10, "responsabilidad": -5 },
+      "rama": null,
+      "objetor": "gil",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · Nadie dijo nada",
+          "facil": "2077 · Nadie dijo nada"
+        },
+        "texto": {
+          "normal": "Callaste, y otros también callaron. Cuando se supo lo que había pasado, la gente se preguntó cuántos científicos lo sabían. Desde entonces, cada anuncio de un avance genético se recibe con sospecha.",
+          "facil": "Te callaste, y otros también. Cuando se supo, la gente se preguntó cuántos científicos lo sabían. Desde entonces, nadie se fía de los anuncios sobre genes."
+        }
+      }
+    }
+  ],
+  "justificacion": {
+    "pregunta": {
+      "normal": "¿Por qué has elegido esta opción? Explica si todo lo que la ciencia puede hacer se debe hacer y a quién has tenido en cuenta: los bebés, sus futuros hijos, la sociedad…",
+      "facil": "¿Por qué eliges esta opción? Explica si hay que hacer todo lo que la ciencia puede hacer. Piensa en los bebés, en sus hijos y en los demás."
+    },
+    "palabras": [40, 80]
+  },
+  "replica": { "palabras": [30, 60] },
+  "archivoReal": {
+    "texto": {
+      "normal": "En 2018, el investigador He Jiankui anunció el nacimiento de dos gemelas con el gen CCR5 editado. El experimento siguió adelante y solo se conoció tras el nacimiento. La comunidad científica lo condenó, en 2019 fue condenado a prisión en China, y hubo llamamientos internacionales a una moratoria de la edición de la línea germinal, la que se hereda.",
+      "facil": "En 2018, el investigador He Jiankui contó que habían nacido dos niñas gemelas con un gen cambiado. Nadie lo supo hasta después del nacimiento. Los científicos lo criticaron y en 2019 fue condenado a prisión en China. Muchos expertos pidieron parar los cambios en los genes que se heredan."
+    },
+    "verificado": false
+  },
+  "ia": {
+    "contexto": "Shenzhen, 2018. Un investigador (sin nombre en el juego) ha editado embriones humanos con CRISPR para hacerlos resistentes al VIH y quiere implantarlos; el cambio se heredaría. El alumno es un colega científico ficticio al que consulta antes de la implantación. Hechos reales: en 2018 He Jiankui anunció el nacimiento de dos gemelas con el gen CCR5 editado; la comunidad científica lo condenó y en 2019 fue condenado a prisión en China. Tema: límites de la edición genética, terapia frente a mejora, eugenesia y la película Gattaca. No inventes frases ni decisiones del investigador real."
+  },
+  "sensibilidad": [
+    "He Jiankui no habla en el juego: el investigador de la escena no tiene nombre ni frases suyas.",
+    "Las niñas reales no se nombran y no se habla de su salud."
+  ],
+  "assets": { "capas": [], "stems": [] }
+}

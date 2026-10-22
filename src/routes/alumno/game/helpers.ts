@@ -1,9 +1,16 @@
 import { counselors, dilemmas } from '@shared/generated/content.ts';
 import type { Counselor, Dilemma, Texto } from '@shared/schemas/content.ts';
+import { hasStory } from '../../../engine/ink.ts';
+import { reading } from '../../../lib/reading.ts';
 
-/** Versión del texto que toca mostrar. La lectura fácil (D-10) se activará con su ajuste en M5. */
+/** Versión del texto que toca mostrar: la de lectura fácil si está activada y existe (D-10). */
 export function texto(value: Texto): string {
-  return value.normal;
+  return reading.isEasy() ? (value.facil ?? value.normal) : value.normal;
+}
+
+/** Historia Ink que toca narrar: su versión de lectura fácil (`<id>-facil`) si está activada. */
+export function storyFor(id: string): string {
+  return reading.isEasy() && hasStory(`${id}-facil`) ? `${id}-facil` : id;
 }
 
 export function findDilemma(id: string | null): Dilemma | undefined {

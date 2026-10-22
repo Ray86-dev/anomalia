@@ -60,7 +60,16 @@
 
 .game-bar-actions {
   display: flex;
+  flex: none;
   gap: var(--space-2);
+}
+
+/* Con alias largos en móviles de 360 px, el rótulo se recorta en vez de desbordar la barra. */
+.game-bar .kicker {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .game-screen {
@@ -533,4 +542,9 @@
   letter-spacing: 0.08em;
   color: var(--accent);
   overflow-wrap: anywhere;
+}
+
+/* Voz de la historia en el Consejo: se distingue de los consejeros (no es uno de ellos). */
+.voice-card {
+  border-style: dashed;
 }

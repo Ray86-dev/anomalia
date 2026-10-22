@@ -1,0 +1,134 @@
+{
+  "id": "d3",
+  "capitulo": 1,
+  "orden": 3,
+  "anio": 1951,
+  "lugar": "Baltimore",
+  "titulo": {
+    "normal": "Las células de Henrietta Lacks",
+    "facil": "Las células de Henrietta Lacks"
+  },
+  "tema": {
+    "normal": "Consentimiento, justicia y quién se beneficia de la ciencia. Desigualdad racial y de clase.",
+    "facil": "¿Se puede investigar con el cuerpo de alguien sin preguntarle? ¿Quién gana con lo que se descubre?"
+  },
+  "rolCronista": {
+    "normal": "Eres técnico del laboratorio que recibe la muestra.",
+    "facil": "Trabajas en el laboratorio que recibe la muestra."
+  },
+  "estetica": "foto50",
+  "escena": { "ink": "dilemas/d3-lacks.ink", "inkFacil": "lectura-facil/d3-lacks.ink" },
+  "consejeros": [
+    {
+      "id": "calvo",
+      "argumento": {
+        "normal": "Piensa en todo el bien que podrían hacer estas células: vacunas, tratamientos, vidas salvadas en todo el mundo. La muestra ya se ha tomado para tratarla. Cuando el beneficio para millones de personas es tan grande, ¿no debería pesar más que una firma?",
+        "facil": "Estas células pueden ayudar a curar a millones de personas. La muestra ya está aquí. Si el bien para tanta gente es tan grande, ¿no vale más que pedir un permiso?"
+      }
+    },
+    {
+      "id": "kaltz",
+      "argumento": {
+        "normal": "Una persona nunca puede ser solo un medio, ni siquiera para curar a otras. Su cuerpo es suyo, y lo que sale de él también. Si no se le pregunta, se la trata como una cosa. Hay un deber de respeto que no depende de lo buenos que sean los resultados.",
+        "facil": "Una persona no es una cosa que se pueda usar, ni siquiera para curar a otras. Su cuerpo es suyo. Si no le preguntas, la tratas como una cosa. Respetarla es un deber, aunque los resultados sean buenos."
+      }
+    },
+    {
+      "id": "jonas",
+      "argumento": {
+        "normal": "No sabemos qué se podrá hacer con estas células dentro de cincuenta años, ni qué se sabrá a través de ellas de esta mujer y de su familia. Cuando algo puede tener efectos tan largos, hay que pensar ahora en quién cargará con ellos. La prudencia también es preguntar.",
+        "facil": "No sabemos qué se podrá hacer con estas células en el futuro. Tampoco qué se sabrá de ella y de su familia. Si algo puede durar tantos años, hay que pensarlo antes. Preguntar también es ser prudente."
+      }
+    }
+  ],
+  "voces": [],
+  "opciones": [
+    {
+      "id": "A",
+      "texto": {
+        "normal": "Usar las células sin más: el avance médico lo justifica.",
+        "facil": "Usar las células sin preguntar: curar a otras personas es más importante."
+      },
+      "corto": "Usar sin preguntar",
+      "deltas": { "poder": 15, "equidad": -15, "confianza": -5 },
+      "rama": null,
+      "objetor": "kaltz",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · Un banco de células sin nombres",
+          "facil": "2077 · Células sin nombre"
+        },
+        "texto": {
+          "normal": "En esta línea temporal, la medicina avanzó deprisa usando muestras de pacientes sin preguntarles. Hay curas que salvan millones de vidas, pero muchas familias no saben que una parte de su historia está en un laboratorio, y desconfían de los hospitales.",
+          "facil": "La medicina avanzó rápido usando muestras sin pedir permiso. Hay curas que salvan millones de vidas. Pero muchas familias no se fían de los hospitales."
+        }
+      }
+    },
+    {
+      "id": "B",
+      "texto": {
+        "normal": "No usarlas hasta pedirle permiso a ella y explicarle para qué.",
+        "facil": "No usarlas hasta pedirle permiso a ella y explicarle para qué son."
+      },
+      "corto": "Pedirle permiso antes",
+      "deltas": { "responsabilidad": 10, "poder": -10 },
+      "rama": null,
+      "objetor": "calvo",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · El permiso antes que la prisa",
+          "facil": "2077 · Primero, el permiso"
+        },
+        "texto": {
+          "normal": "Esperar el permiso retrasó algunas investigaciones. A cambio, en Canarias nadie entra en un estudio médico sin entender para qué sirve: dar el consentimiento es tan normal como vacunarse.",
+          "facil": "Pedir permiso hizo que algunas investigaciones tardaran más. Pero hoy, en Canarias, nadie participa en un estudio médico sin saber para qué sirve."
+        }
+      }
+    },
+    {
+      "id": "C",
+      "texto": {
+        "normal": "Usarlas, pero informarla a ella y a su familia y compartir los beneficios.",
+        "facil": "Usarlas, pero contárselo a ella y a su familia y compartir lo que se gane."
+      },
+      "corto": "Usar, informar y compartir",
+      "deltas": { "equidad": 10, "responsabilidad": 5, "poder": 5 },
+      "rama": null,
+      "objetor": "jonas",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · La ciencia que reparte",
+          "facil": "2077 · La ciencia que comparte"
+        },
+        "texto": {
+          "normal": "Las células se usaron y la familia lo supo desde el principio. Hoy, quien dona una muestra recibe información y una parte de los beneficios, y los hospitales cuentan con la confianza de todos los barrios.",
+          "facil": "Las células se usaron y la familia lo supo desde el principio. Hoy, quien da una muestra recibe información y una parte de lo que se gana. La gente confía en los hospitales."
+        }
+      }
+    }
+  ],
+  "justificacion": {
+    "pregunta": {
+      "normal": "¿Por qué has elegido esta opción? Explica qué debe pasar antes de investigar con el cuerpo de una persona y quién debería beneficiarse de lo que se descubra.",
+      "facil": "¿Por qué eliges esta opción? Explica qué hay que hacer antes de investigar con el cuerpo de alguien y quién debe ganar con lo que se descubra."
+    },
+    "palabras": [40, 80]
+  },
+  "replica": { "palabras": [30, 60] },
+  "archivoReal": {
+    "texto": {
+      "normal": "Las células del tumor de Henrietta Lacks se tomaron sin su consentimiento y dieron lugar a la línea HeLa, fundamental para la vacuna de la polio y para miles de investigaciones. Su familia no fue informada durante décadas. El caso se convirtió en un referente de la bioética del consentimiento informado.",
+      "facil": "A Henrietta Lacks le tomaron células de un tumor sin pedirle permiso. Con ellas se hicieron las células HeLa. Sirvieron para crear la vacuna de la polio y para miles de investigaciones. Durante muchos años, nadie se lo contó a su familia. Hoy su caso se estudia para explicar por qué hay que pedir permiso antes de investigar."
+    },
+    "verificado": false
+  },
+  "ia": {
+    "contexto": "Baltimore, 1951, Hospital Johns Hopkins. Henrietta Lacks, mujer afroamericana tratada allí, tiene un tumor; se han tomado células del tumor sin su consentimiento y llegan al laboratorio. Esas células darán lugar a la línea HeLa, clave para la vacuna de la polio y para miles de investigaciones; su familia no será informada durante décadas. El alumno es un técnico de laboratorio ficticio que recibe la muestra mientras ella sigue en tratamiento. Tema: consentimiento, justicia y quién se beneficia de la ciencia; desigualdad racial y de clase. Henrietta Lacks no habla en el juego: no le atribuyas palabras ni decisiones."
+  },
+  "sensibilidad": [
+    "Henrietta Lacks no tiene diálogo ni frases inventadas, y se la nombra siempre por su nombre: nunca solo «la paciente» ni «HeLa».",
+    "La escena ocurre cuando llega la muestra y ella está viva y en tratamiento (decisión del docente).",
+    "No se describe la enfermedad con detalle ni se habla de su muerte."
+  ],
+  "assets": { "capas": [], "stems": [] }
+}

@@ -1,0 +1,144 @@
+{
+  "id": "d5",
+  "capitulo": 2,
+  "orden": 2,
+  "anio": 2077,
+  "lugar": "Canarias",
+  "titulo": { "normal": "La Ley del Genoma", "facil": "La Ley de los Genes" },
+  "tema": {
+    "normal": "El mundo que has construido te plantea la última decisión: ¿puede una ley usar la genética para decidir el lugar de cada persona?",
+    "facil": "Tú has construido este mundo. Ahora decides: ¿pueden los genes decidir el lugar de cada persona?"
+  },
+  "rolCronista": {
+    "normal": "Tienes el voto decisivo en el Consejo de Canarias.",
+    "facil": "Tu voto decide una ley en Canarias."
+  },
+  "estetica": "2077",
+  "escena": { "ink": "dilemas/d5-ley-genoma.ink", "inkFacil": "lectura-facil/d5-ley-genoma.ink" },
+  "consejeros": [
+    {
+      "id": "calvo",
+      "argumento": {
+        "normal": "Una ley debe buscar el mayor bienestar para el mayor número. Pregúntate qué opción evita más enfermedades y más sufrimiento, y cuál crea más injusticias. El bienestar de todos incluye también a quienes saldrían perdiendo.",
+        "facil": "Una ley debe hacer el mayor bien a la mayor cantidad de gente. Piensa qué opción evita más sufrimiento y cuál crea más injusticias."
+      }
+    },
+    {
+      "id": "kaltz",
+      "argumento": {
+        "normal": "Nadie elige sus genes. Si una ley decide el futuro de alguien por su ADN, lo trata como un dato y no como una persona. La dignidad no se mide en un laboratorio: todas las personas valen lo mismo.",
+        "facil": "Nadie elige sus genes. Si una ley decide tu futuro por tu ADN, te trata como un número. Ningún laboratorio mide cuánto vale una persona: todas valen lo mismo."
+      }
+    },
+    {
+      "id": "jonas",
+      "argumento": {
+        "normal": "Lo que se decida hoy lo heredarán personas que aún no han nacido y que no pueden votar. Ante cambios que no se pueden deshacer, la ley debe ser prudente y pensar en ellas primero.",
+        "facil": "Esta ley afectará a personas que todavía no han nacido. Ellas no pueden votar. Si un cambio no se puede deshacer, hay que ir con mucho cuidado."
+      }
+    },
+    {
+      "id": "novak",
+      "argumento": {
+        "normal": "La edición genética puede acabar con enfermedades terribles. Prohibirla es condenar a muchas personas a sufrir lo que ya se sabe evitar. La ciencia resuelve problemas: la ley debe dejarla avanzar, con normas, pero sin miedo.",
+        "facil": "Cambiar genes puede acabar con enfermedades terribles. Si se prohíbe, mucha gente sufrirá sin necesidad. La ley debe dejar que la ciencia avance, con normas."
+      }
+    },
+    {
+      "id": "gil",
+      "argumento": {
+        "normal": "Mira el desnivel: ya sabemos cambiar genes, pero no sabemos imaginar una sociedad que clasifique a la gente por ellos. Los «válidos» y los «no válidos» empiezan con una ley que parece eficiente.",
+        "facil": "Sabemos cambiar genes, pero no imaginamos cómo sería vivir clasificados por ellos. Separar a la gente en «válidos» y «no válidos» empieza con una ley que parece útil."
+      }
+    }
+  ],
+  "voces": [],
+  "opciones": [
+    {
+      "id": "A",
+      "texto": {
+        "normal": "Votar el índice genómico obligatorio para estudios y empleo: más eficiencia.",
+        "facil": "Votar que un análisis de genes decida qué estudia y en qué trabaja cada persona."
+      },
+      "corto": "Índice genómico obligatorio",
+      "deltas": { "poder": 10, "equidad": -20 },
+      "rama": null,
+      "objetor": "kaltz",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · Cada cual en su sitio",
+          "facil": "2077 · Cada uno en su sitio"
+        },
+        "texto": {
+          "normal": "La ley se aprobó. Desde el colegio, un índice genómico decide quién estudia qué y quién trabaja dónde. Todo funciona con eficiencia… para quien tiene buenos genes. Los demás aprenden pronto lo que no podrán ser.",
+          "facil": "La ley se aprobó. Desde el colegio, un análisis de genes decide qué estudias y en qué trabajas. Todo funciona bien para quien tiene «buenos» genes. Los demás saben pronto lo que no podrán ser."
+        }
+      }
+    },
+    {
+      "id": "B",
+      "texto": {
+        "normal": "Votar la edición genética solo terapéutica, pública y gratuita.",
+        "facil": "Votar que los genes solo se cambien para curar enfermedades, gratis y para todos."
+      },
+      "corto": "Solo para curar, para todos",
+      "deltas": { "equidad": 10, "responsabilidad": 10 },
+      "rama": null,
+      "objetor": "novak",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · Curar sin elegir",
+          "facil": "2077 · Curar, no elegir"
+        },
+        "texto": {
+          "normal": "La edición genética se usa solo para curar enfermedades graves, en hospitales públicos y sin pagar. Nadie puede comprar mejoras. Las listas de espera son largas, pero nadie se queda fuera por su dinero ni por sus genes.",
+          "facil": "Los genes solo se cambian para curar enfermedades graves, en hospitales públicos y gratis. Nadie puede comprar mejoras. Hay que esperar, pero nadie se queda fuera."
+        }
+      }
+    },
+    {
+      "id": "C",
+      "texto": {
+        "normal": "Votar una moratoria total de la edición genética.",
+        "facil": "Votar que se pare del todo el cambio de genes durante un tiempo."
+      },
+      "corto": "Moratoria total",
+      "deltas": { "responsabilidad": 10, "poder": -15 },
+      "rama": null,
+      "objetor": "calvo",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · El freno de emergencia",
+          "facil": "2077 · Todo parado"
+        },
+        "texto": {
+          "normal": "Canarias detuvo toda edición genética. No hay mejoras ni discriminación genética, pero tampoco nuevas curas: algunas familias viajan a otros países a buscar tratamientos que aquí están prohibidos.",
+          "facil": "En Canarias ya no se cambian genes. No hay mejoras ni separación por genes, pero tampoco curas nuevas. Algunas familias viajan a otros países para curarse."
+        }
+      }
+    }
+  ],
+  "justificacion": {
+    "pregunta": {
+      "normal": "¿Por qué votas esta opción? Explica qué papel debe tener la ciencia en esta ley y qué hay que decidir con razones, porque ningún dato lo resuelve.",
+      "facil": "¿Por qué votas esto? Explica qué nos dice la ciencia y qué tenemos que decidir nosotros, con razones."
+    },
+    "palabras": [40, 80]
+  },
+  "replica": { "palabras": [30, 60] },
+  "archivoReal": {
+    "texto": {
+      "normal": "El 2077 de este juego es ficción, pero el debate es real. En 1997, la UNESCO aprobó la Declaración Universal sobre el Genoma Humano y los Derechos Humanos, que establece que nadie podrá ser discriminado por sus características genéticas. Ese mismo año se firmó el Convenio de Oviedo del Consejo de Europa, que España ha ratificado: solo permite modificar el genoma humano con fines preventivos, diagnósticos o terapéuticos, y nunca para cambiar el de la descendencia. TODO(verificar)",
+      "facil": "Este 2077 es inventado, pero el debate es real. En 1997, la UNESCO aprobó una declaración que dice que nadie puede ser discriminado por sus genes. Ese mismo año se firmó en Europa el Convenio de Oviedo. España lo aceptó. Dice que los genes humanos solo se pueden cambiar para prevenir o curar enfermedades, y nunca de forma que se hereden. TODO(verificar)"
+    },
+    "verificado": false
+  },
+  "ia": {
+    "contexto": "Canarias, 2077 (ficción). El Consejo de Canarias vota la Ley del Genoma y el alumno tiene el voto decisivo. Opciones: un índice genómico obligatorio para estudios y empleo; edición genética solo terapéutica, pública y gratuita; o una moratoria total. Eco de la película Gattaca (válidos y no válidos, determinismo genético, discriminación) y del mito de los metales de Platón. Es la última decisión: el escenario depende del mundo que el alumno ha construido."
+  },
+  "sensibilidad": [
+    "Es ficción: el 2077, el Consejo de Canarias y la Ley del Genoma no se presentan como hechos reales.",
+    "La escena cambia según el estado del mundo y las ramas abiertas (variables de Ink)."
+  ],
+  "assets": { "capas": [], "stems": [] }
+}

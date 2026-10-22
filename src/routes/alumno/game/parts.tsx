@@ -4,7 +4,8 @@ import { checkWords, countWords, type WordCheck } from '@shared/game/words.ts';
 import type { Counselor } from '@shared/schemas/content.ts';
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { audio } from '../../../engine/audio.ts';
-import { loadInkLines, type InkLine } from '../../../engine/ink.ts';
+import { loadInkLines, type InkLine, type InkVariables } from '../../../engine/ink.ts';
+import { reading } from '../../../lib/reading.ts';
 import { fmt } from '../../../lib/text.ts';
 import { Notice } from '../../../ui/Notice.tsx';
 import { useGameContext } from './GameContext.ts';
@@ -56,6 +57,7 @@ export function AdvanceButton({ label }: { readonly label: string }) {
 type InkReaderProps = {
   readonly storyId: string;
   readonly knot: string;
+  readonly variables?: InkVariables;
   /** Se llama al mostrar cada línea (0, 1, 2…): mueve el parallax del fondo. */
   readonly onStep?: (step: number) => void;
   readonly onDone: () => void;
@@ -65,14 +67,14 @@ type InkReaderProps = {
  * Narración de Mnemósine línea a línea, al ritmo del alumno (sin límite de tiempo, §10.3).
  * Las líneas leídas siguen visibles para poder releerlas.
  */
-export function InkReader({ storyId, knot, onStep, onDone }: InkReaderProps) {
+export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReaderProps) {
   const [lines, setLines] = useState<readonly InkLine[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [shown, setShown] = useState(1);
 
   useEffect(() => {
     let active = true;
-    loadInkLines(storyId, knot).then(
+    loadInkLines(storyId, knot, variables).then(
       (loaded) => {
         if (active) setLines(loaded);
       },
@@ -83,6 +85,8 @@ export function InkReader({ storyId, knot, onStep, onDone }: InkReaderProps) {
     return () => {
       active = false;
     };
+    // Las variables se leen al empezar la narración; cambiarlas a mitad no la reinicia.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storyId, knot]);
 
   const total = lines?.length ?? 0;
@@ -245,6 +249,36 @@ export function TextAnswer({
 }
 
 /** Botón de silencio, siempre accesible (§10.2). */
+const subscribeReading = (listener: () => void) => reading.subscribe(listener);
+const isEasy = () => reading.isEasy();
+
+/** Lectura fácil (D-10): cambia al momento todos los textos y las escenas siguientes. */
+export function ReadingToggle() {
+  const easy = useSyncExternalStore(subscribeReading, isEasy);
+  return (
+    <button
+      className="icon-button"
+      type="button"
+      aria-pressed={easy}
+      aria-label={easy ? t.lecturaFacil.desactivar : t.lecturaFacil.activar}
+      onClick={() => {
+        reading.setEasy(!easy);
+      }}
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path
+          d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1v13c-3-1-6-1-9 1-3-2-6-2-9-1z M12 6.5v13"
+          fill={easy ? 'currentColor' : 'none'}
+          fillOpacity={easy ? 0.25 : 0}
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </button>
+  );
+}
+
 export function AudioToggle() {
   const muted = useSyncExternalStore(subscribeAudio, isMuted);
   return (

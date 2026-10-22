@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { fallbacks } from '../../shared/generated/content.ts';
 import { gameResponseSchema } from '../../shared/schemas/partida.ts';
 import {
+  admin,
   anonymousStudent,
   cleanup,
   configured,
@@ -17,6 +18,7 @@ import {
 } from './helpers.ts';
 
 let student: Db;
+let classId: string;
 
 const advance = (phase: string, dilemmaId: string | null) =>
   partida(student, { action: 'advance', from: { phase, dilemmaId } });
@@ -25,6 +27,7 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
   beforeAll(async () => {
     const teacher = await createTeacher('juego');
     const schoolClass = await createClass(teacher, `Juego ${run}`);
+    classId = schoolClass.id;
     student = await anonymousStudent();
     expect(
       await partida(student, { action: 'join', classCode: schoolClass.code, alias: 'Cronista1' }),
@@ -114,10 +117,27 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
     });
   });
 
-  it('tras el Archivo real espera al capítulo II mientras esté bloqueado', async () => {
+  it('tras el Archivo real de D1 viaja a D2', async () => {
     expect(await advance('ripples', 'd1')).toMatchObject({ run: { phase: 'archive' } });
-    // En el contenido actual solo existe D1: el capítulo I termina aquí.
     expect(await advance('archive', 'd1')).toMatchObject({
+      run: { phase: 'travel', currentDilemma: 'd2' },
+    });
+  });
+
+  it('al cerrar el capítulo I espera al II mientras esté bloqueado', async () => {
+    // Se salta D2 con la clave secreta (sin gastar IA): la partida queda al final de D3.
+    const { data: player } = await admin()
+      .from('players')
+      .select('id')
+      .eq('alias', 'Cronista1')
+      .eq('class_id', classId)
+      .single();
+    if (player === null) throw new Error('Cronista1 no existe');
+    await admin()
+      .from('runs')
+      .update({ phase: 'archive', current_dilemma: 'd3' })
+      .eq('player_id', player.id);
+    expect(await advance('archive', 'd3')).toMatchObject({
       run: { phase: 'waiting', currentDilemma: null },
     });
     expect(await advance('waiting', null)).toMatchObject({ ok: false, error: 'locked' });

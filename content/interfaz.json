@@ -78,7 +78,8 @@
     },
     "consejo": {
       "titulo": "El Consejo",
-      "ayuda": "Desliza para escuchar a los tres consejeros. Ninguno tiene la respuesta correcta.",
+      "ayuda": "Desliza para escuchar a cada consejero. Ninguno tiene la respuesta correcta.",
+      "voz": "Voz de la historia",
       "tarjeta": "Consejero {n} de {total}",
       "decidir": "Tomar mi decisión"
     },
@@ -168,6 +169,10 @@
       "descargar": "Descargar el PDF",
       "error": "No se ha podido generar el PDF. Inténtalo de nuevo.",
       "fin": "Cuando lo hayas subido al aula virtual, habrás terminado. Gracias, cronista."
+    },
+    "lecturaFacil": {
+      "activar": "Activar la lectura fácil",
+      "desactivar": "Desactivar la lectura fácil"
     },
     "audio": {
       "silenciar": "Silenciar el sonido",

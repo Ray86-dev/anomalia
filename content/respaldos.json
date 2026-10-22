@@ -3,30 +3,188 @@
     "A": {
       "kaltz": {
         "objecion": {
-          "normal": "Has elegido que Galileo diga en público lo contrario de lo que sabe. Entiendo que quieras salvarle, pero piénsalo: si todos los científicos mintieran cuando les amenazan, ¿podríamos fiarnos de lo que dicen? ¿Hay alguna verdad que no debería negarse nunca, pase lo que pase?"
+          "normal": "Has elegido que Galileo diga en público lo contrario de lo que sabe. Entiendo que quieras salvarle, pero piénsalo: si todos los científicos mintieran cuando les amenazan, ¿podríamos fiarnos de lo que dicen? ¿Hay alguna verdad que no debería negarse nunca, pase lo que pase?",
+          "facil": "Quieres que Galileo diga lo contrario de lo que sabe para salvarse. Pero si todos los científicos mintieran cuando tienen miedo, ¿podríamos creerles? ¿Hay verdades que nunca se deben negar?"
         },
         "cierre": {
-          "normal": "Sigo pensando que la verdad no se negocia, pero reconozco que proteger una vida también es un deber. Ese choque entre dos deberes es justo lo que el Archivo necesitaba guardar."
+          "normal": "Sigo pensando que la verdad no se negocia, pero reconozco que proteger una vida también es un deber. Ese choque entre dos deberes es justo lo que el Archivo necesitaba guardar.",
+          "facil": "Sigo pensando que la verdad no se cambia. Pero salvar una vida también es un deber. El Archivo guarda ese choque entre dos deberes."
         }
       }
     },
     "B": {
       "novak": {
         "objecion": {
-          "normal": "Admiro la valentía, pero hagamos cuentas: si Galileo se mantiene firme y lo pierde todo, ¿quién terminará sus investigaciones? Un mártir inspira, pero no hace experimentos. ¿Seguro que un gesto heroico vale más que años de descubrimientos?"
+          "normal": "Admiro la valentía, pero hagamos cuentas: si Galileo se mantiene firme y lo pierde todo, ¿quién terminará sus investigaciones? Un mártir inspira, pero no hace experimentos. ¿Seguro que un gesto heroico vale más que años de descubrimientos?",
+          "facil": "Eres valiente. Pero si Galileo lo pierde todo, ¿quién terminará sus investigaciones? Un héroe inspira, pero no hace experimentos. ¿Vale más un gesto que años de descubrimientos?"
         },
         "cierre": {
-          "normal": "Sigo creyendo que la ciencia necesita investigadores vivos más que héroes. Pero me has hecho ver que, sin confianza en la verdad, los descubrimientos tampoco llegan muy lejos. Archivado."
+          "normal": "Sigo creyendo que la ciencia necesita investigadores vivos más que héroes. Pero me has hecho ver que, sin confianza en la verdad, los descubrimientos tampoco llegan muy lejos. Archivado.",
+          "facil": "Sigo creyendo que la ciencia necesita investigadores vivos. Pero sin confianza en la verdad, los descubrimientos no llegan lejos. Lo guardo en el Archivo."
         }
       }
     },
     "C": {
       "jonas": {
         "objecion": {
-          "normal": "Difundir los escritos en secreto parece una buena salida, pero ¿has pensado en quién corre el riesgo? Copistas, mensajeros, el propio Galileo si lo descubren. Cuando no sabemos cómo acabará algo y el daño no tiene vuelta atrás, ¿no deberíamos ser más prudentes?"
+          "normal": "Difundir los escritos en secreto parece una buena salida, pero ¿has pensado en quién corre el riesgo? Copistas, mensajeros, el propio Galileo si lo descubren. Cuando no sabemos cómo acabará algo y el daño no tiene vuelta atrás, ¿no deberíamos ser más prudentes?",
+          "facil": "Sacar los escritos en secreto parece buena idea. Pero otras personas se arriesgan: quienes los copian, quienes los llevan y el propio Galileo. Si el daño no tiene arreglo, ¿no hay que tener más cuidado?"
         },
         "cierre": {
-          "normal": "No me has convencido del todo, y está bien: la prudencia no es quedarse quieto, sino pensar en todas las personas afectadas. Has puesto razones sobre la mesa; el Archivo las guarda."
+          "normal": "No me has convencido del todo, y está bien: la prudencia no es quedarse quieto, sino pensar en todas las personas afectadas. Has puesto razones sobre la mesa; el Archivo las guarda.",
+          "facil": "No me has convencido del todo, y está bien. Ser prudente es pensar en todas las personas afectadas. Has dado razones y el Archivo las guarda."
+        }
+      }
+    }
+  },
+  "d2": {
+    "A": {
+      "gil": {
+        "objecion": {
+          "normal": "Dices que participas, pero mira la cadena completa: tu fórmula, una fábrica, un frente, personas que respiran ese gas. En el laboratorio todo parece limpio. ¿Puedes imaginar de verdad lo que pasará al final de esa cadena y seguir pensando que tu parte no cuenta?",
+          "facil": "Vas a participar. Pero piensa en todo el camino: tu fórmula, una fábrica, la guerra, personas que respiran ese gas. ¿Puedes imaginar el final y pensar que tu parte no cuenta?"
+        },
+        "cierre": {
+          "normal": "Sigo creyendo que fabricamos más de lo que somos capaces de imaginar. Pero has puesto razones sobre la mesa, y eso es lo que el Archivo necesita guardar.",
+          "facil": "Sigo creyendo que fabricamos cosas que no imaginamos del todo. Pero has dado razones, y el Archivo las guarda."
+        }
+      }
+    },
+    "B": {
+      "calvo": {
+        "objecion": {
+          "normal": "Te vas y tu conciencia queda tranquila. Pero hagamos cuentas: el programa seguirá con otro químico y tú ya no podrás influir en nada. ¿Tu renuncia evita sufrimiento de verdad, o solo te aparta a ti?",
+          "facil": "Te vas y te quedas tranquilo. Pero otro químico hará el trabajo y tú ya no podrás cambiar nada. ¿Tu renuncia evita sufrimiento o solo te aparta a ti?"
+        },
+        "cierre": {
+          "normal": "No me has convencido de que cambie el resultado, pero sí de que hay cosas que alguien tiene que negarse a hacer. Lo guardo en el Archivo.",
+          "facil": "No sé si tu renuncia cambia el resultado. Pero alguien tiene que negarse a hacer ciertas cosas. Lo guardo en el Archivo."
+        }
+      }
+    },
+    "C": {
+      "novak": {
+        "objecion": {
+          "normal": "Hacerlo público puede hundir a todo el laboratorio, también lo que se investiga para dar de comer a la gente. Y probablemente te aparten de la ciencia para siempre. ¿Vale más un escándalo que todo lo que podrías descubrir desde dentro?",
+          "facil": "Si lo cuentas, el laboratorio puede cerrar, también lo que sirve para dar de comer a la gente. Y a ti te echarán. ¿Vale más un escándalo que lo que podrías descubrir dentro?"
+        },
+        "cierre": {
+          "normal": "Sigo pensando que la ciencia avanza mejor sin escándalos. Aun así, reconozco que sin la confianza de la gente ningún avance llega muy lejos. Archivado.",
+          "facil": "Sigo pensando que la ciencia avanza mejor sin escándalos. Pero sin la confianza de la gente, ningún avance llega lejos. Lo guardo en el Archivo."
+        }
+      }
+    }
+  },
+  "d3": {
+    "A": {
+      "kaltz": {
+        "objecion": {
+          "normal": "Has decidido usar sus células sin preguntarle. Entiendo que pienses en todas las personas que se podrían curar. Pero si aceptamos usar el cuerpo de alguien sin su permiso cuando el fin es bueno, ¿quién nos protegerá a cada uno de ser el próximo medio para un buen fin?",
+          "facil": "Vas a usar sus células sin preguntarle, para curar a muchas personas. Pero si se puede usar el cuerpo de alguien sin permiso cuando el fin es bueno, ¿quién te protegerá a ti?"
+        },
+        "cierre": {
+          "normal": "Sigo pensando que una persona nunca es solo un medio. Pero entiendo el peso de las vidas que se podrían salvar: ese choque es lo que el Archivo guarda.",
+          "facil": "Sigo pensando que una persona no es una cosa que se usa. Pero entiendo que quieras salvar vidas. El Archivo guarda ese choque."
+        }
+      }
+    },
+    "B": {
+      "calvo": {
+        "objecion": {
+          "normal": "Esperar su permiso es respetuoso, pero el tiempo también cuenta: cada mes sin investigar son enfermos que no se curan. Y si ella dice que no, ¿quién responde ante todas esas personas? ¿Pesa más una firma que miles de vidas?",
+          "facil": "Pedir permiso es respetuoso. Pero cada mes que esperas hay enfermos que no se curan. Y si ella dice que no, ¿qué pasa con esas personas? ¿Vale más una firma que miles de vidas?"
+        },
+        "cierre": {
+          "normal": "Me sigue preocupando el coste de esperar, pero me has hecho ver que una ciencia que no pregunta acaba perdiendo la confianza de la gente. Lo guardo en el Archivo.",
+          "facil": "Me sigue preocupando el tiempo que se pierde. Pero una ciencia que no pregunta pierde la confianza de la gente. Lo guardo en el Archivo."
+        }
+      }
+    },
+    "C": {
+      "jonas": {
+        "objecion": {
+          "normal": "Informar y compartir es mejor que callar, pero piensa en lo que no sabemos. Estas células podrían usarse durante décadas, de formas que hoy nadie imagina. ¿Puede alguien aceptar algo cuyas consecuencias ni siquiera los científicos conocen?",
+          "facil": "Contarlo y compartir es mejor que callar. Pero estas células se podrían usar durante muchos años, de formas que hoy nadie imagina. ¿Se puede aceptar algo que ni los científicos conocen?"
+        },
+        "cierre": {
+          "normal": "No me has convencido del todo, y está bien. Pensar en quién cargará con las consecuencias ya es una forma de prudencia. El Archivo lo guarda.",
+          "facil": "No me has convencido del todo, y está bien. Pensar en quién sufrirá las consecuencias ya es ser prudente. El Archivo lo guarda."
+        }
+      }
+    }
+  },
+  "d4": {
+    "A": {
+      "jonas": {
+        "objecion": {
+          "normal": "Proteger del VIH es un buen fin, pero este cambio pasará a sus hijos y a los hijos de sus hijos, y nadie sabe qué efectos tendrá. Ellos no han podido opinar y, si algo sale mal, no habrá forma de deshacerlo. ¿Tenemos derecho a arriesgar la vida de quien todavía no existe?",
+          "facil": "Proteger del VIH es bueno. Pero el cambio pasará a sus hijos y a sus nietos, y nadie sabe qué efectos tendrá. Si sale mal, no se podrá arreglar. ¿Podemos arriesgar la vida de quien aún no existe?"
+        },
+        "cierre": {
+          "normal": "Sigo creyendo que lo irreversible exige prudencia. Pero entiendo que quieras proteger a esos niños: has dado razones, y eso es lo que el Archivo guarda.",
+          "facil": "Sigo creyendo que lo que no se puede deshacer exige mucho cuidado. Pero entiendo que quieras proteger a esos niños. El Archivo guarda tus razones."
+        }
+      }
+    },
+    "B": {
+      "novak": {
+        "objecion": {
+          "normal": "Denunciarlo puede frenar toda la investigación genética durante años. Mientras tanto, enfermedades que ya se podrían evitar seguirán ahí. ¿Seguro que el mayor peligro es avanzar y no quedarse quieto?",
+          "facil": "Si lo denuncias, puede que se pare toda la investigación de genes durante años. Mientras tanto, habrá enfermedades que se podrían evitar. ¿Es más peligroso avanzar o quedarse quieto?"
+        },
+        "cierre": {
+          "normal": "Sigo pensando que frenar también tiene víctimas. Aun así, reconozco que una ciencia sin normas pierde la confianza que necesita. Archivado.",
+          "facil": "Sigo pensando que frenar también hace daño. Pero una ciencia sin normas pierde la confianza de la gente. Lo guardo en el Archivo."
+        }
+      }
+    },
+    "C": {
+      "gil": {
+        "objecion": {
+          "normal": "Callar parece no hacer nada, pero tu silencio también decide: deja que la técnica vaya por delante sin que nadie piense en las consecuencias. ¿Puedes no implicarte cuando sabes lo que va a pasar?",
+          "facil": "Callar parece no hacer nada. Pero tu silencio también decide: deja que la técnica avance sin que nadie piense en lo que puede pasar. ¿Puedes no meterte si sabes lo que va a ocurrir?"
+        },
+        "cierre": {
+          "normal": "Sigo pensando que el silencio también es una forma de actuar. Pero has explicado tus razones, y el Archivo las guarda.",
+          "facil": "Sigo pensando que callar también es actuar. Pero has explicado tus razones, y el Archivo las guarda."
+        }
+      }
+    }
+  },
+  "d5": {
+    "A": {
+      "kaltz": {
+        "objecion": {
+          "normal": "Has votado que el ADN decida dónde estudia y trabaja cada persona. Pero nadie elige sus genes. Si una ley trata a alguien según un dato que no ha elegido, ¿lo trata como una persona o como una pieza? ¿Votarías igual sin saber qué genes te habrían tocado a ti?",
+          "facil": "Has votado que los genes decidan qué estudia y en qué trabaja cada persona. Pero nadie elige sus genes. ¿Votarías igual si no supieras qué genes te tocarían a ti?"
+        },
+        "cierre": {
+          "normal": "Sigo pensando que la dignidad no se mide con un análisis. Pero has defendido tu voto con razones, y eso merece estar en el Archivo.",
+          "facil": "Sigo pensando que ningún análisis mide cuánto vale una persona. Pero has defendido tu voto con razones, y el Archivo las guarda."
+        }
+      }
+    },
+    "B": {
+      "novak": {
+        "objecion": {
+          "normal": "Solo terapia, y gratis: suena justo. Pero ¿quién decide qué es curar y qué es mejorar? Si una edición puede evitar que alguien sufra, ¿por qué prohibirla solo porque no es una enfermedad? Frenar la ciencia también deja gente atrás.",
+          "facil": "Solo para curar y gratis: parece justo. Pero ¿quién decide qué es curar y qué es mejorar? Si un cambio evita que alguien sufra, ¿por qué prohibirlo?"
+        },
+        "cierre": {
+          "normal": "Sigo creyendo que la ciencia debe poder ir más allá de curar. Pero me has hecho ver que un avance que solo llega a unos pocos rompe la confianza de todos. Archivado.",
+          "facil": "Sigo creyendo que la ciencia puede hacer más que curar. Pero un avance que solo llega a unos pocos rompe la confianza de todos. Lo guardo en el Archivo."
+        }
+      }
+    },
+    "C": {
+      "calvo": {
+        "objecion": {
+          "normal": "Una moratoria total evita riesgos, pero también evita curas. Piensa en las familias que esperan un tratamiento para una enfermedad grave. ¿Cuánto sufrimiento estamos dispuestos a aceptar para no correr ningún riesgo?",
+          "facil": "Parar todo evita riesgos, pero también evita curas. Piensa en las familias que esperan un tratamiento. ¿Cuánto sufrimiento aceptamos para no arriesgar nada?"
+        },
+        "cierre": {
+          "normal": "Me sigue pesando el sufrimiento que una moratoria no evita. Pero entiendo que quieras tiempo para pensar antes de cambiar algo que se hereda. Lo guardo en el Archivo.",
+          "facil": "Me sigue preocupando el sufrimiento que no se evita. Pero entiendo que quieras pensar antes de cambiar algo que se hereda. Lo guardo en el Archivo."
         }
       }
     }

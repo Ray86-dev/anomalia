@@ -6,18 +6,20 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type CSSProperties,
   type ReactNode,
 } from 'react';
 import { audio } from '../../../engine/audio.ts';
 import { assetUrl, Backdrop } from '../../../engine/backdrop/Backdrop.tsx';
 import { animateIn } from '../../../engine/motion.ts';
+import { reading } from '../../../lib/reading.ts';
 import { fmt } from '../../../lib/text.ts';
 import { Notice } from '../../../ui/Notice.tsx';
 import { Credits } from './Credits.tsx';
 import { GameContext, useGameState } from './GameContext.ts';
 import { findDilemma } from './helpers.ts';
-import { AudioToggle } from './parts.tsx';
+import { AudioToggle, ReadingToggle } from './parts.tsx';
 import { Council, Decision } from './screens/council.tsx';
 import { Prologue, Scene, Travel } from './screens/intro.tsx';
 import { Archive, Ripples } from './screens/outcome.tsx';
@@ -47,6 +49,11 @@ type GameProps = {
 /** Partida del alumno: elige la pantalla según la fase y ambienta fondo y música. */
 export function Game({ initial, onLost }: GameProps) {
   const state = useGameState(initial, onLost);
+  // Al cambiar la lectura fácil se vuelve a pintar toda la partida con la otra versión.
+  useSyncExternalStore(
+    (listener) => reading.subscribe(listener),
+    () => reading.isEasy(),
+  );
   const { run } = state;
   // El parallax vuelve a 0 en cada pantalla: el paso se guarda junto a la pantalla que lo fijó.
   const screenKey = `${run.phase}:${run.currentDilemma ?? ''}`;
@@ -118,6 +125,7 @@ export function Game({ initial, onLost }: GameProps) {
         <header className="game-bar">
           <span className="kicker">{kicker}</span>
           <span className="game-bar-actions">
+            <ReadingToggle />
             <Credits />
             <AudioToggle />
           </span>

@@ -1,0 +1,142 @@
+{
+  "id": "d2",
+  "capitulo": 1,
+  "orden": 2,
+  "anio": 1915,
+  "lugar": "Berlín",
+  "titulo": {
+    "normal": "Fritz Haber y la química de la guerra",
+    "facil": "Fritz Haber y el gas de la guerra"
+  },
+  "tema": {
+    "normal": "¿Es neutral la ciencia? Responsabilidad del científico. El mismo saber alimenta y mata.",
+    "facil": "¿La ciencia es neutral? ¿Quién responde de cómo se usa?"
+  },
+  "rolCronista": {
+    "normal": "Eres químico del equipo de Fritz Haber.",
+    "facil": "Trabajas como químico con Fritz Haber."
+  },
+  "estetica": "artdeco",
+  "escena": { "ink": "dilemas/d2-haber.ink", "inkFacil": "lectura-facil/d2-haber.ink" },
+  "consejeros": [
+    {
+      "id": "calvo",
+      "argumento": {
+        "normal": "Haz las cuentas con honradez. ¿Cuántas personas sufrirán con cada opción, dentro y fuera del laboratorio? Si te vas, quizá otro haga el trabajo igual. Si lo cuentas, quizá se salven vidas, o quizá no cambie nada. Elige lo que traiga menos daño y más bienestar para más gente.",
+        "facil": "Piensa en las consecuencias. ¿Qué opción hace menos daño a menos personas? Si te vas, puede que otro haga lo mismo. Elige lo que traiga más bien a más gente."
+      }
+    },
+    {
+      "id": "gil",
+      "argumento": {
+        "normal": "Este es el desnivel del que hablo: sabemos fabricar un gas capaz de matar a miles de personas, pero nadie es capaz de imaginar de verdad ese sufrimiento. En un laboratorio se ve una fórmula, no una persona. Antes de decidir, intenta imaginar el final de la cadena.",
+        "facil": "Sabemos fabricar cosas muy peligrosas, pero no imaginamos el daño que hacen. En el laboratorio solo ves una fórmula. Piensa en las personas que hay al final."
+      }
+    },
+    {
+      "id": "novak",
+      "argumento": {
+        "normal": "La química no es buena ni mala: es conocimiento. El mismo saber que sirve para fabricar abono puede servir para muchas otras cosas. Si los buenos científicos se marchan, la investigación seguirá sin ellos. Mejor estar dentro, avanzar y tener voz en lo que se hace.",
+        "facil": "La química no es buena ni mala: es saber. Lo importante es seguir investigando. Si te vas, otros seguirán sin ti y no tendrás voz."
+      }
+    }
+  ],
+  "voces": [
+    {
+      "nombre": "Clara Immerwahr",
+      "postura": {
+        "normal": "Química y esposa de Fritz Haber. Se opone a que la química se use para fabricar armas.",
+        "facil": "Es química y es la esposa de Haber. No quiere que la química sirva para hacer armas."
+      }
+    }
+  ],
+  "opciones": [
+    {
+      "id": "A",
+      "texto": {
+        "normal": "Participar en el programa de gas.",
+        "facil": "Seguir en el equipo y ayudar a fabricar el gas."
+      },
+      "corto": "Participar",
+      "deltas": { "poder": 15, "responsabilidad": -15, "confianza": -10 },
+      "rama": null,
+      "objetor": "gil",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · La química que aprendió a no mirar",
+          "facil": "2077 · La ciencia que no miró"
+        },
+        "texto": {
+          "normal": "En esta línea temporal, los laboratorios aprendieron a obedecer sin preguntar para qué servía su trabajo. Hay técnicas asombrosas, pero mucha gente desconfía de la ciencia: la ve como un arma más.",
+          "facil": "Los laboratorios aprendieron a obedecer sin preguntar para qué sirve su trabajo. Hay inventos asombrosos, pero mucha gente ve la ciencia como un arma."
+        }
+      }
+    },
+    {
+      "id": "B",
+      "texto": {
+        "normal": "Negarte y abandonar el laboratorio.",
+        "facil": "Decir que no y marcharte del laboratorio."
+      },
+      "corto": "Negarse y marcharse",
+      "deltas": { "responsabilidad": 10, "poder": -5 },
+      "rama": null,
+      "objetor": "calvo",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · Los que dijeron que no",
+          "facil": "2077 · Los que dijeron que no"
+        },
+        "texto": {
+          "normal": "Tu renuncia no paró la guerra, pero no se olvidó. Hoy, en Canarias, quien estudia ciencias aprende que puede negarse a investigar algo que va contra su conciencia. La técnica avanza un poco más despacio.",
+          "facil": "Tu renuncia no paró la guerra, pero nadie la olvidó. Hoy, en Canarias, quien estudia ciencias sabe que puede negarse a investigar algo que le parece mal. La técnica avanza un poco más despacio."
+        }
+      }
+    },
+    {
+      "id": "C",
+      "texto": {
+        "normal": "Hacer pública la existencia del programa.",
+        "facil": "Contar a todo el mundo lo que se prepara."
+      },
+      "corto": "Hacerlo público",
+      "deltas": { "confianza": 5, "responsabilidad": 10, "equidad": 5 },
+      "rama": "d2-denuncia",
+      "objetor": "novak",
+      "ondas": {
+        "titular": {
+          "normal": "2077 · El secreto que salió a la luz",
+          "facil": "2077 · El secreto que todos conocieron"
+        },
+        "texto": {
+          "normal": "Contaste lo que se preparaba y pagaste un precio: te apartaron del laboratorio. Pero desde entonces la gente exige saber en qué se investiga. En Canarias hay leyes que protegen a quien denuncia un peligro.",
+          "facil": "Contaste el secreto y te castigaron: te echaron del laboratorio. Pero desde entonces la gente quiere saber qué se investiga. En Canarias hay leyes que protegen a quien avisa de un peligro."
+        }
+      }
+    }
+  ],
+  "justificacion": {
+    "pregunta": {
+      "normal": "¿Por qué has elegido esta opción? Explica quién es responsable de cómo se usa lo que descubre la ciencia y qué has puesto por delante.",
+      "facil": "¿Por qué eliges esta opción? Explica quién es responsable de cómo se usa la ciencia."
+    },
+    "palabras": [40, 80]
+  },
+  "replica": { "palabras": [30, 60] },
+  "archivoReal": {
+    "texto": {
+      "normal": "Haber recibió el Premio Nobel de Química de 1918 por la síntesis del amoníaco. El uso de gas cloro en Ypres, en abril de 1915, inauguró la guerra química a gran escala.",
+      "facil": "En 1918, Haber ganó el Premio Nobel de Química por fabricar amoníaco. En abril de 1915 se usó gas cloro en la guerra, en Ypres. Así empezó la guerra química a gran escala."
+    },
+    "verificado": false
+  },
+  "ia": {
+    "contexto": "Berlín, 1915, durante la Primera Guerra Mundial (TODO(verificar)). Fritz Haber, químico que logró la síntesis del amoníaco (proceso Haber-Bosch), que permitió fabricar fertilizantes a escala masiva, dirige el programa alemán de gas cloro que se usará en Ypres. Clara Immerwahr, química y esposa de Haber, se opone. El alumno es un químico ficticio del equipo de Haber. Tema: si la ciencia es neutral y la responsabilidad del científico; el mismo saber alimenta y mata."
+  },
+  "sensibilidad": [
+    "No se menciona la muerte de Clara Immerwahr: basta con su oposición (alumnado de 15–16 años).",
+    "Ni Clara Immerwahr ni Fritz Haber tienen frases entre comillas.",
+    "No se describen con detalle los efectos del gas sobre las personas."
+  ],
+  "assets": { "capas": [], "stems": [] }
+}

@@ -1,9 +1,11 @@
 {
   "pregunta": {
-    "normal": "¿Puede la ciencia decirnos lo que debemos hacer? Responde usando al menos una de tus decisiones y la postura de al menos un consejero."
+    "normal": "¿Puede la ciencia decirnos lo que debemos hacer? Responde usando al menos una de tus decisiones y la postura de al menos un consejero.",
+    "facil": "¿La ciencia nos puede decir lo que debemos hacer? Usa al menos una de tus decisiones y lo que pensaba al menos un consejero."
   },
   "pista": {
-    "normal": "Pista: los datos dicen cómo son las cosas. ¿Dicen también qué debemos hacer? Piensa en lo que el Consejo discutía con razones."
+    "normal": "Pista: los datos dicen cómo son las cosas. ¿Dicen también qué debemos hacer? Piensa en lo que el Consejo discutía con razones.",
+    "facil": "Pista: los datos dicen cómo son las cosas. ¿Dicen también qué hay que hacer?"
   },
   "palabras": [150, 250]
 }

@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -10,7 +10,10 @@ const json = (file: string): unknown => JSON.parse(readFileSync(join(contentDir,
 /** Contenido real del repo como punto de partida; cada test lo altera. */
 function realContent(): RawContent {
   return {
-    dilemmas: [{ file: 'dilemas/d1-galileo.json', data: json('dilemas/d1-galileo.json') }],
+    dilemmas: readdirSync(join(contentDir, 'dilemas'))
+      .filter((file) => file.endsWith('.json'))
+      .sort()
+      .map((file) => ({ file: `dilemas/${file}`, data: json(`dilemas/${file}`) })),
     counselors: json('consejeros.json'),
     concepts: json('conceptos.json'),
     endings: json('finales.json'),
@@ -30,7 +33,11 @@ const inkFiles: Record<string, string> = {
   'prologo.ink': VALID_PROLOGUE,
   'dilemas/d1-galileo.ink': '=== escena ===\nRoma.\n-> END',
 };
-const readText = (path: string) => inkFiles[path] ?? null;
+/** Escenas de prueba para el prólogo y D1; el resto, las reales del repo. */
+const readText = (path: string) => {
+  const file = join(contentDir, path);
+  return inkFiles[path] ?? (existsSync(file) ? readFileSync(file, 'utf8') : null);
+};
 
 /** Compilador falso: «falla» si la fuente contiene ROTO (el real se prueba al generar el contenido). */
 const compileInk = (source: string): InkResult =>
@@ -48,7 +55,7 @@ describe('validateContent', () => {
   it('acepta el contenido actual del repositorio', () => {
     const result = validate(realContent());
     expect(result.errors).toEqual([]);
-    expect(result.content?.dilemmas.map((d) => d.id)).toEqual(['d1']);
+    expect(result.content?.dilemmas.map((d) => d.id)).toEqual(['d1', 'd2', 'd3', 'd4', 'd5']);
   });
 
   it('detecta un objetor que no es consejero del dilema', () => {
@@ -86,7 +93,20 @@ describe('validateContent', () => {
   });
 
   it('compila el prólogo y las escenas, e informa de los errores de Ink', () => {
-    expect(Object.keys(validate(realContent()).inks).sort()).toEqual(['d1', 'prologo']);
+    expect(Object.keys(validate(realContent()).inks).sort()).toEqual([
+      'd1',
+      'd1-facil',
+      'd2',
+      'd2-facil',
+      'd3',
+      'd3-facil',
+      'd4',
+      'd4-facil',
+      'd5',
+      'd5-facil',
+      'prologo',
+      'prologo-facil',
+    ]);
     inkFiles['prologo.ink'] = 'ROTO';
     try {
       expect(validate(realContent()).errors.join('\n')).toMatch(/prologo\.ink: error de sintaxis/);
@@ -101,7 +121,9 @@ describe('validateContent', () => {
   });
 
   it('en modo estricto, los TODO y la falta de lectura fácil son errores', () => {
-    const strict = validate(realContent(), true);
+    const raw = realContent();
+    d1(raw).titulo = { normal: 'Galileo ante la Inquisición' };
+    const strict = validate(raw, true);
     expect(strict.content).toBeNull();
     expect(strict.errors.join('\n')).toMatch(/marca TODO/);
     expect(strict.errors.join('\n')).toMatch(/lectura fácil/);

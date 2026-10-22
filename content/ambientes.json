@@ -10,7 +10,10 @@
         "src": "img/2077/tng-andromeda.webp",
         "credito": "Foto: Gianni0088 (Wikimedia Commons), CC BY 4.0. Recortada.",
         "licenciaUrl": "https://creativecommons.org/licenses/by/4.0/deed.es",
-        "pie": { "normal": "El Telescopio Nazionale Galileo, en La Palma, bajo la galaxia de Andrómeda." },
+        "pie": {
+          "normal": "El Telescopio Nazionale Galileo, en La Palma, bajo la galaxia de Andrómeda.",
+          "facil": "Un telescopio en la isla de La Palma, de noche."
+        },
         "foco": "50% 50%"
       }
     ],
