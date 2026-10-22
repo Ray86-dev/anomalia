@@ -184,3 +184,30 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
 - Imagen propia de cada final, con su crédito en `finales.json` (M5/M6).
 - Mapeo de la rúbrica con el currículo oficial (§15). El PDF imprime C1–C5 tal como están en `content/rubrica.json`.
 
+## 2026-10-22 · Alineación con los materiales de clase
+
+Revisión del contenido frente a los materiales que el docente trabajó antes de la actividad: una sesión sobre ciencia y filosofía (datos que se comprueban frente a razones que se discuten) y una ficha de *Gattaca*. Los materiales no se versionan (`no_git_materiales/`).
+
+### Tomadas por el docente
+- **D-48 · Cuatro conceptos nuevos en la lista cerrada:** discriminación, naturaleza y cultura, bioética, y datos y razones. Son 20 en total.
+- **D-49 · Rúbrica vinculada al currículo** (Filosofía 4.º ESO, Decreto 30/2023 de Canarias). Cierra el pendiente del §15.
+  - C1 → 1.1; C2 → 3.1; C3 → 2.1; C4 → 1.1; C5 → 2.1 y 3.1.
+  - Sin ponderaciones: las fija el docente en el aula virtual.
+  - Se imprime en la rúbrica del PDF (`rubrica.json › referencia` y `criterios[].curriculo`).
+- **D-50 · Archivo real de D1:** añade que en los *Discorsi* Galileo explicaba cómo había medido la caída de los cuerpos con bolas en planos inclinados. Enlaza con lo trabajado en clase. Va marcado `TODO(verificar)` hasta que lo revise el docente.
+- **D-51 · La IA puede apoyarse en la distinción entre datos y razones** cuando encaje con la objeción, con esas mismas palabras y sin repetirla en todas las respuestas. Comprobado con `npm run ai:probe`.
+
+### Propuestas de contenido
+- **D-52 · Vocabulario de la unidad dentro del juego**, en lenguaje literal:
+  - **Prólogo:** el Archivo guarda los datos, pero los datos no dicen qué debemos hacer; por eso hace falta alguien que decida con razones.
+  - **Escena de D1:** lo que muestran los dibujos se puede comprobar con el telescopio; lo que debe hacer Galileo se decide con razones.
+  - **Reflexión final:** una pista bajo la pregunta (`reflexion.json › pista`).
+
+### Para el M5 (ideas de los materiales; los datos se verifican antes de escribirlos)
+- **D4:** enlazar con «predecir no es decidir»: una probabilidad genética no es un destino.
+- **D5:**
+  - Eco del mito de los metales de Platón (*La República*): en la Ley del Genoma, el «metal» sería el índice genómico.
+  - Posible voz documental: la Declaración Universal sobre el Genoma Humano y los Derechos Humanos (UNESCO, 1997) y su artículo sobre la no discriminación por características genéticas. La cita literal debe verificarse.
+- **Coherencia con la ficha de *Gattaca*:** CRISPR desde 2012 y el caso de 2018, condenado por la comunidad científica y con pena de prisión.
+- **Lectura fácil y textos de los finales:** frases literales y sin metáforas en todo lo que indique qué hay que hacer.
+

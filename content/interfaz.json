@@ -349,6 +349,7 @@
     "rubrica": "Rúbrica (la completa el docente)",
     "criterio": "Criterio",
     "observaciones": "Observaciones",
+    "curriculo": "Criterios de evaluación: {codigos}",
     "pie": "ANOMALÍA · {codigo} · Página {n} de {total}",
     "archivoNombre": "ANOMALIA-expediente-{codigo}.pdf"
   },

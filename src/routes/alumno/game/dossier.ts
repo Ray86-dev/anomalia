@@ -16,6 +16,8 @@ export function endingFor(id: string | null, world: WorldState): Ending {
   return endings.find((e) => e.id === id) ?? computeEnding(world, endings);
 }
 
+const listFormat = new Intl.ListFormat('es-ES', { type: 'conjunction' });
+
 const signed = (n: number) => (n > 0 ? `+${String(n)}` : n < 0 ? `−${String(-n)}` : '0');
 
 /**
@@ -90,9 +92,14 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
     reflection: { question: texto(reflection.pregunta), text: dossier.reflection ?? p.sinTexto },
     rubric: {
       levels: rubric.niveles,
+      reference: rubric.referencia ?? null,
       criteria: rubric.criterios.map((c) => ({
         name: `${c.id}. ${c.nombre}`,
         description: c.descripcion,
+        curriculum:
+          c.curriculo === undefined || c.curriculo.length === 0
+            ? null
+            : fmt(p.curriculo, { codigos: listFormat.format(c.curriculo) }),
       })),
     },
     footer: (page, total) => fmt(p.pie, { codigo: code, n: page, total }),

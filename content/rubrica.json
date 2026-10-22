@@ -1,30 +1,36 @@
 {
   "niveles": ["Insuficiente", "Suficiente", "Notable", "Sobresaliente"],
+  "referencia": "Filosofía 4.º ESO · Decreto 30/2023 (Canarias)",
   "criterios": [
     {
       "id": "C1",
       "nombre": "Comprensión de posturas",
-      "descripcion": "Identifica y explica correctamente las posturas de los consejeros."
+      "descripcion": "Identifica y explica correctamente las posturas de los consejeros.",
+      "curriculo": ["1.1"]
     },
     {
       "id": "C2",
       "nombre": "Argumentación",
-      "descripcion": "Las justificaciones dan razones, no solo opiniones; son coherentes con la decisión."
+      "descripcion": "Las justificaciones dan razones, no solo opiniones; son coherentes con la decisión.",
+      "curriculo": ["3.1"]
     },
     {
       "id": "C3",
       "nombre": "Diálogo crítico",
-      "descripcion": "La réplica responde de verdad a la objeción (concede, matiza o refuta)."
+      "descripcion": "La réplica responde de verdad a la objeción (concede, matiza o refuta).",
+      "curriculo": ["2.1"]
     },
     {
       "id": "C4",
       "nombre": "Ciencia y filosofía",
-      "descripcion": "La reflexión final distingue lo que la ciencia puede explicar de lo que debemos hacer."
+      "descripcion": "La reflexión final distingue lo que la ciencia puede explicar de lo que debemos hacer.",
+      "curriculo": ["1.1"]
     },
     {
       "id": "C5",
       "nombre": "Uso de conceptos y casos",
-      "descripcion": "Emplea con precisión conceptos de la unidad y conecta casos históricos (y Gattaca)."
+      "descripcion": "Emplea con precisión conceptos de la unidad y conecta casos históricos (y Gattaca).",
+      "curriculo": ["2.1", "3.1"]
     }
   ]
 }

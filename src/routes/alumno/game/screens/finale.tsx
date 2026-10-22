@@ -102,6 +102,7 @@ export function Reflection() {
       </h1>
       <p className="lead">{t.reflexion.intro}</p>
       <p className="prompt">{texto(reflection.pregunta)}</p>
+      <p className="help">{texto(reflection.pista)}</p>
       {dossier !== undefined && dossier !== null && <MyDecisions dossier={dossier} />}
       <TextAnswer
         label={t.reflexion.etiqueta}

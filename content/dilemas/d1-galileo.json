@@ -83,7 +83,7 @@
   "replica": { "palabras": [30, 60] },
   "archivoReal": {
     "texto": {
-      "normal": "Galileo abjuró en 1633, fue condenado a arresto domiciliario y siguió trabajando; sus Discorsi se publicaron en Leiden en 1638."
+      "normal": "Galileo abjuró en 1633, fue condenado a arresto domiciliario y siguió trabajando; sus Discorsi se publicaron en Leiden en 1638. En esa obra explicaba cómo había medido la caída de los cuerpos con bolas que rodaban por planos inclinados. TODO(verificar)"
     },
     "verificado": false
   },

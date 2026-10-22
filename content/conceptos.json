@@ -14,5 +14,9 @@
   { "id": "evidencia", "etiqueta": "Evidencia" },
   { "id": "neutralidad", "etiqueta": "Neutralidad" },
   { "id": "riesgo", "etiqueta": "Riesgo" },
-  { "id": "determinismo", "etiqueta": "Determinismo" }
+  { "id": "determinismo", "etiqueta": "Determinismo" },
+  { "id": "discriminacion", "etiqueta": "Discriminación" },
+  { "id": "naturaleza-cultura", "etiqueta": "Naturaleza y cultura" },
+  { "id": "bioetica", "etiqueta": "Bioética" },
+  { "id": "datos-razones", "etiqueta": "Datos y razones" }
 ]

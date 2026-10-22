@@ -26,3 +26,6 @@ Thumbs.db
 
 # Caché de herramientas locales (plugin de diseño)
 .impeccable/
+
+# Materiales de clase del docente: no se suben al repositorio público
+no_git_materiales/

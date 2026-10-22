@@ -13,6 +13,8 @@ Galileo ha defendido que la Tierra se mueve alrededor del Sol. Los jueces sostie
 // TODO(verificar): cuadernos con dibujos de la Luna y de las manchas solares observadas con el telescopio.
 Sobre la mesa hay cuadernos llenos de dibujos de la Luna y de manchas en el Sol, hechos mirando por el telescopio.
 En el tribunal no se discute qué muestran esos dibujos. Se discute quién tiene autoridad para decir qué es verdad.
+Lo que muestran los dibujos se puede comprobar: basta con mirar por el telescopio.
+Lo que Galileo debe hacer mañana no lo dice ningún telescopio. Eso hay que decidirlo con razones.
 Galileo no puede dormir. Esta noche te ha pedido consejo.
 ¿Qué cuenta como conocimiento: lo que dicta la autoridad o lo que muestran las pruebas? ¿Y qué precio merece la pena pagar por defenderlo? # pregunta
 -> END

@@ -178,17 +178,26 @@ export const endingsSchema = z.array(endingSchema).superRefine((list, ctx) => {
 
 export const rubricSchema = z.strictObject({
   niveles: z.array(z.string().min(1)).min(2),
+  /** Norma de la que salen los códigos de `curriculo` (p. ej., el decreto del currículo). */
+  referencia: z.string().min(1).optional(),
   criterios: z.array(
     z.strictObject({
       id: z.string().min(1),
       nombre: z.string().min(1),
       descripcion: z.string().min(1),
+      /** Criterios de evaluación oficiales a los que contribuye («1.1», «3.1»…). */
+      curriculo: z.array(z.string().regex(/^\d+\.\d+$/, 'formato 1.1')).optional(),
     }),
   ),
 });
 
 /** Reflexión final (§6): pregunta y palabras orientativas. */
-export const reflectionSchema = z.strictObject({ pregunta: textoSchema, palabras: wordRange });
+export const reflectionSchema = z.strictObject({
+  pregunta: textoSchema,
+  /** Ayuda bajo la pregunta, con el vocabulario trabajado en clase. */
+  pista: textoSchema,
+  palabras: wordRange,
+});
 
 export const classModeSchema = z.strictObject({
   id,

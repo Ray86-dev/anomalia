@@ -54,7 +54,14 @@ export type DossierPdfInput = {
   readonly reflection: { readonly question: string; readonly text: string };
   readonly rubric: {
     readonly levels: readonly string[];
-    readonly criteria: readonly { readonly name: string; readonly description: string }[];
+    /** Norma de los criterios oficiales, bajo el título de la rúbrica. */
+    readonly reference: string | null;
+    readonly criteria: readonly {
+      readonly name: string;
+      readonly description: string;
+      /** «Criterios de evaluación: 2.1 y 3.1», o `null` si no está vinculado. */
+      readonly curriculum: string | null;
+    }[];
   };
   /** Pie de cada página: «… Página n de total». */
   readonly footer: (page: number, total: number) => string;
@@ -317,6 +324,7 @@ export async function buildDossierPdf(
   // ── Rúbrica en blanco para el docente ──
   w.newPage();
   w.line(labels.rubrica, s.h1);
+  if (input.rubric.reference !== null) w.text(input.rubric.reference, s.muted);
   w.space(10);
   const { levels, criteria } = input.rubric;
   const nameWidth = WIDTH - levels.length * 62;
@@ -361,7 +369,8 @@ export async function buildDossierPdf(
   for (const criterion of criteria) {
     const measure = (value: string) => regular.widthOfTextAtSize(value, 9.5);
     const lines = wrapText(criterion.description, nameWidth - 12, measure).flat();
-    const height = Math.max(48, 22 + lines.length * 12.5);
+    const extra = criterion.curriculum === null ? 0 : 1;
+    const height = Math.max(48, 22 + (lines.length + extra) * 12.5);
     if (top - height < BOTTOM) {
       w.newPage();
       top = w.y;
@@ -383,6 +392,15 @@ export async function buildDossierPdf(
         color: MUTED,
       });
     });
+    if (criterion.curriculum !== null) {
+      w.page.drawText(criterion.curriculum, {
+        x: MARGIN + 6,
+        y: top - 29 - lines.length * 12.5,
+        size: 9,
+        font: bold,
+        color: ACCENT,
+      });
+    }
     levels.forEach((_, i) => {
       const x = MARGIN + nameWidth + i * levelWidth;
       w.page.drawRectangle({ x, y: top - height, width: levelWidth, height, ...cell });

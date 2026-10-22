@@ -49,6 +49,11 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 - **Commits** en inglés con prefijo convencional (`feat:`, `fix:`, `chore:`…).
 - **Proyecto de Supabase:** «anomalia» (`kicpndzbcswxchxiejje`, eu-west-1), vinculado a la CLI. El MCP de Supabase sirve para consultas y avisos; las migraciones se aplican con `npm run db:push`.
 
+## Materiales de clase
+
+- `no_git_materiales/` (ignorado por git) contiene los materiales que el docente trabajó antes de la actividad. Úsalos para alinear el vocabulario y los conceptos, pero no copies su contenido al repo, que es público.
+- Vocabulario de la unidad: los **datos** se comprueban (medir, contar, experimentar) y las **razones** se discuten («¿qué debemos hacer?»). El juego usa esas mismas palabras (D-52).
+
 ## Arquitectura (resumen)
 
 - **Contenido:** `content/` (JSON + Ink) → `npm run content` (`scripts/build-content.ts`) valida con zod, compila Ink con `inkjs/full` y genera `shared/generated/` (`content.ts` y `ink/<id>.json`). Esos archivos no se versionan ni se editan a mano.

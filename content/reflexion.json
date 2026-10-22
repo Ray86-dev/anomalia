@@ -2,5 +2,8 @@
   "pregunta": {
     "normal": "¿Puede la ciencia decirnos lo que debemos hacer? Responde usando al menos una de tus decisiones y la postura de al menos un consejero."
   },
+  "pista": {
+    "normal": "Pista: los datos dicen cómo son las cosas. ¿Dicen también qué debemos hacer? Piensa en lo que el Consejo discutía con razones."
+  },
   "palabras": [150, 250]
 }

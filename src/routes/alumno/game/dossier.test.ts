@@ -67,6 +67,17 @@ describe('dossierPdfInput', () => {
     expect(entry?.sections[3]?.text).toBe('(sin respuesta)');
   });
 
+  it('la rúbrica indica los criterios de evaluación oficiales de cada criterio', () => {
+    expect(input.rubric.reference).toBe('Filosofía 4.º ESO · Decreto 30/2023 (Canarias)');
+    expect(input.rubric.criteria.map((c) => c.curriculum)).toEqual([
+      'Criterios de evaluación: 1.1',
+      'Criterios de evaluación: 3.1',
+      'Criterios de evaluación: 2.1',
+      'Criterios de evaluación: 1.1',
+      'Criterios de evaluación: 2.1 y 3.1',
+    ]);
+  });
+
   it('desnivel con signo, pie con el código y nombre de archivo', () => {
     expect(input.world.gap).toBe('+30');
     expect(input.footer(2, 5)).toBe('ANOMALÍA · ANM-7F3K-92QD · Página 2 de 5');
