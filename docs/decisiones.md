@@ -338,3 +338,4 @@ Los giros, los ecos, Ari y el Índice Ω son ficción. Llevan `TODO(verificar)`:
   - un velo rojizo estático, que también funciona sin animaciones y sin WebGL;
   - el titular de las ondas suena a alarma desde +25.
 - **D-83 · Fondos de época** para D2–D4 (instituto de Haber en 1913, Hospital Johns Hopkins hacia 1900 y un laboratorio de genética del NHGRI), con el año real de cada foto en su pie.
+- **D-84 · Zumbido más bajo y desactivable** (petición del docente tras probarlo): volumen máximo un 30 % menor y un ajuste «Zumbido de inestabilidad» en el panel «i» que lo quita sin quitar la música. En el Centro, la tecla Z.

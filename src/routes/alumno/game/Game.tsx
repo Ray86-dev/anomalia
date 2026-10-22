@@ -16,6 +16,7 @@ import { speech } from '../../../engine/speech.ts';
 import { assetUrl, Backdrop } from '../../../engine/backdrop/Backdrop.tsx';
 import { animateIn } from '../../../engine/motion.ts';
 import { reading } from '../../../lib/reading.ts';
+import { drone } from '../../../lib/settings.ts';
 import { fmt } from '../../../lib/text.ts';
 import { Notice } from '../../../ui/Notice.tsx';
 import { Achievements } from './Achievements.tsx';
@@ -79,6 +80,15 @@ export function Game({ initial, onLost }: GameProps) {
   useEffect(() => {
     audio.play(trackUrl);
   }, [trackUrl]);
+
+  // El zumbido se puede quitar desde los ajustes (solo él, no la música).
+  const droneOn = useSyncExternalStore(
+    (listener) => drone.subscribe(listener),
+    () => drone.get() === 'si',
+  );
+  useEffect(() => {
+    audio.setDroneMuted(!droneOn);
+  }, [droneOn]);
 
   // La disonancia crece con el Desnivel del mundo del alumno (§10.2).
   const tension = tensionFor(desnivel(run.world));

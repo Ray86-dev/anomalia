@@ -315,6 +315,8 @@
       "titulo": "Ajustes",
       "tamano": "Tamaño del texto",
       "tamanos": { "normal": "Normal", "grande": "Grande", "muy-grande": "Muy grande" },
+      "zumbido": "Zumbido de inestabilidad",
+      "zumbidoAyuda": "Suena cuando el Desnivel sube. Puedes quitarlo sin quitar la música.",
       "movimiento": "Reducir el movimiento",
       "movimientoAyuda": "Quita animaciones y efectos. Se activa solo si tu móvil ya lo pide."
     },
@@ -461,6 +463,7 @@
       "flechas": "← → · destacar un panel",
       "f": "F · pantalla completa",
       "m": "M · sonido",
+      "z": "Z · zumbido de inestabilidad",
       "h": "H · mostrar u ocultar esta ayuda",
       "esc": "Esc · volver a todos los paneles"
     },

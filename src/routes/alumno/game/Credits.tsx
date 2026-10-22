@@ -1,6 +1,6 @@
 import { ambients, dilemmas, ui } from '@shared/generated/content.ts';
 import { useId, useRef, useSyncExternalStore } from 'react';
-import { motion, textSize, TEXT_SIZES } from '../../../lib/settings.ts';
+import { drone, motion, textSize, TEXT_SIZES } from '../../../lib/settings.ts';
 import { useGameContext } from './GameContext.ts';
 import { formatRescueKey } from './helpers.ts';
 
@@ -14,6 +14,10 @@ function Settings() {
   const size = useSyncExternalStore(
     (listener) => textSize.subscribe(listener),
     () => textSize.get(),
+  );
+  const droneOn = useSyncExternalStore(
+    (listener) => drone.subscribe(listener),
+    () => drone.get() === 'si',
   );
   const reduced = useSyncExternalStore(
     (listener) => motion.subscribe(listener),
@@ -38,6 +42,17 @@ function Settings() {
           </label>
         ))}
       </fieldset>
+      <label className="lab-check">
+        <input
+          type="checkbox"
+          checked={droneOn}
+          onChange={(event) => {
+            drone.set(event.target.checked ? 'si' : 'no');
+          }}
+        />
+        <span>{a.zumbido}</span>
+      </label>
+      <p className="help">{a.zumbidoAyuda}</p>
       <label className="lab-check">
         <input
           type="checkbox"

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { audio, tensionFor } from '../../engine/audio.ts';
 import { assetUrl } from '../../engine/backdrop/Backdrop.tsx';
+import { drone } from '../../lib/settings.ts';
 import { getClient } from '../../lib/supabase.ts';
 import { useTeacherSession } from '../../lib/teacher.ts';
 import { fmt } from '../../lib/text.ts';
@@ -54,6 +55,7 @@ function Dashboard({ classId }: { readonly classId: string }) {
   // Atajos del docente (§8.3). Nada de esto se ve en la proyección salvo la ayuda (H).
   useEffect(() => {
     const music = ambients.centro.musica;
+    audio.setDroneMuted(drone.get() === 'no');
     let started = false;
     const startSound = () => {
       if (started || music === undefined) return;
@@ -75,6 +77,9 @@ function Dashboard({ classId }: { readonly classId: string }) {
         toggle.catch(() => undefined);
       } else if (key === 'm') {
         audio.setMuted(!audio.isMuted());
+      } else if (key === 'z') {
+        drone.set(drone.get() === 'si' ? 'no' : 'si');
+        audio.setDroneMuted(drone.get() === 'no');
       } else if (key === 'h' || key === '?') {
         setHelp((value) => !value);
       } else if (key === 'arrowright' || key === 'arrowleft') {

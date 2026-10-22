@@ -33,7 +33,9 @@ type Drone = {
 let drone: Drone | null = null;
 
 /** Volumen máximo de la disonancia: se mezcla por debajo de la música. */
-const TENSION_GAIN = 0.07;
+const TENSION_GAIN = 0.05;
+/** El zumbido se puede quitar sin quitar la música (ajuste del alumno o tecla Z del Centro). */
+let droneMuted = false;
 
 /** Tensión de 0 a 1 según el Desnivel: nada hasta +5 y el máximo a partir de +40. */
 export function tensionFor(desnivel: number): number {
@@ -80,7 +82,8 @@ function applyTension(module: HowlerModule): void {
   drone ??= buildDrone(module);
   if (drone === null) return;
   const now = drone.context.currentTime;
-  drone.gain.gain.setTargetAtTime(TENSION_GAIN * tension ** 1.5, now, 1.5);
+  const level = droneMuted ? 0 : TENSION_GAIN * tension ** 1.5;
+  drone.gain.gain.setTargetAtTime(level, now, droneMuted ? 0.2 : 1.5);
   drone.filter.frequency.setTargetAtTime(300 + 900 * tension, now, 1.5);
 }
 let muted = readMuted();
@@ -149,6 +152,12 @@ export const audio = {
     tension = Math.min(1, Math.max(0, value));
     if (howler !== null) applyTension(howler);
     else if (tension > 0) void load().then(applyTension);
+  },
+
+  /** Quita (o devuelve) solo el zumbido de inestabilidad. */
+  setDroneMuted(value: boolean): void {
+    droneMuted = value;
+    if (howler !== null) applyTension(howler);
   },
 
   /** Baja la música mientras se lee en voz alta y la recupera al terminar. */

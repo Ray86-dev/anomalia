@@ -52,6 +52,9 @@ const root = () => document.documentElement;
 
 export const voice = storedSetting('anomalia:voz', ['si', 'no'] as const, 'no');
 
+/** Zumbido de inestabilidad (la disonancia del Desnivel): se puede quitar sin quitar la música. */
+export const drone = storedSetting('anomalia:zumbido', ['si', 'no'] as const, 'si');
+
 export const textSize = storedSetting<TextSize>(
   'anomalia:tamano-texto',
   TEXT_SIZES,
