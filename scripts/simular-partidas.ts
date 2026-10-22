@@ -14,6 +14,7 @@
  */
 import { parseArgs } from 'node:util';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { z } from 'zod';
 import { aliasProblem } from '../shared/game/alias.ts';
 import { nextPosition, type Position } from '../shared/game/flow.ts';
 import type { Phase } from '../shared/game/phases.ts';
@@ -84,6 +85,8 @@ const REPLIES = [
 /** Tiempo medio de cada paso; escribir lleva más que pulsar «Continuar». */
 const WRITING_FACTOR = 3;
 const STATUS_EVERY_MS = 5_000;
+/** El alumno ya no está en la clase (p. ej., se lanzó `--borrar` durante la simulación). */
+const GONE = 'ya no está en la clase';
 
 const PHASE_LABEL: Partial<Record<Phase, string>> = {
   prologue: 'prólogo',
@@ -152,7 +155,10 @@ function directDriver(admin: Db, uid: string, code: string, alias: string): Driv
     return data;
   };
   const write = async (fn: string, args: Record<string, unknown>) => {
-    state = svcWriteResultSchema.parse(await rpc(fn, args)).state;
+    const result = await rpc(fn, args);
+    // Un jugador borrado no tiene estado: las svc_* devuelven `state: null`.
+    if (z.object({ state: z.null() }).safeParse(result).success) throw new Error(GONE);
+    state = svcWriteResultSchema.parse(result).state;
   };
   const current = (): SvcState => {
     if (state === null) throw new Error('Estado sin cargar');
@@ -173,7 +179,9 @@ function directDriver(admin: Db, uid: string, code: string, alias: string): Driv
       if (result.status !== 'ok') throw new Error(result.status);
     },
     async position() {
-      state = svcStateSchema.parse(await rpc('svc_load', { p_auth_uid: uid }));
+      const loaded = await rpc('svc_load', { p_auth_uid: uid });
+      if (loaded === null) throw new Error(GONE);
+      state = svcStateSchema.parse(loaded);
       return { phase: state.run.phase, dilemma: state.run.currentDilemma };
     },
     async advance(from) {
@@ -263,7 +271,7 @@ function apiDriver(client: Db, code: string, alias: string): Driver {
       const { data, error } = await client.rpc('my_state');
       if (error !== null) throw new Error(`my_state: ${error.message}`);
       const state = myStateSchema.parse(data);
-      if (state === null) throw new Error('not_joined');
+      if (state === null) throw new Error(GONE);
       return { phase: state.run.phase, dilemma: state.run.currentDilemma };
     },
     async advance(from) {
@@ -439,8 +447,14 @@ async function main() {
     // Las entradas se escalonan durante los primeros segundos, como en un aula real.
     runs.push(
       play(student, driver, pace, Math.random() * pace * 3).catch((error: unknown) => {
-        student.failed = error instanceof Error ? error.message : String(error);
-        console.error(`✖ ${alias}: ${student.failed}`);
+        student.failed =
+          error instanceof z.ZodError
+            ? 'respuesta inesperada del servidor'
+            : error instanceof Error
+              ? error.message
+              : String(error);
+        // Si borran a toda la clase simulada, basta con el resumen final.
+        if (student.failed !== GONE) console.error(`✖ ${alias}: ${student.failed}`);
       }),
     );
   }
@@ -471,9 +485,15 @@ async function main() {
       idleSince = null;
       continue;
     }
+    const waiting = students.filter(
+      (s) => s.failed === null && s.position?.phase === 'waiting',
+    ).length;
+    if (waiting === 0) break;
     idleSince ??= Date.now();
     if (!warned) {
-      console.log('  Todos esperan el capítulo II: desbloquéalo en la consola para que sigan.');
+      console.log(
+        `  ${String(waiting)} esperan el capítulo II: desbloquéalo en la consola para que sigan.`,
+      );
       warned = true;
     }
     if (Date.now() - idleSince >= idleLimit) {
@@ -482,8 +502,17 @@ async function main() {
     }
   }
   printStatus(students);
-  console.log('✔ Simulación terminada. Para borrar a los alumnos: npm run simular -- --borrar');
-  process.exit(0);
+  const gone = students.filter((s) => s.failed === GONE).length;
+  if (gone > 0) {
+    console.log(
+      `✖ Alumnos simulados que desaparecieron durante la simulación (¿--borrar?): ${String(gone)}.`,
+    );
+  }
+  const failed = students.every((s) => s.failed !== null);
+  if (!failed) {
+    console.log('✔ Simulación terminada. Para borrar a los alumnos: npm run simular -- --borrar');
+  }
+  process.exit(failed ? 1 : 0);
 }
 
 await main();
