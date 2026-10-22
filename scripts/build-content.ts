@@ -9,7 +9,12 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileInk } from './content/ink.ts';
-import { validateContent, type Content, type RawContent } from './content/validate.ts';
+import {
+  validateContent,
+  withoutReviewMarks,
+  type Content,
+  type RawContent,
+} from './content/validate.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const contentDir = join(root, 'content');
@@ -73,7 +78,13 @@ if (allErrors.length > 0 || content === null) {
 }
 
 function emit(c: Content): string {
-  const json = (value: unknown) => JSON.stringify(value, null, 2);
+  // Sin marcas de revisión: el alumnado no debe ver «TODO(verificar)» (D-72).
+  const json = (value: unknown) =>
+    JSON.stringify(
+      value,
+      (_key, item: unknown) => (typeof item === 'string' ? withoutReviewMarks(item) : item),
+      2,
+    );
   return `// Generado por scripts/build-content.ts a partir de content/. NO EDITAR A MANO.
 import type { BlockedTerms } from '../game/alias.ts';
 import type {

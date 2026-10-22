@@ -95,15 +95,17 @@
       "dato": "Dato del laboratorio",
       "datoAyuda": "Esto es un dato: se puede comprobar. Lo que hagas con él es una decisión.",
       "irAlAgora": "Ir al ágora",
-      "modelo": "Modelo simplificado para comprobar una idea.",
       "telescopio": {
         "cielo": "Júpiter en el telescopio",
         "enfoque": "Enfoque",
         "borroso": "La imagen está borrosa: mueve el enfoque.",
-        "enfocado": "¡Imagen nítida! Observa Júpiter varias noches.",
+        "enfocado": "¡Imagen nítida! Anota lo que ves y observa otra noche.",
+        "reenfocar": "Nueva noche: el aire ha cambiado y la imagen está borrosa. Vuelve a enfocar.",
         "observar": "Observar otra noche",
         "noche": "Noche {n} de {total}: {izquierda} a la izquierda y {derecha} a la derecha de Júpiter.",
         "cuaderno": "Tu cuaderno de observación",
+        "cuadernoAyuda": "Como en los cuadernos de Galileo: O es Júpiter y cada * es un punto de luz.",
+        "marcaLuna": "*",
         "fila": "Noche {n}"
       },
       "amoniaco": {
@@ -125,7 +127,8 @@
         "normales": "Células normales",
         "muestra": "Células de la muestra",
         "recuento": "{n} células",
-        "placa": "{nombre}: {n} células"
+        "muertas": "{n} muertas",
+        "placa": "{nombre}: {n} células vivas"
       },
       "crispr": {
         "secuencia": "ADN de ejemplo",
@@ -139,21 +142,21 @@
       },
       "probabilidad": {
         "umbral": "Umbral del Índice Ω",
-        "pregunta": "¿Quién llega a pilotar drones de rescate?",
-        "dentro": "Pasa",
-        "fuera": "Fuera",
-        "loConsigue": "Lo consigue",
-        "noLoConsigue": "No lo consigue",
+        "pregunta": "Veinte aspirantes y su Índice Ω",
+        "dentro": "entra",
+        "fuera": "se queda fuera",
+        "loConsigue": "sería buen piloto",
+        "noLoConsigue": "no lo sería",
         "simboloSi": "✓",
         "simboloNo": "✗",
-        "persona": "Persona con índice {indice}: {estado}, {resultado}.",
-        "pasanYLoConsiguen": "Pasan y lo consiguen: {n}",
-        "pasanYNo": "Pasan y no lo consiguen: {n}",
-        "fueraYLoHabrian": "Fuera, pero lo habrían conseguido: {n}",
-        "fueraYNo": "Fuera y no lo habrían conseguido: {n}",
+        "persona": "Aspirante con índice {indice}: {estado}; {resultado}.",
+        "pasanYLoConsiguen": "Entran y serían buenos pilotos: {n}",
+        "pasanYNo": "Entran y no lo serían: {n}",
+        "fueraYLoHabrian": "Se quedan fuera, pero habrían sido buenos pilotos: {n}",
+        "fueraYNo": "Se quedan fuera y no lo habrían sido: {n}",
         "prueba": "Prueba {total} umbrales distintos ({n} de {total}).",
-        "leyenda": "✓ lo consigue · ✗ no lo consigue · recuadro iluminado: pasa el umbral",
-        "ficticio": "El Índice Ω y estas personas son inventados."
+        "leyenda": "✓ sería buen piloto · ✗ no lo sería · recuadro iluminado: entra en la academia",
+        "ficticio": "La academia, el Índice Ω y los aspirantes son inventados."
       }
     },
     "logros": {
@@ -205,7 +208,6 @@
     "giro": {
       "titulo": "Un giro inesperado",
       "texto": "Antes de archivar tu decisión puedes mantenerla o cambiarla. Las dos cosas valen lo mismo.",
-      "ficcion": "Ficción del juego",
       "historia": "Dato histórico",
       "tuEleccion": "Tu decisión",
       "provisional": "elegida",
@@ -476,13 +478,14 @@
     "archivo": "Archivo real",
     "sinTexto": "(sin respuesta)",
     "mundo": "Estado final del mundo",
-    "desnivel": "Desnivel prometeico (poder menos responsabilidad)",
     "reflexion": "Reflexión final",
     "rubrica": "Rúbrica (la completa el docente)",
     "criterio": "Criterio",
     "observaciones": "Observaciones",
     "curriculo": "Criterios de evaluación: {codigos}",
-    "pie": "ANOMALÍA · {codigo} · Página {n} de {total}",
+    "pie": "{codigo} · {n} / {total}",
+    "piePrograma": "ANOMALÍA · Filosofía 4.º ESO",
+    "cabecera": "Expediente de {alias}",
     "archivoNombre": "ANOMALIA-expediente-{codigo}.pdf",
     "decisionMantenida": "La mantuvo tras el giro.",
     "decisionCambiada": "La cambió tras el giro (antes eligió la {opcion}).",

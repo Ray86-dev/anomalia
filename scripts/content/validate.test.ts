@@ -2,7 +2,12 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { validateContent, type InkResult, type RawContent } from './validate.ts';
+import {
+  validateContent,
+  withoutReviewMarks,
+  type InkResult,
+  type RawContent,
+} from './validate.ts';
 
 const contentDir = fileURLToPath(new URL('../../content/', import.meta.url));
 const json = (file: string): unknown => JSON.parse(readFileSync(join(contentDir, file), 'utf8'));
@@ -53,6 +58,16 @@ const validate = (raw: RawContent, strict = false) =>
 
 type Mutable = Record<string, unknown> & { opciones: Record<string, unknown>[] };
 const d1 = (raw: RawContent) => raw.dilemmas[0]?.data as Mutable;
+
+describe('withoutReviewMarks', () => {
+  it('quita las marcas de revisión sin dejar huecos ni paréntesis vacíos', () => {
+    expect(withoutReviewMarks('Siguió trabajando. TODO(verificar)')).toBe('Siguió trabajando.');
+    expect(withoutReviewMarks('alrededor del Sol (TODO(verificar)). Tema')).toBe(
+      'alrededor del Sol. Tema',
+    );
+    expect(withoutReviewMarks('Sin marcas.')).toBe('Sin marcas.');
+  });
+});
 
 describe('validateContent', () => {
   it('acepta el contenido actual del repositorio', () => {

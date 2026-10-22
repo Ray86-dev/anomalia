@@ -24,6 +24,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 6. **Rigor histórico:**
    - No inventes hechos ni citas textuales atribuidas a personas reales.
    - Un dato histórico que no esté en el diseño se marca con `// TODO(verificar)`, o `TODO(verificar)` dentro del texto JSON, y se avisa al docente.
+   - La marca se queda en `content/` y en los avisos, pero el contenido generado la quita: nunca se ve en el juego, el PDF ni la IA (D-72).
    - Respeta las notas de sensibilidad: no mencionar la muerte de Clara Immerwahr, Henrietta Lacks sin diálogo inventado, ningún diálogo de He Jiankui.
 7. **Móvil primero:**
    - Vertical de 360–430 px, `100dvh` y safe areas.

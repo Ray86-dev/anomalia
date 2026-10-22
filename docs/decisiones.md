@@ -295,3 +295,19 @@ Los giros, los ecos, Ari y el Índice Ω son ficción. Llevan `TODO(verificar)`:
   - D3: las células normales mueren en pocos días y las de la muestra siguen dividiéndose;
   - D4: CRISPR puede cortar también en sitios parecidos, y en un embrión el cambio pasaría a todas sus células y a sus hijos.
 - **Las 10 fichas secretas** (`content/fichas.json`, todas con `verificado: false`).
+
+## 2026-10-22 · Ajustes tras probar el M6
+
+### Tomadas por el docente
+- **D-72 · Las marcas `TODO(verificar)` nunca se ven en el juego.** Se quedan en `content/` y en los avisos de `npm run content` (y `content:strict` sigue fallando mientras queden), pero `build-content` las quita del contenido generado: no llegan a la pantalla, al PDF ni a la IA. Ajusta la regla 6 de `CLAUDE.md`.
+- **D-73 · Nada que rompa la inmersión:** los giros de ficción ya no llevan la etiqueta «Ficción del juego» (solo se señalaría un «Dato histórico» real), y los laboratorios no dicen «Modelo simplificado».
+- **D-74 · Laboratorios más realistas:**
+  - D1: Júpiter con bandas, mancha roja y oscurecimiento del borde, cuatro lunas de distinto tono, estrellas y ocular. Cada noche el aire cambia y hay que volver a enfocar. El cuaderno imita las notas de Galileo («O» para Júpiter y asteriscos para las lunas).
+  - D3: campo claro de microscopio con células teñidas (citoplasma rosado y núcleo violeta), células en división en la muestra y restos grises de las normales que mueren.
+  - D5: «La academia de drones», con una introducción que plantea el dilema antes de mover el umbral (plazas limitadas, Índice Ω y lo que el Consejo no puede saber).
+- **D-75 · Lectura y Consejo:** cada «Siguiente» desplaza la pantalla para dejar a la vista la línea nueva y el botón; «Leer más» empieza cerrado (una regla global hace que `hidden` gane a cualquier `display`).
+- **D-76 · Expediente PDF rediseñado** al estilo de los de «Diálogo Socrático», con la estética de ANOMALÍA:
+  - papel crema, cabecera con una franja del cielo del 2077 y pie con el código en todas las páginas;
+  - portada con cielo estrellado, órbitas temporales, sello del emblema con rango y puntos, y la ruta temporal con un nodo por anomalía del color de su época;
+  - cada anomalía con su año, la decisión en una insignia, la objeción en un recuadro con el color del consejero y el Archivo real en un recuadro dorado;
+  - indicador circular del Desnivel, tarjeta oscura del final, reflexión entre comillas grandes, rúbrica con cabecera oscura y página de logros con rombos y la constelación.

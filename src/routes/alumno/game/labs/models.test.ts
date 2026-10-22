@@ -6,8 +6,10 @@ import {
   blurFor,
   classify,
   DAYS,
-  dishPoints,
-  focusTarget,
+  cellLayout,
+  deadNormalCells,
+  focusTargets,
+  FOCUS_TOLERANCE,
   GUIDE_LENGTH,
   isFocused,
   makeGenome,
@@ -29,13 +31,22 @@ import {
 const SEEDS = Array.from({ length: 50 }, (_, i) => i + 1);
 
 describe('telescopio', () => {
-  it('el enfoque inicial está borroso y existe un punto nítido', () => {
+  it('cada noche hay que volver a enfocar: el punto nítido cambia y se empieza borroso', () => {
     for (const seed of SEEDS) {
-      const target = focusTarget(seeded(seed));
-      expect(isFocused(0, target)).toBe(false);
-      expect(blurFor(0, target)).toBeGreaterThan(0);
-      expect(isFocused(target, target)).toBe(true);
-      expect(blurFor(target, target)).toBe(0);
+      const targets = focusTargets(seeded(seed));
+      expect(targets).toHaveLength(NIGHTS);
+      const [first] = targets;
+      expect(isFocused(0, first ?? 0)).toBe(false);
+      expect(blurFor(0, first ?? 0)).toBeGreaterThan(0);
+      targets.forEach((target, n) => {
+        expect(isFocused(target, target)).toBe(true);
+        expect(blurFor(target, target)).toBe(0);
+        const previous = targets[n - 1];
+        if (previous !== undefined) {
+          expect(isFocused(previous, target)).toBe(false);
+          expect(Math.abs(target - previous)).toBeGreaterThanOrEqual(3 * FOCUS_TOLERANCE);
+        }
+      });
     }
   });
 
@@ -84,9 +95,18 @@ describe('microscopio', () => {
     expect(sampleCells(DAYS)).toBeGreaterThan(sampleCells(0) * 10);
   });
 
-  it('los puntos del cultivo caen dentro de la placa', () => {
-    const points = dishPoints(200, seeded(7));
-    expect(points.every(([x, y]) => x * x + y * y <= 1)).toBe(true);
+  it('las células normales que mueren quedan como restos en la placa', () => {
+    expect(deadNormalCells(0)).toBe(0);
+    expect(deadNormalCells(DAYS)).toBe(8);
+    for (let day = 0; day <= DAYS; day++) {
+      expect(normalCells(day) + deadNormalCells(day)).toBeLessThanOrEqual(8);
+    }
+  });
+
+  it('las células del cultivo caen dentro del campo del microscopio', () => {
+    const cells = cellLayout(70, seeded(3));
+    expect(cells).toHaveLength(70);
+    expect(cells.every((c) => Math.hypot(c.x, c.y) + c.rx <= 1)).toBe(true);
   });
 });
 

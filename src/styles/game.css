@@ -397,6 +397,15 @@
   text-wrap: pretty;
 }
 
+/* Destino del desplazamiento tras «Siguiente»: queda por encima de la barra de acción fija. */
+.ink-end {
+  scroll-margin-bottom: 7rem;
+}
+
+.lab-result {
+  scroll-margin-bottom: 7rem;
+}
+
 .ink-titulo {
   font-family: var(--font-mono);
   font-size: 1.375rem;
@@ -971,31 +980,50 @@
   background: radial-gradient(circle at 50% 50%, #10182a, #05070c 75%);
 }
 
-.lab-jupiter {
-  fill: #e3c79b;
-}
-
-.lab-moon {
-  fill: #f4f1e8;
-}
-
+/* Cuaderno de observación: papel y tinta, como los de Galileo. */
 .lab-notebook {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
-  border: 1px dashed var(--line);
-  border-radius: var(--radius);
+  padding: var(--space-3);
+  border-radius: 6px;
+  background: linear-gradient(#f4ecd8, #ece0c4);
+  box-shadow: inset 0 0 18px rgba(120, 90, 40, 0.25);
+  color: #3b2a1a;
+}
+
+.lab-notebook-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
 }
 
 .lab-notebook-row {
   display: grid;
-  grid-template-columns: 5.5rem 1fr;
+  grid-template-columns: 5rem 1fr;
   align-items: center;
   gap: var(--space-2);
-  font-family: var(--font-mono);
+  border-bottom: 1px solid rgba(59, 42, 26, 0.18);
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: var(--text-small);
-  color: var(--text-muted);
+  font-style: italic;
+}
+
+.lab-notebook-planet {
+  fill: none;
+  stroke: #3b2a1a;
+  stroke-width: 1.4;
+}
+
+.lab-notebook-moon {
+  fill: #3b2a1a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lab-notebook-help {
+  font-size: var(--text-small);
+  color: #6b5640;
 }
 
 .lab-check {
@@ -1048,14 +1076,8 @@
   font-size: var(--text-small);
 }
 
-.lab-dish-plate {
-  fill: #0f1a24;
-  stroke: var(--line);
-  stroke-width: 0.03;
-}
-
-.lab-cell {
-  fill: #f2a7c3;
+.lab-dead {
+  color: var(--text-muted);
 }
 
 .lab-dna {

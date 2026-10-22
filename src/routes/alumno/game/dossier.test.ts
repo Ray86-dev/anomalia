@@ -60,20 +60,26 @@ describe('dossierPdfInput', () => {
     expect(endingFor('fractura', dossier.world).id).toBe('fractura');
   });
 
-  it('una entrada por dilema contestado, con sus cinco apartados', () => {
+  it('una entrada por dilema contestado: decisión y sus cuatro apartados', () => {
     expect(input.entries).toHaveLength(1);
     const [entry] = input.entries;
-    expect(entry?.heading).toBe('Roma, 1633 · Galileo ante la Inquisición');
-    expect(entry?.sections.map((s) => s.label)).toEqual([
-      'Decisión',
-      'Justificación',
-      'Objeción de Inés Kaltz',
-      'Réplica',
-      'Archivo real',
+    expect(entry).toMatchObject({
+      year: '1633',
+      place: 'Roma',
+      title: 'Galileo ante la Inquisición',
+      color: '#e3c08a',
+      decision: { letter: 'A', note: 'La mantuvo tras el giro.' },
+    });
+    expect(entry?.blocks.map((b) => [b.label, b.tone])).toEqual([
+      ['Justificación', 'plain'],
+      ['Objeción de Inés Kaltz', 'quote'],
+      ['Réplica', 'plain'],
+      ['Archivo real', 'archive'],
     ]);
-    expect(entry?.sections[3]?.text).toBe('(sin respuesta)');
-    // M6: si mantuvo o cambió su decisión tras el giro.
-    expect(entry?.sections[0]?.text).toMatch(/La mantuvo tras el giro\.$/);
+    expect(entry?.blocks[1]?.accent).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(entry?.blocks[2]?.text).toBe('(sin respuesta)');
+    // Las marcas de revisión nunca llegan al expediente (D-72).
+    expect(entry?.blocks[3]?.text).not.toMatch(/TODO/);
   });
 
   it('la réplica indica la postura y la decisión cambiada dice cuál era la primera', () => {
@@ -98,20 +104,18 @@ describe('dossierPdfInput', () => {
       new Date(),
     );
     const [entry] = changed.entries;
-    expect(entry?.sections[0]?.text).toMatch(/La cambió tras el giro \(antes eligió la A\)/);
-    expect(entry?.sections[3]?.label).toBe('Réplica · Matizo mi postura');
+    expect(entry?.decision.note).toBe('La cambió tras el giro (antes eligió la A).');
+    expect(entry?.blocks[2]?.label).toBe('Réplica · Matizo mi postura');
   });
 
   it('sello de rango y página de logros, que no cuentan para la nota', () => {
     expect(input.badge.rank).toBe('Aprendiz del Archivo');
     expect(input.badge.emblemColor).toMatch(/^#[0-9a-f]{6}$/i);
     expect(input.achievements.note).toMatch(/no forman parte de la nota/);
-    expect(input.achievements.groups.map((g) => g.items[0])).toEqual([
-      'Aprendiz del Archivo · 0 puntos',
-      '(ninguno)',
-      '(ninguno)',
-      '(ninguno)',
-    ]);
+    expect(input.achievements.summary).toBe('Aprendiz del Archivo · 0 puntos');
+    expect(input.achievements.items.every((item) => item.count === 0)).toBe(true);
+    expect(input.achievements.stars).toHaveLength(20);
+    expect(input.achievements.fichas).toEqual([]);
   });
 
   it('la rúbrica indica los criterios de evaluación oficiales de cada criterio', () => {
@@ -125,9 +129,11 @@ describe('dossierPdfInput', () => {
     ]);
   });
 
-  it('desnivel con signo, pie con el código y nombre de archivo', () => {
-    expect(input.world.gap).toBe('+30');
-    expect(input.footer(2, 5)).toBe('ANOMALÍA · ANM-7F3K-92QD · Página 2 de 5');
+  it('desnivel con signo, cabecera, pie con el código y nombre de archivo', () => {
+    expect(input.world.gap).toBe(30);
+    expect(input.world.gapText).toBe('+30');
+    expect(input.footer(2, 5)).toBe('ANM-7F3K-92QD · 2 / 5');
+    expect(input.labels.cabecera).toBe('Expediente de Hipatia');
     expect(dossierFileName('ANM-7F3K-92QD')).toBe('ANOMALIA-expediente-ANM-7F3K-92QD.pdf');
   });
 });

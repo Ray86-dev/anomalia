@@ -1,5 +1,6 @@
 /** Datos del expediente PDF a partir de la partida archivada y del contenido (§9). */
 import {
+  ambients,
   concepts,
   dilemmas,
   endings,
@@ -13,7 +14,7 @@ import { desnivel, WORLD_VARS, type WorldState } from '@shared/game/world.ts';
 import type { Ending } from '@shared/schemas/content.ts';
 import type { MyDossier } from '@shared/schemas/state.ts';
 // Solo tipos: pdf-lib se carga bajo demanda al generar el PDF.
-import type { DossierPdfInput } from '../../../engine/pdf/dossier.ts';
+import type { DossierBlock, DossierEntry, DossierPdfInput } from '../../../engine/pdf/dossier.ts';
 import { replyLabel, twistNote } from '../../../lib/answers.ts';
 import { fmt, formatDate } from '../../../lib/text.ts';
 import { findCounselor, texto } from './helpers.ts';
@@ -39,29 +40,34 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
   const ending = endingFor(dossier.ending, dossier.world);
 
   // En el orden del juego (capítulo y orden), no en el de las respuestas.
-  const entries = dilemmas.flatMap((dilemma) => {
+  const entries = dilemmas.flatMap((dilemma): DossierEntry[] => {
     const answer = dossier.answers.find((a) => a.dilemmaId === dilemma.id);
     const option = dilemma.opciones.find((o) => o.id === answer?.choice);
     if (answer === undefined || option === undefined) return [];
     const objector = findCounselor(answer.objector);
+    const blocks: DossierBlock[] = [
+      { label: p.justificacion, text: answer.justification ?? p.sinTexto, tone: 'plain' },
+      {
+        label: fmt(p.objecion, { nombre: objector?.nombre ?? '' }),
+        text: answer.objection ?? p.sinTexto,
+        tone: 'quote',
+        ...(objector === undefined ? {} : { accent: objector.color }),
+      },
+      { label: replyLabel(answer.replyStance), text: answer.reply ?? p.sinTexto, tone: 'plain' },
+      { label: p.archivo, text: texto(dilemma.archivoReal.texto), tone: 'archive' },
+    ];
     return [
       {
-        heading: `${dilemma.lugar}, ${String(dilemma.anio)} · ${texto(dilemma.titulo)}`,
-        sections: [
-          {
-            label: p.decision,
-            text: [`${option.id}. ${texto(option.texto)}`, twistNote(option.id, answer.firstChoice)]
-              .filter((part) => part !== null)
-              .join(' '),
-          },
-          { label: p.justificacion, text: answer.justification ?? p.sinTexto },
-          {
-            label: fmt(p.objecion, { nombre: objector?.nombre ?? '' }),
-            text: answer.objection ?? p.sinTexto,
-          },
-          { label: replyLabel(answer.replyStance), text: answer.reply ?? p.sinTexto },
-          { label: p.archivo, text: texto(dilemma.archivoReal.texto) },
-        ],
+        year: String(dilemma.anio),
+        place: dilemma.lugar,
+        title: texto(dilemma.titulo),
+        color: ambients[dilemma.estetica].paleta[2],
+        decision: {
+          letter: option.id,
+          text: texto(option.texto),
+          note: twistNote(option.id, answer.firstChoice),
+        },
+        blocks,
       },
     ];
   });
@@ -69,12 +75,7 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
   // Logros (M6): juego, no evaluación. Se dice en la propia página.
   const summary = summaryOf(dossier.progress);
   const pieces = emblemPieces(dossier.emblem);
-  const listOrNone = (items: readonly string[]) => (items.length > 0 ? items : [p.ninguno]);
-  const earned = ACHIEVEMENTS.flatMap((achievement) => {
-    const count = summary.earned.get(achievement.id) ?? 0;
-    if (count === 0) return [];
-    return [count > 1 ? `${achievement.etiqueta} ×${String(count)}` : achievement.etiqueta];
-  });
+  const points = fmt(p.puntos, { n: summary.points });
 
   return {
     documentTitle: `${p.titulo} · ${p.subtitulo}`,
@@ -90,12 +91,16 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
       final: p.final,
       verificacion: p.verificacion,
       ruta: p.ruta,
+      decision: p.decision,
       mundo: p.mundo,
-      desnivel: p.desnivel,
+      desnivel: ui.juego.ondas.desnivel,
+      desnivelAyuda: ui.juego.ondas.desnivelAyuda,
       reflexion: p.reflexion,
       rubrica: p.rubrica,
       criterio: p.criterio,
       observaciones: p.observaciones,
+      cabecera: fmt(p.cabecera, { alias: dossier.alias }),
+      pie: p.piePrograma,
     },
     cover: {
       name,
@@ -105,15 +110,26 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
       date: formatDate(dossier.finishedAt ?? now.toISOString()),
       ending: texto(ending.titulo),
     },
+    badge: {
+      rank: summary.rank.label,
+      points,
+      emblemPath: pieces.symbol.path,
+      emblemColor: pieces.color.hex,
+    },
     entries,
     world: {
       meters: WORLD_VARS.map((variable) => ({
         label: ui.juego.mundo[variable],
         value: dossier.world[variable],
       })),
-      gap: signed(desnivel(dossier.world)),
+      gap: desnivel(dossier.world),
+      gapText: signed(desnivel(dossier.world)),
     },
-    ending: { title: texto(ending.titulo), text: texto(ending.texto) },
+    ending: {
+      title: texto(ending.titulo),
+      summary: texto(ending.resumen),
+      text: texto(ending.texto),
+    },
     reflection: { question: texto(reflection.pregunta), text: dossier.reflection ?? p.sinTexto },
     rubric: {
       levels: rubric.niveles,
@@ -127,33 +143,20 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
             : fmt(p.curriculo, { codigos: listFormat.format(c.curriculo) }),
       })),
     },
-    badge: {
-      rank: summary.rank.label,
-      emblemPath: pieces.symbol.path,
-      emblemColor: pieces.color.hex,
-    },
     achievements: {
       title: p.logros,
       note: p.logrosNota,
-      groups: [
-        {
-          label: p.rango,
-          items: [`${summary.rank.label} · ${fmt(p.puntos, { n: summary.points })}`],
-        },
-        { label: p.logrosLista, items: listOrNone(earned) },
-        {
-          label: fmt(p.estrellas, { n: summary.stars.length, total: concepts.length }),
-          items: listOrNone(
-            concepts.filter((c) => summary.stars.includes(c.id)).map((c) => c.etiqueta),
-          ),
-        },
-        {
-          label: p.fichas,
-          items: listOrNone(
-            fichas.filter((f) => summary.fichas.includes(f.id)).map((f) => texto(f.titulo)),
-          ),
-        },
-      ],
+      summary: `${summary.rank.label} · ${points}`,
+      itemsLabel: p.logrosLista,
+      items: ACHIEVEMENTS.map((achievement) => ({
+        label: achievement.etiqueta,
+        count: summary.earned.get(achievement.id) ?? 0,
+      })),
+      starsLabel: fmt(p.estrellas, { n: summary.stars.length, total: concepts.length }),
+      stars: concepts.map((c) => ({ label: c.etiqueta, lit: summary.stars.includes(c.id) })),
+      fichasLabel: p.fichas,
+      fichas: fichas.filter((f) => summary.fichas.includes(f.id)).map((f) => texto(f.titulo)),
+      none: p.ninguno,
     },
     footer: (page, total) => fmt(p.pie, { codigo: code, n: page, total }),
   };

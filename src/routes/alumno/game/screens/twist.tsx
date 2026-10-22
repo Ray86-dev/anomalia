@@ -24,7 +24,8 @@ export function Twist({ dilemma }: { readonly dilemma: Dilemma }) {
       </h1>
       {twist !== undefined && (
         <article className="panel stack twist-card">
-          <p className="kicker">{twist.fuente === 'historia' ? t.giro.historia : t.giro.ficcion}</p>
+          {/* Solo se señala un dato histórico real; la ficción no se anuncia (rompería la inmersión). */}
+          {twist.fuente === 'historia' && <p className="kicker">{t.giro.historia}</p>}
           <p className="lead">{texto(twist.texto)}</p>
         </article>
       )}

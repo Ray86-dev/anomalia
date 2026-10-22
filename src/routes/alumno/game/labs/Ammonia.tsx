@@ -91,7 +91,6 @@ export function Ammonia(props: LabProps) {
       <p className="lab-status" aria-live="polite">
         {fmt(t.meta, { n: AMMONIA_GOAL })} · {reached ? t.conseguido : t.falta}
       </p>
-      <p className="help">{lab.modelo}</p>
     </div>
   );
 }

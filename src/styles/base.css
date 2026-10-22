@@ -331,6 +331,11 @@ a {
 
 /* ── Accesibilidad ───────────────────────────────────────────────────── */
 
+/* `hidden` gana siempre, aunque una clase fije `display` (p. ej. «Leer más» del Consejo). */
+[hidden] {
+  display: none !important;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

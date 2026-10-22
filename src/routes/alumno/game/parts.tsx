@@ -5,6 +5,7 @@ import type { Counselor } from '@shared/schemas/content.ts';
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { audio } from '../../../engine/audio.ts';
 import { loadInkLines, type InkLine, type InkVariables } from '../../../engine/ink.ts';
+import { prefersReducedMotion } from '../../../engine/motion.ts';
 import { reading } from '../../../lib/reading.ts';
 import { fmt } from '../../../lib/text.ts';
 import { Notice } from '../../../ui/Notice.tsx';
@@ -71,6 +72,7 @@ export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReade
   const [lines, setLines] = useState<readonly InkLine[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [shown, setShown] = useState(1);
+  const end = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -100,6 +102,15 @@ export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReade
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shown, lines]);
 
+  // Cada «Siguiente» deja a la vista la línea nueva y el botón, sin desplazar a mano.
+  useEffect(() => {
+    if (shown <= 1) return;
+    end.current?.scrollIntoView({
+      block: 'end',
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    });
+  }, [shown]);
+
   if (failed) return <Notice tone="error">{ui.app.errorCarga}</Notice>;
   if (lines === null) return <p role="status">{ui.app.cargando}</p>;
 
@@ -123,6 +134,7 @@ export function InkReader({ storyId, knot, variables, onStep, onDone }: InkReade
           {t.siguiente}
         </button>
       )}
+      <div ref={end} className="ink-end" aria-hidden="true" />
     </div>
   );
 }

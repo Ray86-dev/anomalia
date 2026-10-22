@@ -14,6 +14,7 @@ import { Telescope } from '../labs/Telescope.tsx';
 import { ActionBar, AdvanceButton } from '../parts.tsx';
 
 const t = ui.juego;
+const NEWLINE = '\n';
 
 const EXPERIMENTS: Record<LabType, ComponentType<LabProps>> = {
   telescopio: Telescope,
@@ -46,7 +47,14 @@ export function Lab({ dilemma }: { readonly dilemma: Dilemma }) {
       <h1 tabIndex={-1} data-focus>
         {texto(experiment.titulo)}
       </h1>
-      <p className="lead">{texto(experiment.instrucciones)}</p>
+      {/* Instrucciones en párrafos cortos: cada salto de línea del contenido es un párrafo. */}
+      {texto(experiment.instrucciones)
+        .split(NEWLINE)
+        .map((paragraph) => (
+          <p key={paragraph} className="lead">
+            {paragraph}
+          </p>
+        ))}
       <Experiment done={done} onDone={onDone} />
       {done && (
         <article ref={result} className="panel stack lab-result" role="status">

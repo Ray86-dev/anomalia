@@ -151,6 +151,14 @@ function tooLong(text: Readonly<Record<string, string | undefined>>, max: number
 const severalSentences = (text: string | undefined) =>
   text !== undefined && /[.!?…]\s+\S/u.test(text);
 
+/**
+ * Las marcas `TODO(verificar)` son para el docente: se quedan en `content/` (y en los avisos de
+ * `npm run content`), pero nunca llegan a la pantalla, al PDF ni a la IA (D-72).
+ */
+export function withoutReviewMarks(text: string): string {
+  return text.replace(/\s*\(TODO\(verificar\)\)/gu, '').replace(/\s*TODO\(verificar\)/gu, '');
+}
+
 function duplicates(ids: readonly string[]): string[] {
   return [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
 }

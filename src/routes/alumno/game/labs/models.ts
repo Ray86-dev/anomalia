@@ -26,8 +26,33 @@ const pickInt = (random: Random, min: number, max: number) =>
 export const FOCUS_TOLERANCE = 6;
 export const NIGHTS = 4;
 
-/** Punto de enfoque nítido, lejos de los extremos y del valor inicial (0). */
-export const focusTarget = (random: Random) => pickInt(random, 35, 85);
+/**
+ * Punto de enfoque nítido de cada noche: el aire cambia y hay que volver a enfocar.
+ * La primera noche queda lejos del valor inicial (0) y cada noche se aleja de la anterior.
+ */
+export function focusTargets(random: Random): number[] {
+  const targets = [pickInt(random, 35, 85)];
+  while (targets.length < NIGHTS) {
+    const previous = targets.at(-1) ?? 50;
+    const next = pickInt(random, 15, 85);
+    if (Math.abs(next - previous) >= 3 * FOCUS_TOLERANCE) targets.push(next);
+  }
+  return targets;
+}
+
+/** Estrellas de fondo en el ocular: posición (−1…1), radio y brillo. */
+export function starField(count: number, random: Random): [number, number, number, number][] {
+  return Array.from({ length: count }, () => {
+    const angle = random() * 2 * Math.PI;
+    const distance = 0.95 * Math.sqrt(random());
+    return [
+      distance * Math.cos(angle),
+      distance * Math.sin(angle),
+      0.004 + random() * 0.008,
+      0.25 + random() * 0.6,
+    ];
+  });
+}
 
 /** Desenfoque en píxeles: crece con la distancia al punto nítido. */
 export const blurFor = (focus: number, target: number) =>
@@ -101,13 +126,53 @@ export const normalCells = (day: number) =>
 /** Células de la muestra: se duplican cada día. */
 export const sampleCells = (day: number) => 8 * 2 ** day;
 
-/** Puntos dentro de una placa redonda (radio 1) para dibujar un cultivo. */
-export function dishPoints(count: number, random: Random): [number, number][] {
-  return Array.from({ length: count }, () => {
-    const angle = random() * 2 * Math.PI;
-    const distance = 0.88 * Math.sqrt(random());
-    return [distance * Math.cos(angle), distance * Math.sin(angle)];
-  });
+/** Células normales que ya han muerto (siguen en la placa como restos). */
+export function deadNormalCells(day: number): number {
+  let peak = 0;
+  for (let d = 0; d <= day; d++) peak = Math.max(peak, normalCells(d));
+  return peak - normalCells(day);
+}
+
+export type Cell = {
+  readonly x: number;
+  readonly y: number;
+  readonly rx: number;
+  readonly ry: number;
+  /** Giro en grados. */
+  readonly angle: number;
+  /** Desplazamiento del núcleo respecto al centro de la célula. */
+  readonly nx: number;
+  readonly ny: number;
+};
+
+/**
+ * Células de un cultivo dentro del campo del microscopio (radio 1). Se reparten sin
+ * amontonarse mientras caben; cuando el cultivo se llena, se solapan, como en la realidad.
+ */
+export function cellLayout(count: number, random: Random): Cell[] {
+  const cells: Cell[] = [];
+  for (let i = 0; i < count; i++) {
+    let x = 0;
+    let y = 0;
+    for (let attempt = 0; attempt < 30; attempt++) {
+      const angle = random() * 2 * Math.PI;
+      const distance = 0.82 * Math.sqrt(random());
+      x = distance * Math.cos(angle);
+      y = distance * Math.sin(angle);
+      if (cells.every((c) => Math.hypot(c.x - x, c.y - y) >= 0.17)) break;
+    }
+    const rx = 0.075 + random() * 0.03;
+    cells.push({
+      x,
+      y,
+      rx,
+      ry: rx * (0.7 + random() * 0.25),
+      angle: random() * 180,
+      nx: (random() - 0.5) * rx * 0.4,
+      ny: (random() - 0.5) * rx * 0.3,
+    });
+  }
+  return cells;
 }
 
 // ── D4 · CRISPR: buscar, cortar… y los sitios parecidos ──

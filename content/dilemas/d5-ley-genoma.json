@@ -136,8 +136,8 @@
   "replica": { "palabras": [15, 35] },
   "laboratorio": {
     "tipo": "probabilidad",
-    "titulo": {"normal": "¿Predice el índice?", "facil": "¿Acierta el índice?"},
-    "instrucciones": {"normal": "El Índice Ω es inventado. Mueve el umbral y mira a quién deja pasar y a quién deja fuera.", "facil": "El Índice Ω es inventado. Mueve el umbral. Mira quién pasa y quién se queda fuera."},
+    "titulo": {"normal": "La academia de drones", "facil": "La academia de drones"},
+    "instrucciones": {"normal": "La Academia de Rescate de Canarias forma pilotos de drones para buscar a personas perdidas en el monte y en el mar, pero solo tiene plazas para algunos aspirantes.\nEl Consejo propone elegirlos con el Índice Ω, un número del 0 al 100 calculado con sus genes.\nEste laboratorio sabe algo que el Consejo no puede saber: quién llegaría de verdad a ser buen piloto (✓) y quién no (✗).\nMueve el umbral: entra quien tenga ese índice o más.", "facil": "La Academia de Rescate de Canarias forma pilotos de drones. Buscan a personas perdidas en el monte y en el mar. Hay pocas plazas.\nEl Consejo quiere elegir con el Índice Ω: un número del 0 al 100 que sale de los genes.\nAquí puedes ver quién sería buen piloto (✓) y quién no (✗).\nMueve el umbral: entra quien tenga ese número o más."},
     "dato": {"normal": "Un índice da probabilidades para grupos, no certezas para cada persona. Con cualquier umbral, deja fuera a alguien que sí lo habría conseguido y deja pasar a alguien que no.", "facil": "Un índice dice lo que es probable en un grupo. No dice qué hará cada persona. Con cualquier umbral, deja fuera a alguien que sí lo habría conseguido."},
     "verificado": true
   },
