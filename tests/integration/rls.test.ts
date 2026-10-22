@@ -162,6 +162,26 @@ describe.skipIf(!configured)('RLS y partida (integración)', () => {
         p_alias: 'Hack',
       });
       expect(svc.error).not.toBeNull();
+      // Las del giro y el emblema (M6) tampoco: la decisión y los deltas pasan por `partida`.
+      const pick = await s1.rpc('svc_pick', {
+        p_player_id: classA.id,
+        p_dilemma: 'd1',
+        p_choice: 'A',
+      });
+      expect(pick.error).not.toBeNull();
+      const emblem = await s1.rpc('svc_emblem', { p_player_id: classA.id, p_emblem: 'corona:oro' });
+      expect(emblem.error).not.toBeNull();
+    });
+
+    it('no puede ponerse un emblema ni una elección pendiente escribiendo en su partida', async () => {
+      const update = await s1
+        .from('runs')
+        .update({ emblem: 'corona:turquesa', labs: ['d1', 'd2'] })
+        .gte('poder', 0)
+        .select('emblem');
+      expect(update.error !== null || update.data.length === 0).toBe(true);
+      const own = await s1.from('runs').select('emblem, labs');
+      expect(own.data).toEqual([{ emblem: null, labs: [] }]);
     });
 
     it('my_state devuelve su partida y su clase', async () => {

@@ -548,3 +548,41 @@
 .voice-card {
   border-style: dashed;
 }
+
+/* ── Giro (M6): opciones como grupo de radio ── */
+
+.option-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option-radio {
+  position: relative;
+}
+
+.option-radio input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.option-radio.is-selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.option-radio.is-selected .option-letter {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.option-radio:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.option-tag {
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}

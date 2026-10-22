@@ -6,8 +6,11 @@ import {
   concepts,
   counselors,
   dilemmas,
+  emblems,
   endings,
   fallbacks,
+  fichas,
+  rewards,
 } from '../../../shared/generated/content.ts';
 import { readAiConfig } from '../_shared/ai/config.ts';
 import { generateClosing, generateObjection, type DialogueDeps } from '../_shared/ai/dialogue.ts';
@@ -33,7 +36,8 @@ function dialogue(config: NonNullable<typeof aiConfig>): AiDialogue {
   };
   return {
     objection: (context, justification) => generateObjection(deps, context, justification),
-    closing: (context, objection, reply) => generateClosing(deps, context, objection, reply),
+    closing: (context, objection, reply, stance) =>
+      generateClosing(deps, context, objection, reply, stance),
   };
 }
 const ai = aiConfig === null ? null : dialogue(aiConfig);
@@ -54,7 +58,16 @@ Deno.serve((request) =>
       if (result.error !== null) throw new Error(`${fn}: ${result.error.message}`);
       return result.data;
     },
-    content: { blockedTerms, dilemmas, fallbacks, counselors, concepts, alertTerms, endings },
+    content: {
+      blockedTerms,
+      dilemmas,
+      fallbacks,
+      counselors,
+      concepts,
+      alertTerms,
+      endings,
+      catalog: { rewards, concepts, fichas, emblems },
+    },
     ai,
     allowedOrigins,
   }),

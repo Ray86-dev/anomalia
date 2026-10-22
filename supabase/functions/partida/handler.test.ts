@@ -4,11 +4,14 @@ import {
   concepts,
   counselors,
   dilemmas,
+  emblems,
   endings,
   fallbacks,
+  fichas,
+  rewards,
 } from '../../../shared/generated/content.ts';
 import { cleanText } from '../../../shared/game/words.ts';
-import type { SvcState } from '../../../shared/schemas/partida.ts';
+import { EMPTY_PROGRESS, type SvcState } from '../../../shared/schemas/partida.ts';
 import { handlePartida, type AiDialogue, type PartidaDeps } from './handler.ts';
 
 const ORIGIN = 'https://ray86-dev.github.io';
@@ -24,6 +27,7 @@ const content = (
   concepts,
   alertTerms,
   endings,
+  catalog: { rewards, concepts, fichas, emblems },
 });
 
 function deps(overrides: Partial<PartidaDeps> = {}): PartidaDeps {
@@ -227,6 +231,9 @@ function loaded(run: Partial<Run> = {}, overrides: Partial<SvcState> = {}): SvcS
       world: { poder: 50, responsabilidad: 50, equidad: 50, confianza: 50 },
       branches: [],
       ending: null,
+      pendingChoice: null,
+      emblem: null,
+      progress: EMPTY_PROGRESS,
       ...run,
     },
     answer: null,
@@ -388,36 +395,65 @@ const afterChoice = (phase: Run['phase'], objection: string | null = null) =>
       answer: {
         dilemmaId: 'd1',
         choice: 'A',
+        firstChoice: 'A',
         justification: null,
         objector: objection === null ? null : 'kaltz',
         objection,
         reply: null,
+        replyStance: null,
         closing: null,
         aiSource: null,
       },
     },
   );
 
-describe('partida · choose / justify / reply (sin IA)', () => {
-  it('aplica los deltas de la opción en el servidor y registra la rama', async () => {
-    // D1 · B: CONFIANZA +10, PODER +5, rama d1-firme
+describe('partida · choose / confirm / justify / reply (sin IA)', () => {
+  it('elegir guarda una elección provisional y pasa al giro sin tocar el mundo', async () => {
     const { rpc } = await play(
       { action: 'choose', dilemmaId: 'd1', choice: 'B' },
       loaded({ phase: 'decision', currentDilemma: 'd1' }),
     );
-    expect(writes(rpc)[0]).toEqual([
-      'svc_choose',
-      {
-        p_player_id: 'player-1',
-        p_dilemma: 'd1',
-        p_choice: 'B',
-        p_poder: 55,
-        p_responsabilidad: 50,
-        p_equidad: 50,
-        p_confianza: 60,
-        p_branch: 'd1-firme',
-      },
+    expect(writes(rpc)).toEqual([
+      ['svc_pick', { p_player_id: 'player-1', p_dilemma: 'd1', p_choice: 'B' }],
     ]);
+  });
+
+  it('tras el giro aplica los deltas de la opción definitiva y su rama', async () => {
+    // Elige A y cambia a D1 · B: CONFIANZA +10, PODER +5, rama d1-firme
+    const { rpc } = await play(
+      { action: 'confirm', dilemmaId: 'd1', choice: 'B' },
+      loaded({ phase: 'twist', currentDilemma: 'd1', pendingChoice: 'A' }),
+    );
+    expect(writes(rpc)).toEqual([
+      [
+        'svc_confirm',
+        {
+          p_player_id: 'player-1',
+          p_dilemma: 'd1',
+          p_first_choice: 'A',
+          p_choice: 'B',
+          p_poder: 55,
+          p_responsabilidad: 50,
+          p_equidad: 50,
+          p_confianza: 60,
+          p_branch: 'd1-firme',
+        },
+      ],
+    ]);
+  });
+
+  it('solo se confirma en el giro y con una elección provisional', async () => {
+    const outside = await play(
+      { action: 'confirm', dilemmaId: 'd1', choice: 'A' },
+      loaded({ phase: 'decision', currentDilemma: 'd1' }),
+    );
+    expect(outside.body).toMatchObject({ ok: false, error: 'stale' });
+    const withoutPick = await play(
+      { action: 'confirm', dilemmaId: 'd1', choice: 'A' },
+      loaded({ phase: 'twist', currentDilemma: 'd1', pendingChoice: null }),
+    );
+    expect(withoutPick.body).toMatchObject({ ok: false, error: 'stale' });
+    expect([...writes(outside.rpc), ...writes(withoutPick.rpc)]).toEqual([]);
   });
 
   it('solo se elige en la fase de decisión del dilema en curso', async () => {
@@ -445,6 +481,7 @@ describe('partida · choose / justify / reply (sin IA)', () => {
         p_ai_source: 'respaldo',
         p_quality: null,
         p_concepts: [],
+        p_moves: [],
         p_alert: false,
       },
     ]);
@@ -459,9 +496,9 @@ describe('partida · choose / justify / reply (sin IA)', () => {
     expect(body).toMatchObject({ ok: false, error: 'invalid' });
   });
 
-  it('guarda la réplica con el cierre de respaldo', async () => {
+  it('guarda la réplica con su postura y el cierre de respaldo', async () => {
     const { rpc } = await play(
-      { action: 'reply', dilemmaId: 'd1', text: 'No estoy de acuerdo' },
+      { action: 'reply', dilemmaId: 'd1', text: 'No estoy de acuerdo', stance: 'rebate' },
       afterChoice('objection', 'objeción previa'),
     );
     expect(writes(rpc)[0]).toEqual([
@@ -470,11 +507,21 @@ describe('partida · choose / justify / reply (sin IA)', () => {
         p_player_id: 'player-1',
         p_dilemma: 'd1',
         p_text: 'No estoy de acuerdo',
+        p_stance: 'rebate',
         p_closing: fallbackA?.cierre.normal,
         p_concepts: [],
+        p_moves: [],
         p_alert: false,
       },
     ]);
+  });
+
+  it('una réplica sin postura (versiones antiguas de la app) se guarda igual', async () => {
+    const { rpc } = await play(
+      { action: 'reply', dilemmaId: 'd1', text: 'No estoy de acuerdo' },
+      afterChoice('objection', 'objeción previa'),
+    );
+    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_stance: null });
   });
 
   it('marca una alerta privada si el texto muestra malestar, aunque no haya IA', async () => {
@@ -486,10 +533,29 @@ describe('partida · choose / justify / reply (sin IA)', () => {
   });
 });
 
+describe('partida · emblema', () => {
+  it('guarda un emblema con piezas desbloqueadas', async () => {
+    const { rpc } = await play({ action: 'emblem', symbol: 'estrella', color: 'ambar' }, loaded());
+    expect(writes(rpc)).toEqual([
+      ['svc_emblem', { p_player_id: 'player-1', p_emblem: 'estrella:ambar' }],
+    ]);
+  });
+
+  it('rechaza piezas que aún no se han desbloqueado con los puntos', async () => {
+    const { body, rpc } = await play(
+      { action: 'emblem', symbol: 'corona', color: 'oro' },
+      loaded(),
+    );
+    expect(body).toMatchObject({ ok: false, error: 'invalid' });
+    expect(writes(rpc)).toEqual([]);
+  });
+});
+
 describe('partida · con IA', () => {
   const objection = {
     calidad: 'solida' as const,
     conceptos: ['verdad'],
+    movimientos: ['da-razones'],
     objecion: 'Dices que la vida importa más, pero ¿qué vale una vida que renuncia a la verdad?',
     alerta: false,
   };
@@ -498,13 +564,18 @@ describe('partida · con IA', () => {
     return {
       objection: vi.fn(() => Promise.resolve(objection)),
       closing: vi.fn(() =>
-        Promise.resolve({ reaccion: 'Me haces dudar.', conceptos: ['dignidad'], alerta: false }),
+        Promise.resolve({
+          reaccion: 'Me haces dudar.',
+          conceptos: ['dignidad'],
+          movimientos: ['reconoce-razon'],
+          alerta: false,
+        }),
       ),
       ...overrides,
     };
   }
 
-  it('usa la objeción de la IA y guarda calidad y conceptos', async () => {
+  it('usa la objeción de la IA y guarda calidad, conceptos y movimientos', async () => {
     const ai = aiWith();
     const { rpc } = await play(
       { action: 'justify', dilemmaId: 'd1', text: 'Porque la vida importa' },
@@ -522,6 +593,7 @@ describe('partida · con IA', () => {
       p_ai_source: 'ia',
       p_quality: 'solida',
       p_concepts: ['verdad'],
+      p_moves: ['da-razones'],
     });
   });
 
@@ -605,17 +677,24 @@ describe('partida · con IA', () => {
     expect(writes(rpc)[0]?.[1]).toMatchObject({ p_alert: true });
   });
 
-  it('el cierre de la IA responde a la objeción guardada y a la réplica', async () => {
+  it('el cierre de la IA responde a la objeción guardada, a la réplica y a su postura', async () => {
     const ai = aiWith();
     const { rpc } = await play(
-      { action: 'reply', dilemmaId: 'd1', text: 'Mi réplica' },
+      { action: 'reply', dilemmaId: 'd1', text: 'Mi réplica', stance: 'matiza' },
       afterChoice('objection', 'objeción previa'),
       { ai, aiCalls: 2 },
     );
-    expect(ai.closing).toHaveBeenCalledWith(expect.anything(), 'objeción previa', 'Mi réplica');
+    expect(ai.closing).toHaveBeenCalledWith(
+      expect.anything(),
+      'objeción previa',
+      'Mi réplica',
+      'matiza',
+    );
     expect(writes(rpc)[0]?.[1]).toMatchObject({
       p_closing: 'Me haces dudar.',
       p_concepts: ['dignidad'],
+      p_moves: ['reconoce-razon'],
+      p_stance: 'matiza',
     });
   });
 });

@@ -3,6 +3,7 @@
  * los archivos los edita el docente (ver CLAUDE.md · Convenciones).
  */
 import { z } from 'zod';
+import { MILESTONE_IDS } from '../game/milestones.ts';
 import { WORLD_VARS } from '../game/world.ts';
 
 const id = z.string().regex(/^[a-z0-9-]+$/, 'solo minúsculas, números y guiones');
@@ -89,6 +90,18 @@ export const dilemmaSchema = z
     justificacion: z.strictObject({ pregunta: textoSchema, palabras: wordRange }),
     replica: z.strictObject({ palabras: wordRange }),
     archivoReal: z.strictObject({ texto: textoSchema, verificado: z.boolean() }),
+    /**
+     * Giro (M6): información nueva tras la decisión provisional. `ficcion` si es una presión
+     * inventada sobre el Cronista; `historia` si es un hecho real (debe verificarlo el docente).
+     */
+    giro: z
+      .strictObject({
+        titulo: textoSchema,
+        texto: textoSchema,
+        fuente: z.enum(['ficcion', 'historia']),
+        verificado: z.boolean(),
+      })
+      .optional(),
     ia: z.strictObject({ contexto: z.string().min(1) }),
     sensibilidad: z.array(z.string()),
     /** Si faltan capas o música, se usan las del ambiente de la época. */
@@ -191,6 +204,78 @@ export const rubricSchema = z.strictObject({
   ),
 });
 
+// ── Logros y recompensas (M6) ───────────────────────────────────────────────
+
+/**
+ * Logros: movimientos filosóficos que detecta la IA en los textos (lista cerrada) e hitos
+ * del juego (reglas fijas). Puntos por logro nuevo o repetido y por estrella de concepto.
+ * Los rangos se escalan con el número de anomalías de la clase.
+ */
+export const rewardsSchema = z.strictObject({
+  puntos: z.strictObject({
+    nuevo: z.number().int().positive(),
+    repetido: z.number().int().min(0),
+    estrella: z.number().int().min(0),
+  }),
+  movimientos: z
+    .array(
+      z.strictObject({
+        id,
+        etiqueta: z.string().min(1),
+        descripcion: textoSchema,
+        /** Cómo reconoce la IA el movimiento en el texto del alumno. */
+        definicionIA: z.string().min(10),
+      }),
+    )
+    .min(1),
+  hitos: z.array(
+    z.strictObject({
+      id: z.enum(MILESTONE_IDS),
+      etiqueta: z.string().min(1),
+      descripcion: textoSchema,
+    }),
+  ),
+  rangos: z
+    .array(
+      z.strictObject({ id, etiqueta: z.string().min(1), puntosPorAnomalia: z.number().min(0) }),
+    )
+    .min(1),
+});
+
+/** Ficha secreta del Archivo: curiosidad real de una época, se desbloquea con puntos. */
+export const fichaSchema = z.strictObject({
+  id,
+  dilema: dilemmaId,
+  titulo: textoSchema,
+  texto: textoSchema,
+  puntos: z.number().int().min(0),
+  verificado: z.boolean(),
+});
+
+/** Emblema del cronista: símbolos (trazado SVG en una caja de 24×24) y colores. */
+export const emblemsSchema = z.strictObject({
+  simbolos: z
+    .array(
+      z.strictObject({
+        id,
+        etiqueta: z.string().min(1),
+        path: z.string().regex(/^[MLHVCSQTAZmlhvcsqtaz0-9.,\s-]+$/, 'trazado SVG simple'),
+        puntos: z.number().int().min(0),
+      }),
+    )
+    .min(1),
+  colores: z
+    .array(
+      z.strictObject({
+        id,
+        etiqueta: z.string().min(1),
+        hex: color,
+        puntos: z.number().int().min(0),
+      }),
+    )
+    .min(1),
+});
+
 /** Reflexión final (§6): pregunta y palabras orientativas. */
 export const reflectionSchema = z.strictObject({
   pregunta: textoSchema,
@@ -239,6 +324,9 @@ export type Ending = z.infer<typeof endingSchema>;
 export type Rubric = z.infer<typeof rubricSchema>;
 export type ClassMode = z.infer<typeof classModeSchema>;
 export type Reflection = z.infer<typeof reflectionSchema>;
+export type Rewards = z.infer<typeof rewardsSchema>;
+export type Ficha = z.infer<typeof fichaSchema>;
+export type Emblems = z.infer<typeof emblemsSchema>;
 export type Fallbacks = z.infer<typeof fallbacksSchema>;
 export type Aesthetic = (typeof AESTHETICS)[number];
 export type AlertTerms = z.infer<typeof alertTermsSchema>;

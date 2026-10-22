@@ -74,7 +74,7 @@
       "viajar": "Viajar a la primera anomalía"
     },
     "escena": {
-      "irAlConsejo": "Escuchar al Consejo"
+      "irAlLaboratorio": "Ir al laboratorio"
     },
     "consejo": {
       "titulo": "El Consejo",
@@ -85,11 +85,22 @@
     },
     "decision": {
       "titulo": "Tu decisión",
-      "ayuda": "Elige una opción. Después tendrás que explicar por qué.",
-      "confirmarTitulo": "Esto alterará la historia",
-      "confirmarTexto": "Has elegido: {opcion}",
-      "confirmar": "Alterar la historia",
-      "cambiar": "Pensarlo otra vez"
+      "ayuda": "Elige una opción. Antes de archivarla podrás pensarlo otra vez."
+    },
+    "laboratorio": {
+      "titulo": "Laboratorio",
+      "texto": "Antes de decidir, comprueba. En el laboratorio se miden los datos; en el ágora se decide con razones.",
+      "dato": "Dato del laboratorio",
+      "irAlAgora": "Ir al ágora"
+    },
+    "giro": {
+      "titulo": "Un giro inesperado",
+      "texto": "Antes de archivar tu decisión puedes mantenerla o cambiarla. Las dos cosas valen lo mismo.",
+      "ficcion": "Ficción del juego",
+      "historia": "Dato histórico",
+      "tuEleccion": "Tu decisión",
+      "provisional": "elegida",
+      "confirmar": "Confirmar mi decisión"
     },
     "justificacion": {
       "titulo": "Justifica tu decisión",
@@ -367,8 +378,10 @@
     "done": "Terminada",
     "travel": "Viaje",
     "scene": "Escena",
+    "lab": "Laboratorio",
     "council": "Consejo",
     "decision": "Decisión",
+    "twist": "Giro",
     "justification": "Justificación",
     "objection": "Objeción",
     "ripples": "Ondas temporales",

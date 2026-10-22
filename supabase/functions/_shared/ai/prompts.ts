@@ -3,6 +3,7 @@
  * en el mensaje de usuario y delimitado como dato: nunca se mezcla con las instrucciones.
  * Al modelo nunca llegan el alias ni el código de clase (no forman parte del contexto).
  */
+import type { ReplyStance } from '../../../../shared/game/milestones.ts';
 import type {
   Concept,
   Counselor,
@@ -13,12 +14,25 @@ import type { Completion } from './provider.ts';
 
 /** Conceptos por respuesta: pocos y explícitos, para que la constelación del Centro no meta ruido. */
 export const MAX_CONCEPTS = 3;
+/** Movimientos filosóficos por respuesta (logros): solo los que el alumno haga de verdad. */
+export const MAX_MOVES = 3;
+
+export type MoveDefinition = { readonly id: string; readonly definicionIA: string };
 
 export type DialogueContext = {
   readonly counselor: Counselor;
   readonly dilemma: Dilemma;
   readonly option: DilemmaOption;
   readonly concepts: readonly Concept[];
+  readonly moves: readonly MoveDefinition[];
+};
+
+/** Réplica guiada: lo que ha elegido hacer el alumno con la objeción (valor cerrado, no texto libre). */
+const STANCE_NOTES: Record<ReplyStance, string> = {
+  concede:
+    'El alumno ha elegido darte la razón en algo: reconoce lo que te concede y responde a lo que mantiene.',
+  matiza: 'El alumno ha elegido matizar tu objeción: valora la distinción que hace.',
+  rebate: 'El alumno ha elegido rebatir tu objeción: responde a su contraargumento.',
 };
 
 /** Neutraliza los signos que podrían cerrar el delimitador del texto del alumno. */
@@ -55,6 +69,7 @@ function assessment(context: DialogueContext, what: string): string {
   return [
     `Además, analiza ${what}:`,
     `- "conceptos": como máximo ${String(MAX_CONCEPTS)} identificadores de esta lista, solo los que el alumno use de forma explícita o casi explícita en su texto (no los que tú le atribuyas): ${context.concepts.map((c) => c.id).join(', ')}. Puede ser una lista vacía.`,
+    `- "movimientos": como máximo ${String(MAX_MOVES)} identificadores de esta lista, solo los que el alumno haga de verdad en su texto (si no hace ninguno, lista vacía): ${context.moves.map((m) => `${m.id} (${m.definicionIA})`).join('; ')}.`,
     '- "alerta": true solo si el texto muestra indicios de malestar personal grave (autolesión, violencia, abuso) o contenido muy inapropiado; en cualquier otro caso, false.',
   ].join('\n');
 }
@@ -66,14 +81,14 @@ export function objectionPrompt(context: DialogueContext, justification: string)
     system: [
       persona(context),
       RULES,
-      'Tarea: plantea UNA objeción a la justificación del alumno, de 60 palabras como máximo, en tu voz, que termine con una pregunta que le obligue a pensar.',
+      'Tarea: plantea UNA objeción a la justificación del alumno, de 45 palabras como máximo, en tu voz, que termine con una pregunta que le obligue a pensar.',
       assessment(context, 'la justificación'),
       '- "calidad": "vacia" si no da ninguna razón (está vacía, no tiene sentido o no trata del dilema), "basica" si da alguna razón sencilla, "solida" si razona y es coherente con su decisión.',
       'Responde solo con un objeto JSON válido, con esta forma exacta:',
-      '{"calidad": "basica", "conceptos": ["verdad"], "objecion": "…", "alerta": false}',
+      '{"calidad": "basica", "conceptos": ["verdad"], "movimientos": ["da-razones"], "objecion": "…", "alerta": false}',
     ].join('\n\n'),
     user: studentText(justification),
-    maxTokens: 450,
+    maxTokens: 380,
   };
 }
 
@@ -81,18 +96,20 @@ export function closingPrompt(
   context: DialogueContext,
   objection: string,
   reply: string,
+  stance: ReplyStance | null = null,
 ): Completion {
   return {
     system: [
       persona(context),
       RULES,
       `Antes le planteaste esta objeción: «${objection}». El alumno te ha replicado.`,
-      'Tarea: reacciona brevemente a su réplica (45 palabras como máximo) en tu voz. Reconoce lo que tenga de valioso y mantén tu postura si procede. No decidas quién tiene razón. Es tu última intervención y el alumno ya no podrá contestarte: no hagas preguntas y termina con una afirmación.',
+      ...(stance === null ? [] : [STANCE_NOTES[stance]]),
+      'Tarea: reacciona brevemente a su réplica (35 palabras como máximo) en tu voz. Reconoce lo que tenga de valioso y mantén tu postura si procede. No decidas quién tiene razón. Es tu última intervención y el alumno ya no podrá contestarte: no hagas preguntas y termina con una afirmación.',
       assessment(context, 'la réplica'),
       'Responde solo con un objeto JSON válido, con esta forma exacta:',
-      '{"reaccion": "…", "conceptos": [], "alerta": false}',
+      '{"reaccion": "…", "conceptos": [], "movimientos": [], "alerta": false}',
     ].join('\n\n'),
     user: studentText(reply),
-    maxTokens: 350,
+    maxTokens: 300,
   };
 }

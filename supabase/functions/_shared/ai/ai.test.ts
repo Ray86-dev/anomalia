@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { concepts, counselors, dilemmas } from '../../../../shared/generated/content.ts';
+import { concepts, counselors, dilemmas, rewards } from '../../../../shared/generated/content.ts';
 import { readAiConfig, type AiConfig } from './config.ts';
 import {
   extractJson,
@@ -74,7 +74,13 @@ const d1 = dilemmas.find((d) => d.id === 'd1');
 const novak = counselors.find((c) => c.id === 'novak');
 if (d1 === undefined || novak === undefined) throw new Error('falta contenido de D1');
 const optionB = d1.opciones[1];
-const context: DialogueContext = { counselor: novak, dilemma: d1, option: optionB, concepts };
+const context: DialogueContext = {
+  counselor: novak,
+  dilemma: d1,
+  option: optionB,
+  concepts,
+  moves: rewards.movimientos,
+};
 
 const config: AiConfig = {
   kind: 'openai',
@@ -104,6 +110,7 @@ const deps = (fetchImpl: FetchLike, overrides: Partial<DialogueDeps> = {}): Dial
 const VALID = {
   calidad: 'solida',
   conceptos: ['verdad', 'Responsabilidad', 'inventado'],
+  movimientos: ['da-razones', 'no-existe'],
   objecion:
     'Dices que la verdad merece cualquier precio, pero ¿quién investigará mañana si hoy lo pierde todo?',
   alerta: false,
@@ -131,7 +138,11 @@ describe('generateObjection', () => {
       context,
       'texto',
     );
-    expect(result).toEqual({ ...VALID, conceptos: ['verdad', 'responsabilidad'] });
+    expect(result).toEqual({
+      ...VALID,
+      conceptos: ['verdad', 'responsabilidad'],
+      movimientos: ['da-razones'],
+    });
   });
 
   it('tolera bloques ```json y texto alrededor', async () => {
@@ -215,7 +226,21 @@ describe('generateClosing', () => {
     ).toEqual({
       ...reply,
       conceptos: [],
+      movimientos: [],
     });
+  });
+
+  it('pasa la postura de la réplica al prompt del cierre', async () => {
+    const fetchImpl = openAiReply(
+      JSON.stringify({
+        reaccion: 'Valoro tu matiz sobre la verdad.',
+        conceptos: [],
+        alerta: false,
+      }),
+    );
+    await generateClosing(deps(fetchImpl), context, 'objeción', 'réplica', 'matiza');
+    const body = bodyOf(vi.mocked(fetchImpl).mock.calls[0]?.[1]);
+    expect(body).toMatch(/ha elegido matizar/);
   });
 });
 

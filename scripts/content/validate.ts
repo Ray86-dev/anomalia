@@ -1,6 +1,7 @@
 import { basename } from 'node:path';
 import { z } from 'zod';
 import { canonical, type BlockedTerms } from '../../shared/game/alias.ts';
+import { MILESTONE_IDS } from '../../shared/game/milestones.ts';
 import {
   alertTermsSchema,
   ambientsSchema,
@@ -9,9 +10,12 @@ import {
   conceptSchema,
   counselorSchema,
   dilemmaSchema,
+  emblemsSchema,
   endingsSchema,
+  fichaSchema,
   fallbacksSchema,
   reflectionSchema,
+  rewardsSchema,
   rubricSchema,
   uiSchema,
   type AlertTerms,
@@ -20,9 +24,12 @@ import {
   type Concept,
   type Counselor,
   type Dilemma,
+  type Emblems,
   type Ending,
+  type Ficha,
   type Fallbacks,
   type Reflection,
+  type Rewards,
   type Rubric,
   type UiTree,
 } from '../../shared/schemas/content.ts';
@@ -40,6 +47,9 @@ export type RawContent = {
   readonly ambients: unknown;
   readonly alerts: unknown;
   readonly reflection: unknown;
+  readonly rewards: unknown;
+  readonly fichas: unknown;
+  readonly emblems: unknown;
 };
 
 export type Content = {
@@ -54,6 +64,9 @@ export type Content = {
   readonly ambients: Ambients;
   readonly alerts: AlertTerms;
   readonly reflection: Reflection;
+  readonly rewards: Rewards;
+  readonly fichas: readonly Ficha[];
+  readonly emblems: Emblems;
   readonly dilemmas: readonly Dilemma[];
 };
 
@@ -162,6 +175,9 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   const ambients = parse(ambientsSchema, raw.ambients, 'ambientes.json');
   const alerts = parse(alertTermsSchema, raw.alerts, 'alertas.json');
   const reflection = parse(reflectionSchema, raw.reflection, 'reflexion.json');
+  const rewards = parse(rewardsSchema, raw.rewards, 'logros.json');
+  const fichas = parse(z.array(fichaSchema), raw.fichas, 'fichas.json');
+  const emblems = parse(emblemsSchema, raw.emblems, 'emblemas.json');
   const dilemmas = raw.dilemmas.map(({ file, data }) => {
     const dilemma = parse(dilemmaSchema, data, file);
     if (dilemma && !basename(file).startsWith(`${dilemma.id}-`)) {
@@ -192,6 +208,12 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     ['finales.json', endings],
     ['modos.json', modes],
     ['dilemas/', dilemmas.filter((d) => d !== null)],
+    ['logros.json › movimientos', rewards?.movimientos ?? null],
+    ['logros.json › hitos', rewards?.hitos ?? null],
+    ['logros.json › rangos', rewards?.rangos ?? null],
+    ['fichas.json', fichas],
+    ['emblemas.json › simbolos', emblems?.simbolos ?? null],
+    ['emblemas.json › colores', emblems?.colores ?? null],
   ];
   for (const [file, list] of uniqueness) {
     for (const id of duplicates(list?.map((item) => item.id) ?? [])) {
@@ -252,6 +274,37 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     if (missing.length > 0) notice(`modos.json › ${mode.id}: aún no existen ${missing.join(', ')}`);
   }
 
+  // ── Logros y recompensas (M6) ──
+  if (rewards) {
+    const conceptIds = new Set(concepts?.map((c) => c.id));
+    for (const move of rewards.movimientos) {
+      if (conceptIds.has(move.id)) {
+        errors.push(`logros.json › movimientos: «${move.id}» coincide con un concepto (la IA los confundiría)`);
+      }
+    }
+    const milestones = new Set(rewards.hitos.map((h) => h.id));
+    for (const id of MILESTONE_IDS) {
+      if (!milestones.has(id)) errors.push(`logros.json › hitos: falta «${id}»`);
+    }
+    rewards.rangos.forEach((rank, i) => {
+      const previous = rewards.rangos[i - 1];
+      if (i === 0 && rank.puntosPorAnomalia !== 0) {
+        errors.push('logros.json › rangos: el primer rango debe empezar en 0 puntos');
+      }
+      if (previous && rank.puntosPorAnomalia <= previous.puntosPorAnomalia) {
+        errors.push(`logros.json › rangos: «${rank.id}» debe pedir más puntos que «${previous.id}»`);
+      }
+    });
+  }
+  for (const ficha of fichas ?? []) {
+    if (!dilemmaIds.has(ficha.dilema)) errors.push(`fichas.json › ${ficha.id}: no existe el dilema «${ficha.dilema}»`);
+    if (!ficha.verificado) notice(`fichas.json › ${ficha.id}: pendiente de verificar por el docente`);
+  }
+  if (emblems) {
+    if (!emblems.simbolos.some((s) => s.puntos === 0)) errors.push('emblemas.json: hace falta un símbolo gratis (0 puntos)');
+    if (!emblems.colores.some((c) => c.puntos === 0)) errors.push('emblemas.json: hace falta un color gratis (0 puntos)');
+  }
+
   for (const term of blocked?.contiene ?? []) {
     if (canonical(term).length < 3) {
       errors.push(`alias-bloqueados.json › contiene: «${term}» es demasiado corto al normalizarlo y bloquearía alias inocentes`);
@@ -265,6 +318,8 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     ['finales.json', raw.endings],
     ['respaldos.json', raw.fallbacks],
     ['reflexion.json', raw.reflection],
+    ['logros.json', raw.rewards],
+    ['fichas.json', raw.fichas],
     ...raw.dilemmas.map(({ file, data }): [string, unknown] => [file, data]),
   ];
   for (const [file, data] of sources) {
@@ -288,8 +343,26 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     fallbacks &&
     ambients &&
     alerts &&
-    reflection
-      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks, ambients, alerts, reflection }
+    reflection &&
+    rewards &&
+    fichas &&
+    emblems
+      ? {
+          ui,
+          counselors,
+          concepts,
+          endings,
+          rubric,
+          modes,
+          blocked,
+          fallbacks,
+          ambients,
+          alerts,
+          reflection,
+          rewards,
+          fichas,
+          emblems,
+        }
       : null;
   const content =
     errors.length === 0 && complete

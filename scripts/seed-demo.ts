@@ -5,8 +5,9 @@
  * DEMO_TEACHER_PASSWORD. Es idempotente: borra y vuelve a crear la clase y sus usuarios.
  */
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { REPLY_STANCES } from '../shared/game/milestones.ts';
 import { applyDeltas, INITIAL_WORLD } from '../shared/game/world.ts';
-import { classModes, concepts, dilemmas, fallbacks } from '../shared/generated/content.ts';
+import { classModes, concepts, dilemmas, fallbacks, rewards } from '../shared/generated/content.ts';
 import type { Database } from '../src/lib/database.types.ts';
 import { adminClient, check, findUserByEmail, requireEnv } from './lib/admin.ts';
 
@@ -115,7 +116,16 @@ async function main() {
   if (schoolClass === undefined) throw new Error('No se creó la clase');
 
   // 2. Treinta alumnos repartidos por las fases de D1
-  const stages = ['prologue', 'travel', 'council', 'decision', 'justification', 'archive'] as const;
+  const stages = [
+    'prologue',
+    'travel',
+    'lab',
+    'council',
+    'decision',
+    'twist',
+    'justification',
+    'archive',
+  ] as const;
   for (const [i, alias] of ALIASES.entries()) {
     const email = `sim-${String(i + 1).padStart(2, '0')}@${SIM_DOMAIN}`;
     const authUid = await ensureUser(admin, email, simPassword);
@@ -135,12 +145,21 @@ async function main() {
 
     const answered = stage === 'justification' || stage === 'archive';
     const option = pick(d1.opciones);
+    // Tras el giro, uno de cada cuatro cambia de opción (la provisional es otra).
+    const firstChoice =
+      random() < 0.25 ? pick(d1.opciones.filter((o) => o !== option)).id : option.id;
     const world = answered ? applyDeltas(INITIAL_WORLD, option.deltas) : INITIAL_WORLD;
     await check(
       `run state ${alias}`,
       admin
         .from('runs')
-        .update({ phase: stage, current_dilemma: 'd1', ...world })
+        .update({
+          phase: stage,
+          current_dilemma: 'd1',
+          pending_choice: stage === 'twist' ? firstChoice : null,
+          labs: stages.indexOf(stage) > stages.indexOf('lab') ? ['d1'] : [],
+          ...world,
+        })
         .eq('player_id', player.id),
     );
     if (!answered) continue;
@@ -153,12 +172,15 @@ async function main() {
         player_id: player.id,
         dilemma_id: 'd1',
         choice: option.id,
+        first_choice: firstChoice,
         justification: `[Simulado] Justificación de ${alias} para la opción ${option.id}.`,
+        moves: [pick(rewards.movimientos).id],
         ...(complete
           ? {
               objector: option.objetor,
               objection: fallback?.objecion.normal ?? null,
               reply: `[Simulado] Réplica de ${alias}.`,
+              reply_stance: pick(REPLY_STANCES),
               closing: fallback?.cierre.normal ?? null,
               concepts: [pick(concepts).id, pick(concepts).id].filter(
                 (c, j, all) => all.indexOf(c) === j,

@@ -1,6 +1,7 @@
 /** Resultado de la RPC `my_state()`: la partida del alumno y los ajustes de su clase. */
 import { z } from 'zod';
-import { answerSnapshotSchema, runSnapshotSchema, worldSchema } from './partida.ts';
+import { REPLY_STANCES } from '../game/milestones.ts';
+import { answerSnapshotSchema, progressSchema, runSnapshotSchema, worldSchema } from './partida.ts';
 
 export const myStateSchema = z
   .object({
@@ -36,10 +37,12 @@ export type MyRecovery = z.infer<typeof myRecoverySchema>;
 export const dossierAnswerSchema = z.object({
   dilemmaId: z.string(),
   choice: z.enum(['A', 'B', 'C']),
+  firstChoice: z.enum(['A', 'B', 'C']).nullable().default(null),
   justification: z.string().nullable(),
   objector: z.string().nullable(),
   objection: z.string().nullable(),
   reply: z.string().nullable(),
+  replyStance: z.enum(REPLY_STANCES).nullable().default(null),
 });
 export type DossierAnswer = z.infer<typeof dossierAnswerSchema>;
 
@@ -57,6 +60,8 @@ export const myDossierSchema = z
     finishedAt: z.string().nullable(),
     world: worldSchema,
     reflection: z.string().nullable(),
+    emblem: z.string().nullable().default(null),
+    progress: progressSchema.prefault({}),
     answers: z.array(dossierAnswerSchema),
   })
   .nullable();

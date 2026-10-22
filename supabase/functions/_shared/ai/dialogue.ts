@@ -16,7 +16,14 @@ import {
   type ObjectionOutput,
 } from '../../../../shared/schemas/ia.ts';
 import type { AiConfig } from './config.ts';
-import { closingPrompt, MAX_CONCEPTS, objectionPrompt, type DialogueContext } from './prompts.ts';
+import type { ReplyStance } from '../../../../shared/game/milestones.ts';
+import {
+  closingPrompt,
+  MAX_CONCEPTS,
+  MAX_MOVES,
+  objectionPrompt,
+  type DialogueContext,
+} from './prompts.ts';
 import { complete, type FetchLike } from './provider.ts';
 
 export type CallLog = {
@@ -76,6 +83,12 @@ function knownConcepts(ids: readonly string[], context: DialogueContext): string
   return [...new Set(known)].slice(0, MAX_CONCEPTS);
 }
 
+function knownMoves(ids: readonly string[], context: DialogueContext): string[] {
+  const allowed = new Set(context.moves.map((m) => m.id));
+  const known = ids.map((id) => id.trim().toLowerCase()).filter((id) => allowed.has(id));
+  return [...new Set(known)].slice(0, MAX_MOVES);
+}
+
 async function run<T>(
   deps: DialogueDeps,
   call: CallLog['call'],
@@ -117,7 +130,13 @@ export function generateObjection(
     const output = parsed.data;
     if (countWords(output.objecion) > MAX_OBJECTION_WORDS) return { reason: 'too_long' };
     if (offensive(output.objecion, deps.blockedTerms)) return { reason: 'unsafe' };
-    return { value: { ...output, conceptos: knownConcepts(output.conceptos, context) } };
+    return {
+      value: {
+        ...output,
+        conceptos: knownConcepts(output.conceptos, context),
+        movimientos: knownMoves(output.movimientos, context),
+      },
+    };
   });
 }
 
@@ -126,11 +145,12 @@ export function generateClosing(
   context: DialogueContext,
   objection: string,
   reply: string,
+  stance: ReplyStance | null = null,
 ): Promise<ClosingOutput | null> {
   return run(deps, 'cierre', async () => {
     const raw = await complete(
       deps.config,
-      closingPrompt(context, objection, scrubPersonalData(reply)),
+      closingPrompt(context, objection, scrubPersonalData(reply), stance),
       deps.fetchImpl,
     );
     const parsed = closingOutputSchema.safeParse(extractJson(raw));
@@ -141,7 +161,12 @@ export function generateClosing(
     const reaccion = withoutTrailingQuestions(output.reaccion);
     if (reaccion === null) return { reason: 'question_only' };
     return {
-      value: { ...output, reaccion, conceptos: knownConcepts(output.conceptos, context) },
+      value: {
+        ...output,
+        reaccion,
+        conceptos: knownConcepts(output.conceptos, context),
+        movimientos: knownMoves(output.movimientos, context),
+      },
     };
   });
 }

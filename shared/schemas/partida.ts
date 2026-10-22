@@ -1,5 +1,6 @@
 /** Contrato entre la app y la Edge Function `partida` (todas las escrituras del alumnado). */
 import { z } from 'zod';
+import { REPLY_STANCES } from '../game/milestones.ts';
 import { DILEMMA_PHASES, GLOBAL_PHASES } from '../game/phases.ts';
 
 const phaseSchema = z.enum([...GLOBAL_PHASES, ...DILEMMA_PHASES]);
@@ -45,10 +46,27 @@ export const justifyRequestSchema = z.strictObject({
   text: z.string().max(MAX_JUSTIFICATION_CHARS),
 });
 
+/** Decisión definitiva tras el giro: la misma opción u otra (M6). */
+export const confirmRequestSchema = z.strictObject({
+  action: z.literal('confirm'),
+  dilemmaId: dilemmaIdSchema,
+  choice: choiceSchema,
+});
+
 export const replyRequestSchema = z.strictObject({
   action: z.literal('reply'),
   dilemmaId: dilemmaIdSchema,
   text: z.string().max(MAX_REPLY_CHARS),
+  /** Réplica guiada: concedo / matizo / rebato. Opcional para versiones antiguas de la app. */
+  stance: z.enum(REPLY_STANCES).optional(),
+});
+
+/** Emblema del cronista: símbolo y color desbloqueados con los puntos (M6). */
+const emblemPartSchema = z.string().regex(/^[a-z0-9-]{1,24}$/);
+export const emblemRequestSchema = z.strictObject({
+  action: z.literal('emblem'),
+  symbol: emblemPartSchema,
+  color: emblemPartSchema,
 });
 
 /** Reflexión final (§6): cierra la partida y genera el código de verificación del PDF. */
@@ -63,8 +81,10 @@ export const partidaRequestSchema = z.discriminatedUnion('action', [
   advanceRequestSchema,
   chooseRequestSchema,
   justifyRequestSchema,
+  confirmRequestSchema,
   replyRequestSchema,
   reflectRequestSchema,
+  emblemRequestSchema,
 ]);
 export type PartidaRequest = z.infer<typeof partidaRequestSchema>;
 export type JoinRequest = z.infer<typeof joinRequestSchema>;
@@ -80,6 +100,26 @@ export const worldSchema = z.object({
   confianza: z.number(),
 });
 
+/**
+ * Progreso de la partida (`private.run_progress`): con él se calculan logros, estrellas y
+ * recompensas (shared/game/achievements.ts). Todo tiene valor por defecto para tolerar
+ * respuestas de versiones anteriores del servidor.
+ */
+export const progressSchema = z.object({
+  classDilemmas: z.array(z.string()).default([]),
+  labs: z.array(z.string()).default([]),
+  choices: z.record(z.string(), choiceSchema).default({}),
+  concepts: z.array(z.string()).default([]),
+  moves: z.array(z.string()).default([]),
+  stances: z.array(z.enum(REPLY_STANCES)).default([]),
+  changed: z.number().int().default(0),
+  kept: z.number().int().default(0),
+  closed: z.number().int().default(0),
+  finished: z.boolean().default(false),
+});
+export type Progress = z.infer<typeof progressSchema>;
+export const EMPTY_PROGRESS: Progress = progressSchema.parse({});
+
 export const runSnapshotSchema = z.object({
   phase: phaseSchema,
   currentDilemma: z.string().nullable(),
@@ -87,6 +127,11 @@ export const runSnapshotSchema = z.object({
   branches: z.array(z.string()),
   /** Final alcanzado: se fija al entrar en el epílogo (`null` antes). */
   ending: z.string().nullable().default(null),
+  /** Elección provisional durante el giro (fase `twist`). */
+  pendingChoice: choiceSchema.nullable().default(null),
+  /** Emblema del cronista, «símbolo:color». */
+  emblem: z.string().nullable().default(null),
+  progress: progressSchema.prefault({}),
 });
 export type RunSnapshot = z.infer<typeof runSnapshotSchema>;
 
@@ -94,10 +139,13 @@ export type RunSnapshot = z.infer<typeof runSnapshotSchema>;
 export const answerSnapshotSchema = z.object({
   dilemmaId: z.string(),
   choice: choiceSchema,
+  /** Elección antes del giro (`null` en partidas anteriores al M6). */
+  firstChoice: choiceSchema.nullable().default(null),
   justification: z.string().nullable(),
   objector: z.string().nullable(),
   objection: z.string().nullable(),
   reply: z.string().nullable(),
+  replyStance: z.enum(REPLY_STANCES).nullable().default(null),
   closing: z.string().nullable(),
   /** De dónde salió la objeción: IA o respaldo preescrito. */
   aiSource: z.enum(['ia', 'respaldo']).nullable().default(null),

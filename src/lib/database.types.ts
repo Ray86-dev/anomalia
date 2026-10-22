@@ -72,59 +72,71 @@ export type Database = {
         Row: {
           ai_calls: number
           ai_source: string | null
+          changed: boolean | null
           choice: string
           chosen_at: string
           closed_at: string | null
           closing: string | null
           concepts: string[]
           dilemma_id: string
+          first_choice: string | null
           id: string
           justification: string | null
           justified_at: string | null
+          moves: string[]
           objection: string | null
           objector: string | null
           player_id: string
           quality: string | null
           replied_at: string | null
           reply: string | null
+          reply_stance: string | null
         }
         Insert: {
           ai_calls?: number
           ai_source?: string | null
+          changed?: boolean | null
           choice: string
           chosen_at?: string
           closed_at?: string | null
           closing?: string | null
           concepts?: string[]
           dilemma_id: string
+          first_choice?: string | null
           id?: string
           justification?: string | null
           justified_at?: string | null
+          moves?: string[]
           objection?: string | null
           objector?: string | null
           player_id: string
           quality?: string | null
           replied_at?: string | null
           reply?: string | null
+          reply_stance?: string | null
         }
         Update: {
           ai_calls?: number
           ai_source?: string | null
+          changed?: boolean | null
           choice?: string
           chosen_at?: string
           closed_at?: string | null
           closing?: string | null
           concepts?: string[]
           dilemma_id?: string
+          first_choice?: string | null
           id?: string
           justification?: string | null
           justified_at?: string | null
+          moves?: string[]
           objection?: string | null
           objector?: string | null
           player_id?: string
           quality?: string | null
           replied_at?: string | null
           reply?: string | null
+          reply_stance?: string | null
         }
         Relationships: [
           {
@@ -297,10 +309,13 @@ export type Database = {
           confianza: number
           current_dilemma: string | null
           desnivel: number | null
+          emblem: string | null
           ending: string | null
           equidad: number
           final_reflection: string | null
           finished_at: string | null
+          labs: string[]
+          pending_choice: string | null
           phase: string
           player_id: string
           poder: number
@@ -313,10 +328,13 @@ export type Database = {
           confianza?: number
           current_dilemma?: string | null
           desnivel?: number | null
+          emblem?: string | null
           ending?: string | null
           equidad?: number
           final_reflection?: string | null
           finished_at?: string | null
+          labs?: string[]
+          pending_choice?: string | null
           phase?: string
           player_id: string
           poder?: number
@@ -329,10 +347,13 @@ export type Database = {
           confianza?: number
           current_dilemma?: string | null
           desnivel?: number | null
+          emblem?: string | null
           ending?: string | null
           equidad?: number
           final_reflection?: string | null
           finished_at?: string | null
+          labs?: string[]
+          pending_choice?: string | null
           phase?: string
           player_id?: string
           poder?: number
@@ -427,17 +448,22 @@ export type Database = {
         Args: { p_dilemma: string; p_player_id: string; p_text: string }
         Returns: undefined
       }
-      svc_choose: {
+      svc_confirm: {
         Args: {
           p_branch: string
           p_choice: string
           p_confianza: number
           p_dilemma: string
           p_equidad: number
+          p_first_choice: string
           p_player_id: string
           p_poder: number
           p_responsabilidad: number
         }
+        Returns: Json
+      }
+      svc_emblem: {
+        Args: { p_emblem: string; p_player_id: string }
         Returns: Json
       }
       svc_join: {
@@ -450,6 +476,7 @@ export type Database = {
           p_alert: boolean
           p_concepts: string[]
           p_dilemma: string
+          p_moves: string[]
           p_objection: string
           p_objector: string
           p_player_id: string
@@ -459,6 +486,10 @@ export type Database = {
         Returns: Json
       }
       svc_load: { Args: { p_auth_uid: string }; Returns: Json }
+      svc_pick: {
+        Args: { p_choice: string; p_dilemma: string; p_player_id: string }
+        Returns: Json
+      }
       svc_recover: {
         Args: {
           p_alias: string
@@ -483,7 +514,9 @@ export type Database = {
           p_closing: string
           p_concepts: string[]
           p_dilemma: string
+          p_moves: string[]
           p_player_id: string
+          p_stance: string
           p_text: string
         }
         Returns: Json

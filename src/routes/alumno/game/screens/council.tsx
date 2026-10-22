@@ -1,8 +1,6 @@
 /** Consejo y decisión (fases 3–4 del bucle §6). */
 import { ui } from '@shared/generated/content.ts';
 import type { Dilemma, DilemmaOption } from '@shared/schemas/content.ts';
-import { useRef, useState } from 'react';
-import { vibrate } from '../../../../engine/motion.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
@@ -64,21 +62,12 @@ export function Council({ dilemma }: { readonly dilemma: Dilemma }) {
   );
 }
 
+/** Elección provisional: el giro (fase siguiente) hace de «pensarlo otra vez» (M6). */
 export function Decision({ dilemma }: { readonly dilemma: Dilemma }) {
   const { act, pending } = useGameContext();
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [selected, setSelected] = useState<DilemmaOption | null>(null);
 
   function choose(option: DilemmaOption) {
-    setSelected(option);
-    dialog.current?.showModal();
-  }
-
-  function confirm() {
-    if (selected === null) return;
-    vibrate();
-    dialog.current?.close();
-    void act({ action: 'choose', dilemmaId: dilemma.id, choice: selected.id });
+    void act({ action: 'choose', dilemmaId: dilemma.id, choice: option.id });
   }
 
   return (
@@ -109,29 +98,6 @@ export function Decision({ dilemma }: { readonly dilemma: Dilemma }) {
           </li>
         ))}
       </ul>
-
-      <dialog ref={dialog} className="confirm-dialog" aria-labelledby="confirmar-titulo">
-        <h2 id="confirmar-titulo">{t.decision.confirmarTitulo}</h2>
-        {selected !== null && (
-          <p>
-            {fmt(t.decision.confirmarTexto, { opcion: `${selected.id}. ${texto(selected.texto)}` })}
-          </p>
-        )}
-        <div className="stack">
-          <button className="btn" type="button" onClick={confirm}>
-            {t.decision.confirmar}
-          </button>
-          <button
-            className="btn btn-secondary"
-            type="button"
-            onClick={() => {
-              dialog.current?.close();
-            }}
-          >
-            {t.decision.cambiar}
-          </button>
-        </div>
-      </dialog>
     </>
   );
 }

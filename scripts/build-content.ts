@@ -50,6 +50,9 @@ const raw: RawContent = {
   ambients: readJson('ambientes.json'),
   alerts: readJson('alertas.json'),
   reflection: readJson('reflexion.json'),
+  rewards: readJson('logros.json'),
+  fichas: readJson('fichas.json'),
+  emblems: readJson('emblemas.json'),
 };
 
 const assetExists = (src: string) => existsSync(join(root, 'public', 'assets', src));
@@ -80,9 +83,12 @@ import type {
   Concept,
   Counselor,
   Dilemma,
+  Emblems,
   Ending,
   Fallbacks,
+  Ficha,
   Reflection,
+  Rewards,
   Rubric,
   UiTree,
 } from '../schemas/content.ts';
@@ -98,6 +104,12 @@ export const endings: readonly Ending[] = ${json(c.endings)};
 export const rubric: Rubric = ${json(c.rubric)};
 
 export const reflection: Reflection = ${json(c.reflection)};
+
+export const rewards: Rewards = ${json(c.rewards)};
+
+export const fichas: readonly Ficha[] = ${json(c.fichas)};
+
+export const emblems: Emblems = ${json(c.emblems)};
 
 export const classModes: readonly ClassMode[] = ${json(c.modes)};
 

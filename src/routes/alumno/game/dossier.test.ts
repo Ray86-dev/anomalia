@@ -1,5 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
+import { EMPTY_PROGRESS } from '@shared/schemas/partida.ts';
 import type { MyDossier } from '@shared/schemas/state.ts';
 import { buildDossierPdf } from '../../../engine/pdf/dossier.ts';
 import boldFont from '../../../../public/assets/fonts/AtkinsonHyperlegible-Bold.ttf?inline';
@@ -13,24 +14,30 @@ const dossier: MyDossier = {
   ending: null,
   finishedAt: '2026-10-22T10:00:00Z',
   world: { poder: 80, responsabilidad: 50, equidad: 30, confianza: 50 },
+  emblem: null,
+  progress: EMPTY_PROGRESS,
   reflection: 'La ciencia explica.\n\nPero no decide por nosotros: eso nos toca a nosotros. 🙂',
   answers: [
     {
       dilemmaId: 'd1',
       choice: 'A',
+      firstChoice: 'A',
       justification: 'Prefiero que siga vivo para que pueda seguir investigando.',
       objector: 'kaltz',
       objection: '¿Y si callar a tiempo enseña a callar siempre?',
       reply: null,
+      replyStance: null,
     },
     // Respuesta de un dilema que ya no existe en el contenido: no rompe el expediente.
     {
       dilemmaId: 'd9',
       choice: 'B',
+      firstChoice: null,
       justification: null,
       objector: null,
       objection: null,
       reply: null,
+      replyStance: null,
     },
   ],
 };

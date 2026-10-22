@@ -7,21 +7,33 @@
  *   npm run simular -- --api              pasa por la Edge Function `partida` (gasta IA)
  *
  * Por defecto escribe con las mismas funciones SQL que usa `partida` (svc_*), con la clave
- * secreta y sin coste de IA: los textos son de relleno y la objeción, el respaldo
- * preescrito. Los alumnos son usuarios `sim-vivo-NN@anomalia.invalid` (contraseña
+ * secreta y sin coste de IA: los textos son de relleno, la objeción es el respaldo
+ * preescrito y los movimientos se sortean. Tras el giro, uno de cada cuatro cambia de opción.
+ * Al terminar resume los puntos y rangos de la clase para calibrar `content/logros.json`. Los alumnos son usuarios `sim-vivo-NN@anomalia.invalid` (contraseña
  * SIM_PASSWORD). Si llegan a «Esperando el capítulo II», desbloquéalo en la consola y
  * seguirán solos.
  */
 import { parseArgs } from 'node:util';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { summarize, type Catalog } from '../shared/game/achievements.ts';
 import { aliasProblem } from '../shared/game/alias.ts';
 import { nextPosition, type Position } from '../shared/game/flow.ts';
+import { REPLY_STANCES, type ReplyStance } from '../shared/game/milestones.ts';
 import type { Phase } from '../shared/game/phases.ts';
 import { applyDeltas } from '../shared/game/world.ts';
-import { blockedTerms, concepts, dilemmas, fallbacks } from '../shared/generated/content.ts';
+import {
+  blockedTerms,
+  concepts,
+  dilemmas,
+  emblems,
+  fallbacks,
+  fichas,
+  rewards,
+} from '../shared/generated/content.ts';
 import {
   gameResponseSchema,
+  type Progress,
   svcJoinResultSchema,
   svcStateSchema,
   svcWriteResultSchema,
@@ -84,6 +96,9 @@ const REPLIES = [
 
 /** Tiempo medio de cada paso; escribir lleva más que pulsar «Continuar». */
 const WRITING_FACTOR = 3;
+/** Parte de la clase que cambia de opción tras el giro. */
+const CHANGE_RATE = 0.25;
+const CATALOG: Catalog = { rewards, concepts, fichas, emblems };
 const STATUS_EVERY_MS = 5_000;
 /** El alumno ya no está en la clase (p. ej., se lanzó `--borrar` durante la simulación). */
 const GONE = 'ya no está en la clase';
@@ -112,6 +127,12 @@ function someConcepts(): string[] {
   return [...new Set(ids.filter((id) => id !== undefined))];
 }
 
+/** Movimientos que «detectaría» la IA: entre ninguno y tres, como en `prompts.ts`. */
+function someMoves(): string[] {
+  const count = Math.floor(Math.random() * 4);
+  return [...new Set(Array.from({ length: count }, () => pick(rewards.movimientos).id))];
+}
+
 /** Preferencias de la clase por dilema: una opción favorita para que haya mayoría visible. */
 const preferences = new Map<string, readonly number[]>();
 function chooseFor(dilemmaId: string): Choice {
@@ -130,16 +151,23 @@ function chooseFor(dilemmaId: string): Choice {
   return 'C';
 }
 
+const otherThan = (choice: Choice): Choice =>
+  pick((['A', 'B', 'C'] as const).filter((id) => id !== choice));
+
 // ── Dos formas de jugar: directa (svc_* con la clave secreta) o por la Edge Function ──
+
+/** Dónde está el alumno, su elección provisional (en el giro) y su progreso. */
+type Here = Position & { readonly pendingChoice: Choice | null; readonly progress: Progress };
 
 type Driver = {
   join(): Promise<void>;
-  position(): Promise<Position>;
+  position(): Promise<Here>;
   /** `false` si el capítulo II sigue bloqueado. */
   advance(from: Position): Promise<boolean>;
   choose(dilemmaId: string, choice: Choice): Promise<void>;
+  confirm(dilemmaId: string, choice: Choice): Promise<void>;
   justify(dilemmaId: string, text: string): Promise<void>;
-  reply(dilemmaId: string, text: string): Promise<void>;
+  reply(dilemmaId: string, text: string, stance: ReplyStance): Promise<void>;
 };
 
 function directDriver(admin: Db, uid: string, code: string, alias: string): Driver {
@@ -182,7 +210,13 @@ function directDriver(admin: Db, uid: string, code: string, alias: string): Driv
       const loaded = await rpc('svc_load', { p_auth_uid: uid });
       if (loaded === null) throw new Error(GONE);
       state = svcStateSchema.parse(loaded);
-      return { phase: state.run.phase, dilemma: state.run.currentDilemma };
+      const { run } = state;
+      return {
+        phase: run.phase,
+        dilemma: run.currentDilemma,
+        pendingChoice: run.pendingChoice,
+        progress: run.progress,
+      };
     },
     async advance(from) {
       const s = current();
@@ -204,15 +238,24 @@ function directDriver(admin: Db, uid: string, code: string, alias: string): Driv
       return true;
     },
     async choose(dilemmaId, choice) {
+      await write('svc_pick', {
+        p_player_id: current().playerId,
+        p_dilemma: dilemmaId,
+        p_choice: choice,
+      });
+    },
+    async confirm(dilemmaId, choice) {
       const s = current();
       const option = dilemmas
         .find((d) => d.id === dilemmaId)
         ?.opciones.find((o) => o.id === choice);
       if (option === undefined) throw new Error(`Opción ${choice} inexistente en ${dilemmaId}`);
+      // Como en `partida`: los deltas se aplican al mundo previo a la decisión.
       const world = applyDeltas(s.run.world, option.deltas);
-      await write('svc_choose', {
+      await write('svc_confirm', {
         p_player_id: s.playerId,
         p_dilemma: dilemmaId,
+        p_first_choice: s.run.pendingChoice,
         p_choice: choice,
         p_poder: world.poder,
         p_responsabilidad: world.responsabilidad,
@@ -233,18 +276,21 @@ function directDriver(admin: Db, uid: string, code: string, alias: string): Driv
         p_ai_source: 'respaldo',
         p_quality: Math.random() < 0.7 ? 'basica' : 'solida',
         p_concepts: someConcepts(),
+        p_moves: someMoves(),
         p_alert: false,
       });
     },
-    async reply(dilemmaId, text) {
+    async reply(dilemmaId, text, stance) {
       const option = optionOf(dilemmaId);
       const fallback = fallbacks[dilemmaId]?.[option.id]?.[option.objetor];
       await write('svc_reply', {
         p_player_id: current().playerId,
         p_dilemma: dilemmaId,
         p_text: text,
+        p_stance: stance,
         p_closing: fallback?.cierre.normal ?? '',
         p_concepts: someConcepts(),
+        p_moves: someMoves(),
         p_alert: false,
       });
     },
@@ -272,7 +318,13 @@ function apiDriver(client: Db, code: string, alias: string): Driver {
       if (error !== null) throw new Error(`my_state: ${error.message}`);
       const state = myStateSchema.parse(data);
       if (state === null) throw new Error(GONE);
-      return { phase: state.run.phase, dilemma: state.run.currentDilemma };
+      const { run } = state;
+      return {
+        phase: run.phase,
+        dilemma: run.currentDilemma,
+        pendingChoice: run.pendingChoice,
+        progress: run.progress,
+      };
     },
     async advance(from) {
       const result = await game({
@@ -284,6 +336,9 @@ function apiDriver(client: Db, code: string, alias: string): Driver {
     async choose(dilemmaId, choice) {
       await game({ action: 'choose', dilemmaId, choice });
     },
+    async confirm(dilemmaId, choice) {
+      await game({ action: 'confirm', dilemmaId, choice });
+    },
     async justify(dilemmaId, text) {
       const result = await game({ action: 'justify', dilemmaId, text });
       // «Necesita más»: se reenvía una vez con otro texto, como haría un alumno.
@@ -291,15 +346,15 @@ function apiDriver(client: Db, code: string, alias: string): Driver {
         await game({ action: 'justify', dilemmaId, text: `${text} ${pick(JUSTIFICATIONS)}` });
       }
     },
-    async reply(dilemmaId, text) {
-      await game({ action: 'reply', dilemmaId, text });
+    async reply(dilemmaId, text, stance) {
+      await game({ action: 'reply', dilemmaId, text, stance });
     },
   };
 }
 
 // ── Un alumno simulado ──
 
-type Student = { readonly alias: string; position: Position | null; failed: string | null };
+type Student = { readonly alias: string; position: Here | null; failed: string | null };
 
 async function play(student: Student, driver: Driver, pace: number, startDelay: number) {
   const wait = (factor = 1) => pause(pace * factor * (0.4 + Math.random() * 1.2));
@@ -314,12 +369,16 @@ async function play(student: Student, driver: Driver, pace: number, startDelay: 
     if (here.phase === 'decision' && dilemma !== null) {
       await wait(WRITING_FACTOR / 2);
       await driver.choose(dilemma, chooseFor(dilemma));
+    } else if (here.phase === 'twist' && dilemma !== null) {
+      await wait();
+      const first = here.pendingChoice ?? chooseFor(dilemma);
+      await driver.confirm(dilemma, Math.random() < CHANGE_RATE ? otherThan(first) : first);
     } else if (here.phase === 'justification' && dilemma !== null) {
       await wait(WRITING_FACTOR);
       await driver.justify(dilemma, `[Simulación] ${pick(JUSTIFICATIONS)}`);
     } else if (here.phase === 'objection' && dilemma !== null) {
       await wait(WRITING_FACTOR);
-      await driver.reply(dilemma, `[Simulación] ${pick(REPLIES)}`);
+      await driver.reply(dilemma, `[Simulación] ${pick(REPLIES)}`, pick(REPLY_STANCES));
     } else {
       await wait();
       // Capítulo II bloqueado: se vuelve a intentar hasta que el docente lo abra.
@@ -388,6 +447,22 @@ function printStatus(students: readonly Student[]) {
   const time = new Date().toLocaleTimeString('es-ES');
   const parts = [...counts.entries()].sort().map(([k, n]) => `${k} ${String(n)}`);
   console.log(`${time}  ${parts.join(' · ')}`);
+}
+
+/** Puntos y rangos de la clase simulada, para calibrar los umbrales de `content/logros.json`. */
+function printPoints(students: readonly Student[]) {
+  const summaries = students.flatMap((s) =>
+    s.position === null ? [] : [summarize(s.position.progress, CATALOG)],
+  );
+  if (summaries.length === 0) return;
+  const points = summaries.map((s) => s.points).sort((a, b) => a - b);
+  const ranks = new Map<string, number>();
+  for (const s of summaries) ranks.set(s.rank.label, (ranks.get(s.rank.label) ?? 0) + 1);
+  const at = (q: number) => String(points[Math.floor(q * (points.length - 1))] ?? 0);
+  console.log(
+    `  Puntos: mín ${at(0)} · mediana ${at(0.5)} · máx ${at(1)} · ` +
+      [...ranks.entries()].map(([label, n]) => `${label} ${String(n)}`).join(' · '),
+  );
 }
 
 async function main() {
@@ -502,6 +577,7 @@ async function main() {
     }
   }
   printStatus(students);
+  printPoints(students);
   const gone = students.filter((s) => s.failed === GONE).length;
   if (gone > 0) {
     console.log(

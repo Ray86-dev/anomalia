@@ -11,6 +11,8 @@ export type Quality = (typeof QUALITIES)[number];
 export const objectionOutputSchema = z.object({
   calidad: z.enum(QUALITIES),
   conceptos: z.array(z.string()).max(10),
+  /** Movimientos filosóficos de la lista cerrada (logros, M6). */
+  movimientos: z.array(z.string()).max(10).default([]),
   objecion: z.string().trim().min(10).max(700),
   alerta: z.boolean(),
 });
@@ -20,12 +22,13 @@ export type ObjectionOutput = z.infer<typeof objectionOutputSchema>;
 export const closingOutputSchema = z.object({
   reaccion: z.string().trim().min(5).max(600),
   conceptos: z.array(z.string()).max(10),
+  movimientos: z.array(z.string()).max(10).default([]),
   alerta: z.boolean(),
 });
 export type ClosingOutput = z.infer<typeof closingOutputSchema>;
 
 /** Máximo de llamadas por alumno y dilema: objeción + cierre + un reintento (§7.2). */
 export const AI_MAX_CALLS_PER_DILEMMA = 3;
-/** Límites de longitud de lo que dice un consejero (el prompt pide 60 y 45; se tolera algo más). */
-export const MAX_OBJECTION_WORDS = 90;
-export const MAX_CLOSING_WORDS = 70;
+/** Límites de longitud de lo que dice un consejero (el prompt pide 45 y 35; se tolera algo más). */
+export const MAX_OBJECTION_WORDS = 68;
+export const MAX_CLOSING_WORDS = 55;

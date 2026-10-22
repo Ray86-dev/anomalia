@@ -4,6 +4,7 @@
  */
 import { REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { INTRO_PATH } from '../../shared/game/flow.ts';
 import {
   admin,
   anonymousStudent,
@@ -35,19 +36,17 @@ async function snapshot(force = false, as: Db = teacher) {
 }
 
 async function toDecision(student: Db) {
-  const path: [string, string | null][] = [
-    ['prologue', null],
-    ['travel', 'd1'],
-    ['scene', 'd1'],
-    ['council', 'd1'],
-  ];
-  for (const [phase, dilemmaId] of path) {
-    await partida(student, { action: 'advance', from: { phase, dilemmaId } });
+  await partida(student, { action: 'advance', from: { phase: 'prologue', dilemmaId: null } });
+  for (const phase of INTRO_PATH) {
+    await partida(student, { action: 'advance', from: { phase, dilemmaId: 'd1' } });
   }
 }
 
-const choose = (student: Db, choice: 'A' | 'B' | 'C') =>
-  partida(student, { action: 'choose', dilemmaId: 'd1', choice });
+/** Decisión completa: elección provisional y confirmación tras el giro (M6). */
+async function choose(student: Db, choice: 'A' | 'B' | 'C') {
+  await partida(student, { action: 'choose', dilemmaId: 'd1', choice });
+  return partida(student, { action: 'confirm', dilemmaId: 'd1', choice });
+}
 
 describe.skipIf(!configured)('Centro de Control y consola (integración)', () => {
   beforeAll(async () => {

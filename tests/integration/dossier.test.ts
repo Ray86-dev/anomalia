@@ -39,19 +39,24 @@ async function studentAt(classCode: string, alias: string, phase: 'archive' | 'r
     .single();
   if (error !== null) throw error;
   const now = new Date().toISOString();
-  const answer = await admin().from('answers').insert({
-    player_id: player.id,
-    dilemma_id: 'd1',
-    choice: 'A',
-    justification: 'Prefiero que siga vivo para que pueda seguir investigando.',
-    objector: 'kaltz',
-    objection: 'Objeción de prueba.',
-    reply: 'Réplica de prueba.',
-    closing: 'Cierre de prueba.',
-    justified_at: now,
-    replied_at: now,
-    closed_at: now,
-  });
+  const answer = await admin()
+    .from('answers')
+    .insert({
+      player_id: player.id,
+      dilemma_id: 'd1',
+      choice: 'A',
+      first_choice: 'B',
+      reply_stance: 'matiza',
+      moves: ['da-razones', 'mira-consecuencias'],
+      justification: 'Prefiero que siga vivo para que pueda seguir investigando.',
+      objector: 'kaltz',
+      objection: 'Objeción de prueba.',
+      reply: 'Réplica de prueba.',
+      closing: 'Cierre de prueba.',
+      justified_at: now,
+      replied_at: now,
+      closed_at: now,
+    });
   if (answer.error !== null) throw answer.error;
   // Desnivel 30 y equidad 30: «Tecnocracia genómica».
   const update = await admin()
@@ -100,8 +105,36 @@ describe.skipIf(!configured)('expediente · reflexión final y verificación (in
       verifyCode: null,
       ending: 'tecnocracia',
       reflection: null,
-      answers: [{ dilemmaId: 'd1', choice: 'A', objector: 'kaltz' }],
+      emblem: null,
+      answers: [
+        {
+          dilemmaId: 'd1',
+          choice: 'A',
+          firstChoice: 'B',
+          replyStance: 'matiza',
+          objector: 'kaltz',
+        },
+      ],
+      progress: {
+        classDilemmas: ['d1'],
+        choices: { d1: 'A' },
+        moves: ['da-razones', 'mira-consecuencias'],
+        stances: ['matiza'],
+        changed: 1,
+        kept: 0,
+        closed: 1,
+        finished: false,
+      },
     });
+  });
+
+  it('el emblema solo admite piezas desbloqueadas y no avisa al Centro', async () => {
+    expect(
+      await partida(student, { action: 'emblem', symbol: 'corona', color: 'turquesa' }),
+    ).toMatchObject({ ok: false, error: 'invalid' });
+    expect(
+      await partida(student, { action: 'emblem', symbol: 'reloj', color: 'ambar' }),
+    ).toMatchObject({ ok: true, run: { emblem: 'reloj:ambar', phase: 'epilogue' } });
   });
 
   it('la reflexión final cierra la partida con un código de verificación', async () => {
@@ -113,6 +146,8 @@ describe.skipIf(!configured)('expediente · reflexión final y verificación (in
     const dossier = myDossierSchema.parse((await student.rpc('my_dossier')).data);
     expect(dossier?.reflection).toBe(REFLECTION);
     expect(dossier?.finishedAt).not.toBeNull();
+    expect(dossier?.emblem).toBe('reloj:ambar');
+    expect(dossier?.progress.finished).toBe(true);
     expect(dossier?.verifyCode).toMatch(/^ANM-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/);
     code = dossier?.verifyCode ?? '';
   });

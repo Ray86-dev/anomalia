@@ -19,14 +19,18 @@ export type FlowContext = {
 
 /**
  * Fases que se superan con «Continuar». El resto exige una acción propia:
- * decision → elegir, justification → justificar, objection → replicar.
+ * decision → elegir, twist → confirmar, justification → justificar, objection → replicar.
  */
 const ADVANCE_WITHIN_DILEMMA: Partial<Record<Phase, Phase>> = {
   travel: 'scene',
-  scene: 'council',
+  scene: 'lab',
+  lab: 'council',
   council: 'decision',
   ripples: 'archive',
 };
+
+/** Fases de un dilema que se recorren con «Continuar» antes de la decisión (tests y scripts). */
+export const INTRO_PATH = ['travel', 'scene', 'lab', 'council'] as const;
 
 function available(ids: readonly string[], ctx: FlowContext): string[] {
   return ids.filter((id) => ctx.isAvailable(id));

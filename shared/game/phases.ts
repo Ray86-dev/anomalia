@@ -16,8 +16,10 @@ export const GLOBAL_PHASES = [
 export const DILEMMA_PHASES = [
   'travel', // 1. Viaje
   'scene', // 2. Escena
+  'lab', // 2b. Laboratorio: comprobar antes de decidir (M6)
   'council', // 3. Consejo
   'decision', // 4. Decisión
+  'twist', // 4b. Giro: llega información nueva; se mantiene o se cambia la decisión (M6)
   'justification', // 5. Justificación
   'objection', // 6. Objeción socrática
   'ripples', // 7. Ondas temporales

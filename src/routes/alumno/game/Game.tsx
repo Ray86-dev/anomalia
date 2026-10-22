@@ -21,6 +21,8 @@ import { GameContext, useGameState } from './GameContext.ts';
 import { findDilemma } from './helpers.ts';
 import { AudioToggle, ReadingToggle } from './parts.tsx';
 import { Council, Decision } from './screens/council.tsx';
+import { Lab } from './screens/lab.tsx';
+import { Twist } from './screens/twist.tsx';
 import { Prologue, Scene, Travel } from './screens/intro.tsx';
 import { Archive, Ripples } from './screens/outcome.tsx';
 import { Dossier, Epilogue, Reflection } from './screens/finale.tsx';
@@ -34,8 +36,10 @@ const t = ui.juego;
 const IN_THE_PAST: ReadonlySet<Phase> = new Set([
   'travel',
   'scene',
+  'lab',
   'council',
   'decision',
+  'twist',
   'justification',
   'objection',
 ]);
@@ -93,8 +97,10 @@ export function Game({ initial, onLost }: GameProps) {
     const screens: Partial<Record<Phase, ReactNode>> = {
       travel: <Travel dilemma={dilemma} />,
       scene: <Scene dilemma={dilemma} />,
+      lab: <Lab dilemma={dilemma} />,
       council: <Council dilemma={dilemma} />,
       decision: <Decision dilemma={dilemma} />,
+      twist: <Twist dilemma={dilemma} />,
       justification: <Justification dilemma={dilemma} />,
       objection: <Objection dilemma={dilemma} />,
       ripples: <Ripples dilemma={dilemma} />,

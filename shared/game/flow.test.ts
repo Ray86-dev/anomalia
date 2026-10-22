@@ -22,14 +22,15 @@ describe('nextPosition', () => {
   it('recorre las fases «de continuar» de un dilema', () => {
     const ctx = twoSessions();
     expect(nextPosition(at('travel', 'd1'), ctx)).toEqual(at('scene', 'd1'));
-    expect(nextPosition(at('scene', 'd1'), ctx)).toEqual(at('council', 'd1'));
+    expect(nextPosition(at('scene', 'd1'), ctx)).toEqual(at('lab', 'd1'));
+    expect(nextPosition(at('lab', 'd1'), ctx)).toEqual(at('council', 'd1'));
     expect(nextPosition(at('council', 'd1'), ctx)).toEqual(at('decision', 'd1'));
     expect(nextPosition(at('ripples', 'd1'), ctx)).toEqual(at('archive', 'd1'));
   });
 
-  it('no deja saltarse la decisión, la justificación ni la réplica', () => {
+  it('no deja saltarse la decisión, el giro, la justificación ni la réplica', () => {
     const ctx = twoSessions();
-    for (const phase of ['decision', 'justification', 'objection'] as const) {
+    for (const phase of ['decision', 'twist', 'justification', 'objection'] as const) {
       expect(nextPosition(at(phase, 'd1'), ctx)).toBeNull();
     }
   });

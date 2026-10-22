@@ -1,0 +1,112 @@
+[
+  {
+    "id": "d1-lunas",
+    "dilema": "d1",
+    "titulo": { "normal": "Las lunas de Galileo", "facil": "Las lunas de Galileo" },
+    "texto": {
+      "normal": "En 1610, Galileo vio con su telescopio cuatro lunas que giraban alrededor de Júpiter. Era la prueba de que no todo gira alrededor de la Tierra. Hoy se llaman lunas galileanas: Ío, Europa, Ganímedes y Calisto. TODO(verificar)",
+      "facil": "En 1610, Galileo vio cuatro lunas que giraban alrededor de Júpiter. Así supo que no todo gira alrededor de la Tierra. Hoy se llaman Ío, Europa, Ganímedes y Calisto. TODO(verificar)"
+    },
+    "puntos": 15,
+    "verificado": false
+  },
+  {
+    "id": "d1-1992",
+    "dilema": "d1",
+    "titulo": { "normal": "Trescientos cincuenta años después", "facil": "Muchos años después" },
+    "texto": {
+      "normal": "En 1992, el papa Juan Pablo II reconoció en público los errores que se cometieron en el juicio a Galileo. TODO(verificar)",
+      "facil": "En 1992, el papa Juan Pablo II reconoció que en el juicio a Galileo se cometieron errores. TODO(verificar)"
+    },
+    "puntos": 40,
+    "verificado": false
+  },
+  {
+    "id": "d2-bosch",
+    "dilema": "d2",
+    "titulo": { "normal": "De la mesa a la fábrica", "facil": "Del laboratorio a la fábrica" },
+    "texto": {
+      "normal": "El ingeniero Carl Bosch, de la empresa BASF, convirtió el método de Haber en una fábrica enorme. Por su trabajo recibió el Premio Nobel de Química en 1931. Por eso hoy se habla del método Haber-Bosch. TODO(verificar)",
+      "facil": "El ingeniero Carl Bosch llevó el método de Haber a una fábrica enorme. Ganó el Premio Nobel de Química en 1931. Por eso se llama método Haber-Bosch. TODO(verificar)"
+    },
+    "puntos": 15,
+    "verificado": false
+  },
+  {
+    "id": "d2-pan",
+    "dilema": "d2",
+    "titulo": { "normal": "Pan del aire", "facil": "Pan del aire" },
+    "texto": {
+      "normal": "Al método Haber-Bosch se le llamó «pan del aire», porque convierte el nitrógeno del aire en abono para los cultivos. TODO(verificar)",
+      "facil": "Al método Haber-Bosch lo llamaron «pan del aire». Convierte el nitrógeno del aire en abono para los cultivos. TODO(verificar)"
+    },
+    "puntos": 40,
+    "verificado": false
+  },
+  {
+    "id": "d3-acuerdo",
+    "dilema": "d3",
+    "titulo": { "normal": "Un acuerdo con la familia", "facil": "Un acuerdo con la familia" },
+    "texto": {
+      "normal": "En 2013, los Institutos Nacionales de Salud de Estados Unidos llegaron a un acuerdo con la familia Lacks. Desde entonces, miembros de la familia participan en las decisiones sobre quién puede usar los datos del genoma de las células HeLa. TODO(verificar)",
+      "facil": "En 2013, la familia de Henrietta Lacks llegó a un acuerdo con el gobierno de Estados Unidos. Desde entonces, la familia ayuda a decidir quién puede usar los datos de las células HeLa. TODO(verificar)"
+    },
+    "puntos": 15,
+    "verificado": false
+  },
+  {
+    "id": "d3-ciencia",
+    "dilema": "d3",
+    "titulo": { "normal": "Unas células por todo el mundo", "facil": "Células por todo el mundo" },
+    "texto": {
+      "normal": "Las células HeLa se enviaron a laboratorios de todo el mundo y se han usado en decenas de miles de investigaciones, por ejemplo sobre el cáncer, los virus o los efectos de la radiación. TODO(verificar)",
+      "facil": "Las células HeLa llegaron a laboratorios de todo el mundo. Se han usado en muchísimas investigaciones, por ejemplo sobre el cáncer o los virus. TODO(verificar)"
+    },
+    "puntos": 40,
+    "verificado": false
+  },
+  {
+    "id": "d4-bacterias",
+    "dilema": "d4",
+    "titulo": { "normal": "Un truco de las bacterias", "facil": "Un truco de las bacterias" },
+    "texto": {
+      "normal": "CRISPR no lo inventó ninguna persona: es un sistema que usan las bacterias para defenderse de los virus. Los científicos aprendieron a usarlo como unas tijeras que cortan el ADN en un lugar exacto. TODO(verificar)",
+      "facil": "CRISPR lo usan las bacterias para defenderse de los virus. Los científicos aprendieron a usarlo como unas tijeras para cortar el ADN. TODO(verificar)"
+    },
+    "puntos": 15,
+    "verificado": false
+  },
+  {
+    "id": "d4-nobel",
+    "dilema": "d4",
+    "titulo": { "normal": "Un Nobel para dos científicas", "facil": "Un Nobel para dos científicas" },
+    "texto": {
+      "normal": "En 2020, Emmanuelle Charpentier y Jennifer Doudna recibieron el Premio Nobel de Química por desarrollar CRISPR como método para editar genes. TODO(verificar)",
+      "facil": "En 2020, Emmanuelle Charpentier y Jennifer Doudna ganaron el Premio Nobel de Química por crear el método CRISPR para cambiar genes. TODO(verificar)"
+    },
+    "puntos": 40,
+    "verificado": false
+  },
+  {
+    "id": "d5-gattaca",
+    "dilema": "d5",
+    "titulo": { "normal": "El nombre de Gattaca", "facil": "El nombre de Gattaca" },
+    "texto": {
+      "normal": "El título de la película Gattaca (1997) está hecho con las letras G, A, T y C: las iniciales de las cuatro bases del ADN (guanina, adenina, timina y citosina). TODO(verificar)",
+      "facil": "La palabra Gattaca usa las letras G, A, T y C. Son las iniciales de las cuatro piezas del ADN. TODO(verificar)"
+    },
+    "puntos": 15,
+    "verificado": false
+  },
+  {
+    "id": "d5-genoma",
+    "dilema": "d5",
+    "titulo": { "normal": "Leer todo el ADN", "facil": "Leer todo el ADN" },
+    "texto": {
+      "normal": "En 2003 terminó el Proyecto Genoma Humano, que leyó casi todo el ADN de nuestra especie después de trece años de trabajo de científicos de varios países. TODO(verificar)",
+      "facil": "En 2003, científicos de varios países terminaron de leer casi todo el ADN humano. Tardaron trece años. TODO(verificar)"
+    },
+    "puntos": 40,
+    "verificado": false
+  }
+]

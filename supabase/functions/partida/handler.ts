@@ -5,9 +5,11 @@
  * escrito por el alumnado.
  */
 import { z } from 'zod';
+import { summarize, type Catalog } from '../../../shared/game/achievements.ts';
 import { aliasProblem, cleanAlias, type BlockedTerms } from '../../../shared/game/alias.ts';
 import { computeEnding } from '../../../shared/game/endings.ts';
 import { nextPosition, samePosition, type FlowContext } from '../../../shared/game/flow.ts';
+import type { ReplyStance } from '../../../shared/game/milestones.ts';
 import { mentionsDistress } from '../../../shared/game/privacy.ts';
 import { applyDeltas } from '../../../shared/game/world.ts';
 import { cleanText, countWords } from '../../../shared/game/words.ts';
@@ -47,7 +49,9 @@ export type SvcFunction =
   | 'svc_recover'
   | 'svc_load'
   | 'svc_advance'
-  | 'svc_choose'
+  | 'svc_pick'
+  | 'svc_confirm'
+  | 'svc_emblem'
   | 'svc_justify'
   | 'svc_reply'
   | 'svc_ai_take'
@@ -64,6 +68,7 @@ export type AiDialogue = {
     context: DialogueContext,
     objection: string,
     reply: string,
+    stance: ReplyStance | null,
   ) => Promise<ClosingOutput | null>;
 };
 
@@ -80,6 +85,8 @@ export type PartidaDeps = {
     readonly concepts: readonly Concept[];
     readonly alertTerms: AlertTerms;
     readonly endings: readonly Ending[];
+    /** Logros, fichas y emblemas: para validar el emblema y para los movimientos de la IA. */
+    readonly catalog: Catalog;
   };
   /** `null` si no hay proveedor de IA configurado: entonces todo sale de los respaldos. */
   readonly ai: AiDialogue | null;
@@ -219,9 +226,22 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
     });
   }
 
+  // Emblema del cronista (cosmético): solo piezas desbloqueadas con los puntos de la partida.
+  if (request.action === 'emblem') {
+    const summary = summarize(run.progress, deps.content.catalog);
+    if (!summary.symbols.includes(request.symbol) || !summary.colors.includes(request.color)) {
+      return failure('invalid', state);
+    }
+    return write(deps, 'svc_emblem', {
+      p_player_id: playerId,
+      p_emblem: `${request.symbol}:${request.color}`,
+    });
+  }
+
   // El resto de acciones actúa sobre el dilema en curso y en una fase concreta.
   const expectedPhase = {
     choose: 'decision',
+    confirm: 'twist',
     justify: 'justification',
     reply: 'objection',
   } as const;
@@ -231,13 +251,28 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
   const dilemma = deps.content.dilemmas.find((d) => d.id === request.dilemmaId);
   if (dilemma === undefined) return failure('invalid', state);
 
+  // Decisión en dos pasos (M6): primero una elección provisional; tras el giro, la definitiva.
   if (request.action === 'choose') {
     const option = dilemma.opciones.find((o) => o.id === request.choice);
     if (option === undefined) return failure('invalid', state);
-    const world = applyDeltas(run.world, option.deltas);
-    return write(deps, 'svc_choose', {
+    return write(deps, 'svc_pick', {
       p_player_id: playerId,
       p_dilemma: dilemma.id,
+      p_choice: option.id,
+    });
+  }
+
+  if (request.action === 'confirm') {
+    const first = run.pendingChoice;
+    if (first === null) return failure('stale', state);
+    const option = dilemma.opciones.find((o) => o.id === request.choice);
+    if (option === undefined) return failure('invalid', state);
+    // En el giro el mundo aún no ha cambiado: los deltas se aplican una sola vez, aquí.
+    const world = applyDeltas(run.world, option.deltas);
+    return write(deps, 'svc_confirm', {
+      p_player_id: playerId,
+      p_dilemma: dilemma.id,
+      p_first_choice: first,
       p_choice: option.id,
       p_poder: world.poder,
       p_responsabilidad: world.responsabilidad,
@@ -260,13 +295,20 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
   const context: DialogueContext | null =
     counselor === undefined
       ? null
-      : { counselor, dilemma, option, concepts: deps.content.concepts };
+      : {
+          counselor,
+          dilemma,
+          option,
+          concepts: deps.content.concepts,
+          moves: deps.content.catalog.rewards.movimientos,
+        };
 
   if (request.action === 'justify') {
     let objection = fallback.objecion.normal;
     let source: 'ia' | 'respaldo' = 'respaldo';
     let quality: ObjectionOutput['calidad'] | null = null;
     let concepts: string[] = [];
+    let moves: string[] = [];
     if (deps.ai !== null && context !== null) {
       const calls = await takeAiCall(deps, playerId, dilemma.id);
       const output = calls === null ? null : await deps.ai.objection(context, text);
@@ -287,6 +329,7 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
         source = 'ia';
         quality = output.calidad;
         concepts = output.conceptos;
+        moves = output.movimientos;
         alert ||= output.alerta;
       }
     }
@@ -299,18 +342,24 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
       p_ai_source: source,
       p_quality: quality,
       p_concepts: concepts,
+      p_moves: moves,
       p_alert: alert,
     });
   }
 
+  // Réplica guiada: la postura es un valor cerrado; versiones antiguas de la app no la envían.
+  const stance = request.stance ?? null;
   let closing = fallback.cierre.normal;
   let concepts: string[] = [];
+  let moves: string[] = [];
   if (deps.ai !== null && context !== null && answer?.objection != null) {
     const calls = await takeAiCall(deps, playerId, dilemma.id);
-    const output = calls === null ? null : await deps.ai.closing(context, answer.objection, text);
+    const output =
+      calls === null ? null : await deps.ai.closing(context, answer.objection, text, stance);
     if (output !== null) {
       closing = output.reaccion;
       concepts = output.conceptos;
+      moves = output.movimientos;
       alert ||= output.alerta;
     }
   }
@@ -318,8 +367,10 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
     p_player_id: playerId,
     p_dilemma: dilemma.id,
     p_text: text,
+    p_stance: stance,
     p_closing: closing,
     p_concepts: concepts,
+    p_moves: moves,
     p_alert: alert,
   });
 }

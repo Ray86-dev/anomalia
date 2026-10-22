@@ -1,0 +1,176 @@
+{
+  "puntos": { "nuevo": 10, "repetido": 3, "estrella": 5 },
+  "movimientos": [
+    {
+      "id": "da-razones",
+      "etiqueta": "Porque…",
+      "descripcion": {
+        "normal": "Diste razones para tu decisión, no solo una opinión.",
+        "facil": "Explicaste por qué, no solo qué piensas."
+      },
+      "definicionIA": "da al menos una razón explícita que apoya su decisión (no solo una opinión)"
+    },
+    {
+      "id": "dato-o-razon",
+      "etiqueta": "Laboratorio y ágora",
+      "descripcion": {
+        "normal": "Distinguiste un dato, que se comprueba, de una razón, que se discute.",
+        "facil": "Separaste un dato (se comprueba) de una razón (se discute)."
+      },
+      "definicionIA": "distingue de forma explícita un dato que se puede comprobar de una razón sobre lo que se debe hacer"
+    },
+    {
+      "id": "mira-consecuencias",
+      "etiqueta": "Efecto dominó",
+      "descripcion": {
+        "normal": "Pensaste en las consecuencias para las personas afectadas.",
+        "facil": "Pensaste en lo que les pasaría a otras personas."
+      },
+      "definicionIA": "analiza consecuencias concretas para las personas afectadas"
+    },
+    {
+      "id": "defiende-principio",
+      "etiqueta": "Regla para todos",
+      "descripcion": {
+        "normal": "Defendiste un principio que vale para todo el mundo, pase lo que pase.",
+        "facil": "Defendiste una norma que vale para todas las personas."
+      },
+      "definicionIA": "defiende un deber o principio válido para todos, sin depender del resultado"
+    },
+    {
+      "id": "piensa-futuro",
+      "etiqueta": "Mirada larga",
+      "descripcion": {
+        "normal": "Pensaste en quienes vendrán o en daños que no tienen vuelta atrás.",
+        "facil": "Pensaste en el futuro y en daños que no se pueden arreglar."
+      },
+      "definicionIA": "tiene en cuenta a generaciones futuras o daños irreversibles"
+    },
+    {
+      "id": "pone-ejemplo",
+      "etiqueta": "Ejemplo",
+      "descripcion": {
+        "normal": "Pusiste un ejemplo concreto para explicar tu idea.",
+        "facil": "Pusiste un ejemplo."
+      },
+      "definicionIA": "pone un ejemplo concreto, real o imaginado, para apoyar su idea"
+    },
+    {
+      "id": "contraejemplo",
+      "etiqueta": "Contraejemplo",
+      "descripcion": {
+        "normal": "Encontraste un caso que no encaja con la otra postura.",
+        "facil": "Encontraste un caso que muestra un fallo de la otra idea."
+      },
+      "definicionIA": "propone un caso que muestra un fallo en la postura contraria"
+    },
+    {
+      "id": "reconoce-razon",
+      "etiqueta": "Mente abierta",
+      "descripcion": {
+        "normal": "Reconociste lo que tenía de razón la otra postura.",
+        "facil": "Dijiste en qué tenía razón la otra persona."
+      },
+      "definicionIA": "reconoce de forma explícita algo de razón en la objeción o en otra postura"
+    },
+    {
+      "id": "distingue",
+      "etiqueta": "Matiz",
+      "descripcion": {
+        "normal": "Hiciste una distinción: «no es lo mismo… que…», «depende de…».",
+        "facil": "Explicaste que dos cosas no son iguales."
+      },
+      "definicionIA": "hace una distinción entre dos ideas («no es lo mismo X que Y», «depende de…»)"
+    },
+    {
+      "id": "pregunta-critica",
+      "etiqueta": "Tábano",
+      "descripcion": {
+        "normal": "Devolviste una pregunta que hace pensar, como Sócrates.",
+        "facil": "Hiciste una pregunta que hace pensar."
+      },
+      "definicionIA": "plantea una pregunta crítica y pertinente sobre el dilema o la objeción"
+    }
+  ],
+  "hitos": [
+    {
+      "id": "laboratorio",
+      "etiqueta": "Ojo de laboratorio",
+      "descripcion": {
+        "normal": "Comprobaste los datos en el laboratorio antes de decidir.",
+        "facil": "Hiciste el experimento del laboratorio."
+      }
+    },
+    {
+      "id": "mantiene",
+      "etiqueta": "Firme ante el giro",
+      "descripcion": {
+        "normal": "Mantuviste tu decisión después de la noticia inesperada.",
+        "facil": "No cambiaste de decisión después de la noticia."
+      }
+    },
+    {
+      "id": "cambia",
+      "etiqueta": "Cambio de rumbo",
+      "descripcion": {
+        "normal": "Cambiaste tu decisión después de la noticia inesperada.",
+        "facil": "Cambiaste de decisión después de la noticia."
+      }
+    },
+    {
+      "id": "tres-posturas",
+      "etiqueta": "Las tres respuestas",
+      "descripcion": {
+        "normal": "Replicaste de las tres formas: concediendo, matizando y rebatiendo.",
+        "facil": "Usaste las tres formas de responder."
+      }
+    },
+    {
+      "id": "estrellas-a",
+      "etiqueta": "Primeras estrellas",
+      "descripcion": {
+        "normal": "Encendiste tus primeras estrellas de conceptos.",
+        "facil": "Conseguiste tus primeras estrellas."
+      }
+    },
+    {
+      "id": "estrellas-b",
+      "etiqueta": "Cielo encendido",
+      "descripcion": {
+        "normal": "Reuniste muchas estrellas de conceptos.",
+        "facil": "Conseguiste muchas estrellas."
+      }
+    },
+    {
+      "id": "constelacion",
+      "etiqueta": "Constelación completa",
+      "descripcion": {
+        "normal": "Encendiste todas las estrellas de conceptos.",
+        "facil": "Conseguiste todas las estrellas."
+      }
+    },
+    {
+      "id": "anomalias",
+      "etiqueta": "Todas las anomalías",
+      "descripcion": {
+        "normal": "Cerraste todas las anomalías de tu clase.",
+        "facil": "Terminaste todas las anomalías."
+      }
+    },
+    {
+      "id": "expediente",
+      "etiqueta": "Expediente archivado",
+      "descripcion": {
+        "normal": "Archivaste tu reflexión final.",
+        "facil": "Terminaste tu reflexión final."
+      }
+    }
+  ],
+  "rangos": [
+    { "id": "aprendiz", "etiqueta": "Aprendiz del Archivo", "puntosPorAnomalia": 0 },
+    { "id": "cronista", "etiqueta": "Cronista", "puntosPorAnomalia": 8 },
+    { "id": "voz", "etiqueta": "Voz del Ágora", "puntosPorAnomalia": 16 },
+    { "id": "memoria", "etiqueta": "Memoria del Archivo", "puntosPorAnomalia": 24 },
+    { "id": "leyenda", "etiqueta": "Leyenda del Tiempo", "puntosPorAnomalia": 32 }
+  ]
+}

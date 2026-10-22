@@ -25,6 +25,9 @@ function realContent(): RawContent {
     ambients: json('ambientes.json'),
     alerts: json('alertas.json'),
     reflection: json('reflexion.json'),
+    rewards: json('logros.json'),
+    fichas: json('fichas.json'),
+    emblems: json('emblemas.json'),
   };
 }
 

@@ -38,13 +38,20 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
 
   afterAll(cleanup);
 
-  it('recorre viaje, escena y consejo hasta la decisión', async () => {
+  it('recorre viaje, escena, laboratorio y consejo hasta la decisión', async () => {
     expect(await advance('prologue', null)).toMatchObject({
       ok: true,
       run: { phase: 'travel', currentDilemma: 'd1' },
     });
     expect(await advance('travel', 'd1')).toMatchObject({ run: { phase: 'scene' } });
-    expect(await advance('scene', 'd1')).toMatchObject({ run: { phase: 'council' } });
+    expect(await advance('scene', 'd1')).toMatchObject({ run: { phase: 'lab' } });
+    // Salir del laboratorio lo deja registrado en el progreso (logro «Ojo de laboratorio»).
+    expect(await advance('lab', 'd1')).toMatchObject({
+      run: {
+        phase: 'council',
+        progress: { labs: ['d1'], classDilemmas: ['d1', 'd2', 'd3', 'd4', 'd5'] },
+      },
+    });
     expect(await advance('council', 'd1')).toMatchObject({ run: { phase: 'decision' } });
   });
 
@@ -57,20 +64,41 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
     expect(await advance('decision', 'd1')).toMatchObject({ ok: false, error: 'invalid' });
   });
 
-  it('la decisión aplica los deltas en el servidor y registra la rama', async () => {
-    // D1 · B: CONFIANZA +10, PODER +5, rama alternativa
-    const result = await partida(student, { action: 'choose', dilemmaId: 'd1', choice: 'B' });
+  it('elegir pasa al giro sin tocar el mundo ni crear la respuesta', async () => {
+    const result = await partida(student, { action: 'choose', dilemmaId: 'd1', choice: 'A' });
+    expect(result).toMatchObject({
+      ok: true,
+      run: {
+        phase: 'twist',
+        pendingChoice: 'A',
+        world: { poder: 50, responsabilidad: 50, equidad: 50, confianza: 50 },
+        branches: [],
+      },
+      answer: null,
+    });
+  });
+
+  it('tras el giro aplica los deltas de la decisión definitiva una sola vez', async () => {
+    // Cambia de A a D1 · B: CONFIANZA +10, PODER +5, rama alternativa
+    const result = await partida(student, { action: 'confirm', dilemmaId: 'd1', choice: 'B' });
     expect(result).toMatchObject({
       ok: true,
       run: {
         phase: 'justification',
+        pendingChoice: null,
         world: { poder: 55, responsabilidad: 50, equidad: 50, confianza: 60 },
         branches: ['d1-firme'],
+        progress: { choices: { d1: 'B' }, changed: 1, kept: 0 },
       },
-      answer: { dilemmaId: 'd1', choice: 'B', justification: null },
+      answer: { dilemmaId: 'd1', choice: 'B', firstChoice: 'A', justification: null },
     });
-    const again = await partida(student, { action: 'choose', dilemmaId: 'd1', choice: 'A' });
-    expect(again).toMatchObject({ ok: false, error: 'stale', answer: { choice: 'B' } });
+    // Doble toque: no vuelve a aplicar los deltas.
+    const again = await partida(student, { action: 'confirm', dilemmaId: 'd1', choice: 'B' });
+    expect(again).toMatchObject({
+      ok: false,
+      error: 'stale',
+      run: { world: { poder: 55, confianza: 60 } },
+    });
   });
 
   it('la justificación devuelve la objeción del consejero que más se opone (IA o respaldo)', async () => {
@@ -98,13 +126,18 @@ describe.skipIf(!configured)('partida · D1 completo (integración)', () => {
     expect(Date.now() - started).toBeLessThan(9000);
   });
 
-  it('la réplica guarda el cierre y pasa a las ondas temporales', async () => {
+  it('la réplica guarda la postura y el cierre y pasa a las ondas temporales', async () => {
     const result = await partida(student, {
       action: 'reply',
       dilemmaId: 'd1',
       text: 'Un mártir no hace experimentos, pero sin confianza en la verdad la ciencia tampoco avanza.',
+      stance: 'concede',
     });
-    expect(result).toMatchObject({ ok: true, run: { phase: 'ripples' } });
+    expect(result).toMatchObject({
+      ok: true,
+      run: { phase: 'ripples', progress: { stances: ['concede'], closed: 1 } },
+      answer: { replyStance: 'concede' },
+    });
     const closing = gameResponseSchema.parse(result).answer?.closing;
     expect(closing?.length).toBeGreaterThan(5);
   });

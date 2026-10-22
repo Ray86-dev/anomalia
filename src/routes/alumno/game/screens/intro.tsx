@@ -136,7 +136,7 @@ export function Scene({ dilemma }: { readonly dilemma: Dilemma }) {
       />
       {done && (
         <ActionBar>
-          <AdvanceButton label={t.escena.irAlConsejo} />
+          <AdvanceButton label={t.escena.irAlLaboratorio} />
         </ActionBar>
       )}
     </>

@@ -3,11 +3,15 @@
  *   npm run ai:probe                    D1 con cuatro casos (sólida, vacía, inyección, malestar)
  *   npm run ai:probe -- --dilema d3     un caso sólido de otro dilema (se puede repetir)
  * Crea clases temporales con alumnos de prueba, juega con varios tipos de justificación,
- * imprime lo que responde el consejero y lo borra todo al terminar. Gasta llamadas de IA reales.
+ * imprime lo que responde el consejero (con sus palabras y los movimientos detectados) y lo
+ * borra todo al terminar. Gasta llamadas de IA reales.
  */
 import { randomBytes } from 'node:crypto';
 import { parseArgs } from 'node:util';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { INTRO_PATH } from '../shared/game/flow.ts';
+import type { ReplyStance } from '../shared/game/milestones.ts';
+import { countWords } from '../shared/game/words.ts';
 import { gameResponseSchema, type GameResponse } from '../shared/schemas/partida.ts';
 import type { Database } from '../src/lib/database.types.ts';
 import { adminClient, loadLocalEnv, requireEnv } from './lib/admin.ts';
@@ -22,6 +26,8 @@ type Scenario = {
   /** Segundo intento si la IA pide más razones (calidad «vacía»). */
   readonly retry?: string;
   readonly reply: string;
+  /** Postura de la réplica guiada; por defecto, «matizo». */
+  readonly stance?: ReplyStance;
 };
 
 const SCENARIOS: readonly Scenario[] = [
@@ -33,6 +39,8 @@ const SCENARIOS: readonly Scenario[] = [
       'Creo que Galileo debe mantenerse firme porque si niega lo que ha visto con el telescopio, la autoridad gana a la evidencia. Si los científicos mienten cuando les presionan, nadie podrá fiarse nunca de la ciencia. Prefiero que pague un precio a que la verdad quede enterrada.',
     reply:
       'Es verdad que un mártir no investiga, pero si Galileo cede, todos los demás científicos aprenderán a callar y la ciencia avanzará mucho más despacio.',
+
+    stance: 'concede',
   },
   {
     dilemma: 'd1',
@@ -42,6 +50,8 @@ const SCENARIOS: readonly Scenario[] = [
     retry:
       'Elijo que abjure porque una vida vale más que una frase dicha en un tribunal. Si sigue vivo puede seguir investigando y publicar más adelante en otro país.',
     reply: 'No es mentir si lo obligan; la culpa es del tribunal que le amenaza, no suya.',
+
+    stance: 'rebate',
   },
   {
     dilemma: 'd1',
@@ -146,6 +156,9 @@ async function setupClass(dilemma: string): Promise<{ id: string; code: string }
   return data as { id: string; code: string };
 }
 
+/** Movimientos que la IA ha detectado en la partida (con repeticiones). */
+const movesOf = (response: GameResponse): readonly string[] => response.run?.progress.moves ?? [];
+
 async function playScenario(code: string, scenario: Scenario, index: number): Promise<void> {
   const dilemmaId = scenario.dilemma;
   const student = client();
@@ -155,16 +168,12 @@ async function playScenario(code: string, scenario: Scenario, index: number): Pr
   await student.functions.invoke('partida', {
     body: { action: 'join', classCode: code, alias: `Sonda${run}${String(index)}` },
   });
-  const path: [string, string | null][] = [
-    ['prologue', null],
-    ['travel', dilemmaId],
-    ['scene', dilemmaId],
-    ['council', dilemmaId],
-  ];
-  for (const [phase, id] of path) {
-    await partida(student, { action: 'advance', from: { phase, dilemmaId: id } });
+  await partida(student, { action: 'advance', from: { phase: 'prologue', dilemmaId: null } });
+  for (const phase of INTRO_PATH) {
+    await partida(student, { action: 'advance', from: { phase, dilemmaId } });
   }
   await partida(student, { action: 'choose', dilemmaId, choice: scenario.choice });
+  await partida(student, { action: 'confirm', dilemmaId, choice: scenario.choice });
 
   console.log(
     `\n━━ ${dilemmaId.toUpperCase()} · ${scenario.name.toUpperCase()} (opción ${scenario.choice}) ━━`,
@@ -183,16 +192,23 @@ async function playScenario(code: string, scenario: Scenario, index: number): Pr
     );
   }
   const answer = justified.answer;
+  const objection = answer?.objection ?? '';
   console.log(
-    `  objeción [${answer?.aiSource ?? '?'} · ${String(ms)} ms] ${answer?.objector ?? ''}:`,
+    `  objeción [${answer?.aiSource ?? '?'} · ${String(ms)} ms · ${String(countWords(objection))} palabras] ${answer?.objector ?? ''}:`,
   );
-  console.log(`    «${answer?.objection ?? '(sin objeción)'}»`);
+  console.log(`    «${objection || '(sin objeción)'}»`);
+  console.log(`    movimientos: ${movesOf(justified).join(', ') || '(ninguno)'}`);
 
+  const stance = scenario.stance ?? 'matiza';
   const [replied, replyMs] = await timed(() =>
-    partida(student, { action: 'reply', dilemmaId, text: scenario.reply }),
+    partida(student, { action: 'reply', dilemmaId, text: scenario.reply, stance }),
   );
-  console.log(`  cierre [${String(replyMs)} ms]:`);
-  console.log(`    «${replied.answer?.closing ?? '(sin cierre)'}»`);
+  const closing = replied.answer?.closing ?? '';
+  console.log(
+    `  cierre [${stance} · ${String(replyMs)} ms · ${String(countWords(closing))} palabras]:`,
+  );
+  console.log(`    «${closing || '(sin cierre)'}»`);
+  console.log(`    movimientos acumulados: ${movesOf(replied).join(', ') || '(ninguno)'}`);
 }
 
 async function main(): Promise<void> {
