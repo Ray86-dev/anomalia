@@ -21,6 +21,7 @@
   "consejeros": [
     {
       "id": "calvo",
+      "frase": { "normal": "Haz las cuentas con honradez: elige lo que traiga menos daño y más bienestar para más gente.", "facil": "Elige lo que haga menos daño y más bien a más gente." },
       "argumento": {
         "normal": "Haz las cuentas con honradez. ¿Cuántas personas sufrirán con cada opción, dentro y fuera del laboratorio? Si te vas, quizá otro haga el trabajo igual. Si lo cuentas, quizá se salven vidas, o quizá no cambie nada. Elige lo que traiga menos daño y más bienestar para más gente.",
         "facil": "Piensa en las consecuencias. ¿Qué opción hace menos daño a menos personas? Si te vas, puede que otro haga lo mismo. Elige lo que traiga más bien a más gente."
@@ -28,6 +29,7 @@
     },
     {
       "id": "gil",
+      "frase": { "normal": "En el laboratorio ves una fórmula, no a las personas que hay al final de la cadena.", "facil": "En el laboratorio ves una fórmula, no a las personas que sufrirán." },
       "argumento": {
         "normal": "Este es el desnivel del que hablo: sabemos fabricar un gas capaz de matar a miles de personas, pero nadie es capaz de imaginar de verdad ese sufrimiento. En un laboratorio se ve una fórmula, no una persona. Antes de decidir, intenta imaginar el final de la cadena.",
         "facil": "Sabemos fabricar cosas muy peligrosas, pero no imaginamos el daño que hacen. En el laboratorio solo ves una fórmula. Piensa en las personas que hay al final."
@@ -35,6 +37,7 @@
     },
     {
       "id": "novak",
+      "frase": { "normal": "La química no es buena ni mala: si te marchas, la investigación seguirá sin ti y sin tu voz.", "facil": "La química no es buena ni mala; si te vas, otros seguirán sin ti." },
       "argumento": {
         "normal": "La química no es buena ni mala: es conocimiento. El mismo saber que sirve para fabricar abono puede servir para muchas otras cosas. Si los buenos científicos se marchan, la investigación seguirá sin ellos. Mejor estar dentro, avanzar y tener voz en lo que se hace.",
         "facil": "La química no es buena ni mala: es saber. Lo importante es seguir investigando. Si te vas, otros seguirán sin ti y no tendrás voz."
@@ -120,9 +123,9 @@
       "normal": "¿Por qué has elegido esta opción? Explica quién es responsable de cómo se usa lo que descubre la ciencia y qué has puesto por delante.",
       "facil": "¿Por qué eliges esta opción? Explica quién es responsable de cómo se usa la ciencia."
     },
-    "palabras": [40, 80]
+    "palabras": [25, 50]
   },
-  "replica": { "palabras": [30, 60] },
+  "replica": { "palabras": [15, 35] },
   "archivoReal": {
     "texto": {
       "normal": "Haber recibió el Premio Nobel de Química de 1918 por la síntesis del amoníaco. El uso de gas cloro en Ypres, en abril de 1915, inauguró la guerra química a gran escala.",

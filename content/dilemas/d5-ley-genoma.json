@@ -18,6 +18,7 @@
   "consejeros": [
     {
       "id": "calvo",
+      "frase": { "normal": "Busca la ley que evite más sufrimiento y cree menos injusticias para el mayor número.", "facil": "Elige la ley que evite más sufrimiento a más gente." },
       "argumento": {
         "normal": "Una ley debe buscar el mayor bienestar para el mayor número. Pregúntate qué opción evita más enfermedades y más sufrimiento, y cuál crea más injusticias. El bienestar de todos incluye también a quienes saldrían perdiendo.",
         "facil": "Una ley debe hacer el mayor bien a la mayor cantidad de gente. Piensa qué opción evita más sufrimiento y cuál crea más injusticias."
@@ -25,6 +26,7 @@
     },
     {
       "id": "kaltz",
+      "frase": { "normal": "Nadie elige sus genes: una ley que te juzga por tu ADN te trata como un dato.", "facil": "Nadie elige sus genes; una ley que te juzga por tu ADN te trata como un número." },
       "argumento": {
         "normal": "Nadie elige sus genes. Si una ley decide el futuro de alguien por su ADN, lo trata como un dato y no como una persona. La dignidad no se mide en un laboratorio: todas las personas valen lo mismo.",
         "facil": "Nadie elige sus genes. Si una ley decide tu futuro por tu ADN, te trata como un número. Ningún laboratorio mide cuánto vale una persona: todas valen lo mismo."
@@ -32,6 +34,7 @@
     },
     {
       "id": "jonas",
+      "frase": { "normal": "Esta ley la heredarán personas que aún no han nacido y que no pueden votar.", "facil": "Esta ley afectará a personas que todavía no han nacido y no pueden votar." },
       "argumento": {
         "normal": "Lo que se decida hoy lo heredarán personas que aún no han nacido y que no pueden votar. Ante cambios que no se pueden deshacer, la ley debe ser prudente y pensar en ellas primero.",
         "facil": "Esta ley afectará a personas que todavía no han nacido. Ellas no pueden votar. Si un cambio no se puede deshacer, hay que ir con mucho cuidado."
@@ -39,6 +42,7 @@
     },
     {
       "id": "novak",
+      "frase": { "normal": "Prohibir la edición genética es condenar a muchas personas a sufrir lo que ya se sabe evitar.", "facil": "Si se prohíbe cambiar genes, mucha gente sufrirá sin necesidad." },
       "argumento": {
         "normal": "La edición genética puede acabar con enfermedades terribles. Prohibirla es condenar a muchas personas a sufrir lo que ya se sabe evitar. La ciencia resuelve problemas: la ley debe dejarla avanzar, con normas, pero sin miedo.",
         "facil": "Cambiar genes puede acabar con enfermedades terribles. Si se prohíbe, mucha gente sufrirá sin necesidad. La ley debe dejar que la ciencia avance, con normas."
@@ -46,6 +50,7 @@
     },
     {
       "id": "gil",
+      "frase": { "normal": "Separar a la gente en «válidos» y «no válidos» empieza con una ley que parece eficiente.", "facil": "Separar a la gente en «válidos» y «no válidos» empieza con una ley que parece útil." },
       "argumento": {
         "normal": "Mira el desnivel: ya sabemos cambiar genes, pero no sabemos imaginar una sociedad que clasifique a la gente por ellos. Los «válidos» y los «no válidos» empiezan con una ley que parece eficiente.",
         "facil": "Sabemos cambiar genes, pero no imaginamos cómo sería vivir clasificados por ellos. Separar a la gente en «válidos» y «no válidos» empieza con una ley que parece útil."
@@ -123,9 +128,9 @@
       "normal": "¿Por qué votas esta opción? Explica qué papel debe tener la ciencia en esta ley y qué hay que decidir con razones, porque ningún dato lo resuelve.",
       "facil": "¿Por qué votas esto? Explica qué nos dice la ciencia y qué tenemos que decidir nosotros, con razones."
     },
-    "palabras": [40, 80]
+    "palabras": [25, 50]
   },
-  "replica": { "palabras": [30, 60] },
+  "replica": { "palabras": [15, 35] },
   "archivoReal": {
     "texto": {
       "normal": "El 2077 de este juego es ficción, pero el debate es real. En 1997, la UNESCO aprobó la Declaración Universal sobre el Genoma Humano y los Derechos Humanos, que establece que nadie podrá ser discriminado por sus características genéticas. Ese mismo año se firmó el Convenio de Oviedo del Consejo de Europa, que España ha ratificado: solo permite modificar el genoma humano con fines preventivos, diagnósticos o terapéuticos, y nunca para cambiar el de la descendencia. TODO(verificar)",

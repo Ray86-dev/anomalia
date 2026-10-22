@@ -81,6 +81,8 @@
       "ayuda": "Desliza para escuchar a cada consejero. Ninguno tiene la respuesta correcta.",
       "voz": "Voz de la historia",
       "tarjeta": "Consejero {n} de {total}",
+      "leerMas": "Leer más",
+      "leerMenos": "Leer menos",
       "decidir": "Tomar mi decisión"
     },
     "decision": {
@@ -118,7 +120,14 @@
     "objecion": {
       "titulo": "{nombre} te plantea una objeción",
       "replicaEtiqueta": "Tu réplica",
-      "ayuda": "Responde a la objeción: puedes darle la razón en algo, matizar o rebatirla ({min}–{max} palabras).",
+      "ayuda": "Completa la frase con tus razones ({min}–{max} palabras).",
+      "postura": "¿Qué haces con su objeción?",
+      "posturas": {
+        "concede": { "etiqueta": "Le doy parte de razón", "comienzo": "Tienes razón en que " },
+        "matiza": { "etiqueta": "Matizo mi postura", "comienzo": "Sí, pero " },
+        "rebate": { "etiqueta": "La rebato", "comienzo": "No estoy de acuerdo, porque " }
+      },
+      "sinCompletar": "Completa la frase con tus propias razones antes de responder.",
       "enviar": "Responder",
       "cierreTitulo": "{nombre} responde",
       "volver": "Volver a 2077"

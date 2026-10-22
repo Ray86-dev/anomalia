@@ -314,7 +314,7 @@ export async function buildDossierPdf(
     }
   }
 
-  // ── Reflexión final: en su propia página (150–250 palabras caben enteras) ──
+  // ── Reflexión final: en su propia página (100–180 palabras caben enteras) ──
   w.newPage();
   w.line(labels.reflexion, s.h1);
   w.text(input.reflection.question, s.muted);

@@ -2,6 +2,7 @@ import { basename } from 'node:path';
 import { z } from 'zod';
 import { canonical, type BlockedTerms } from '../../shared/game/alias.ts';
 import { MILESTONE_IDS } from '../../shared/game/milestones.ts';
+import { countWords } from '../../shared/game/words.ts';
 import {
   alertTermsSchema,
   ambientsSchema,
@@ -132,6 +133,20 @@ function missingEasyReading(value: unknown, path: string[] = []): string[] {
   return Object.entries(value).flatMap(([key, item]) => missingEasyReading(item, [...path, key]));
 }
 
+/** Menos texto (M6): la frase de cada consejero y los respaldos de la IA tienen tope. */
+const MAX_WORDS = { frase: 20, objecion: 50, cierre: 40 } as const;
+
+/** Versiones (normal y fácil) de un Texto que pasan del tope de palabras. */
+function tooLong(text: Readonly<Record<string, string | undefined>>, max: number): string[] {
+  return Object.entries(text)
+    .filter(([, value]) => value !== undefined && countWords(value) > max)
+    .map(([variant]) => variant);
+}
+
+/** Una sola frase: ningún punto, cierre de interrogación o exclamación seguido de más texto. */
+const severalSentences = (text: string | undefined) =>
+  text !== undefined && /[.!?…]\s+\S/u.test(text);
+
 function duplicates(ids: readonly string[]): string[] {
   return [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
 }
@@ -236,6 +251,14 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
         if (!counselorIds.has(c.id)) errors.push(`${file} › consejeros: «${c.id}» no existe en consejeros.json`);
       }
     }
+    for (const c of d.consejeros) {
+      for (const variant of tooLong(c.frase, MAX_WORDS.frase)) {
+        errors.push(`${file} › consejeros.${c.id}.frase.${variant}: más de ${String(MAX_WORDS.frase)} palabras`);
+      }
+      if (Object.values(c.frase).some(severalSentences)) {
+        errors.push(`${file} › consejeros.${c.id}.frase: debe ser una sola frase`);
+      }
+    }
     if (fallbacks) {
       for (const o of d.opciones) {
         if (fallbacks[d.id]?.[o.id]?.[o.objetor] === undefined) {
@@ -258,9 +281,15 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     for (const [dilemma, byOption] of Object.entries(fallbacks)) {
       if (!dilemmaIds.has(dilemma)) errors.push(`respaldos.json › ${dilemma}: no existe ese dilema`);
       for (const [option, byCounselor] of Object.entries(byOption)) {
-        for (const counselor of Object.keys(byCounselor)) {
+        for (const [counselor, fallback] of Object.entries(byCounselor)) {
+          const where = `respaldos.json › ${dilemma}.${option}.${counselor}`;
           if (counselors && !counselorIds.has(counselor)) {
-            errors.push(`respaldos.json › ${dilemma}.${option}.${counselor}: no existe ese consejero`);
+            errors.push(`${where}: no existe ese consejero`);
+          }
+          for (const part of ['objecion', 'cierre'] as const) {
+            for (const variant of tooLong(fallback[part], MAX_WORDS[part])) {
+              errors.push(`${where}.${part}.${variant}: más de ${String(MAX_WORDS[part])} palabras`);
+            }
           }
         }
       }

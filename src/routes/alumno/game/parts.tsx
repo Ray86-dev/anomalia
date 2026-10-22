@@ -139,6 +139,12 @@ type TextAnswerProps = {
   readonly label: string;
   readonly help: string;
   readonly draftKey: string;
+  /**
+   * Comienzo de frase editable (réplica guiada). Si cambia, sustituye al anterior en el texto;
+   * enviarlo sin añadir nada cuenta como vacío y se avisa con `untouchedNotice`.
+   */
+  readonly initialText?: string;
+  readonly untouchedNotice?: string;
   readonly range: readonly [number, number];
   readonly maxChars: number;
   readonly submitLabel: string;
@@ -161,6 +167,8 @@ export function TextAnswer({
   label,
   help,
   draftKey,
+  initialText = '',
+  untouchedNotice,
   range,
   maxChars,
   submitLabel,
@@ -169,7 +177,8 @@ export function TextAnswer({
 }: TextAnswerProps) {
   const id = useId();
   const { pending } = useGameContext();
-  const [text, setText] = useState(() => drafts.read(draftKey));
+  const [text, setText] = useState(() => drafts.read(draftKey) || initialText);
+  const previousStart = useRef(initialText);
   /** Aviso de longitud ya mostrado para este texto: el siguiente envío pasa. */
   const [warnedFor, setWarnedFor] = useState<WordCheck | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -177,6 +186,22 @@ export function TextAnswer({
   const words = countWords(text);
   const check = checkWords(text, range);
   const [min, max] = range;
+
+  // Otra postura, otro comienzo: se cambia el comienzo anterior y se conserva lo escrito.
+  useEffect(() => {
+    const before = previousStart.current;
+    if (before === initialText) return;
+    previousStart.current = initialText;
+    setText((current) => {
+      const next = current.startsWith(before)
+        ? initialText + current.slice(before.length)
+        : current.trim() === ''
+          ? initialText
+          : current;
+      drafts.write(draftKey, next);
+      return next;
+    });
+  }, [initialText, draftKey]);
 
   // Que el aviso quede a la vista (por encima de la barra inferior) sin mover nada más.
   useEffect(() => {
@@ -186,6 +211,10 @@ export function TextAnswer({
   async function submit() {
     if (check === 'empty') {
       setNotice(t.justificacion.vacio);
+      return;
+    }
+    if (initialText !== '' && text.trim() === initialText.trim()) {
+      setNotice(untouchedNotice ?? t.justificacion.vacio);
       return;
     }
     if (check !== 'ok' && warnedFor !== check) {

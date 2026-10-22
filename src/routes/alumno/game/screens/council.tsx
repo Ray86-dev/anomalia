@@ -1,12 +1,37 @@
 /** Consejo y decisión (fases 3–4 del bucle §6). */
 import { ui } from '@shared/generated/content.ts';
 import type { Dilemma, DilemmaOption } from '@shared/schemas/content.ts';
+import { useId, useState, type ReactNode } from 'react';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
 import { findCounselor, texto } from '../helpers.ts';
 import { ActionBar, AdvanceButton, Avatar } from '../parts.tsx';
 
 const t = ui.juego;
+
+/** «Leer más» (M6): el argumento completo queda a un toque, sin alargar la tarjeta. */
+function MoreText({ children }: { readonly children: ReactNode }) {
+  const id = useId();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div id={id} className="stack-tight" hidden={!open}>
+        {children}
+      </div>
+      <button
+        className="link-button more-toggle"
+        type="button"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        {open ? t.consejo.leerMenos : t.consejo.leerMas}
+      </button>
+    </>
+  );
+}
 
 export function Council({ dilemma }: { readonly dilemma: Dilemma }) {
   const total = dilemma.consejeros.length + dilemma.voces.length;
@@ -34,8 +59,11 @@ export function Council({ dilemma }: { readonly dilemma: Dilemma }) {
                   <p className="muted">{counselor.postura}</p>
                 </div>
               </div>
-              <p className="counselor-idea">{texto(counselor.ideaFuerza)}</p>
-              <p>{texto(entry.argumento)}</p>
+              <p className="counselor-phrase">{texto(entry.frase)}</p>
+              <MoreText>
+                <p className="counselor-idea">{texto(counselor.ideaFuerza)}</p>
+                <p>{texto(entry.argumento)}</p>
+              </MoreText>
             </li>
           );
         })}

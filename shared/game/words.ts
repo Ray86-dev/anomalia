@@ -1,4 +1,4 @@
-/** Recuento de palabras para las justificaciones y réplicas (40–80 / 30–60 palabras, §6). */
+/** Recuento de palabras para las justificaciones y réplicas (25–50 / 15–35 palabras, M6). */
 
 /** Cuenta palabras: secuencias con al menos una letra o cifra (ignora signos sueltos). */
 export function countWords(text: string): number {

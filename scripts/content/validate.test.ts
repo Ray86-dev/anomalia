@@ -118,6 +118,27 @@ describe('validateContent', () => {
     }
   });
 
+  it('la frase de un consejero es una sola frase de como mucho 20 palabras', () => {
+    const raw = realContent();
+    const [first] = d1(raw).consejeros as { frase: { normal: string } }[];
+    if (first) first.frase = { normal: `${'palabra '.repeat(21)}final. Y otra frase` };
+    const errors = validate(raw).errors.join('\n');
+    expect(errors).toMatch(/consejeros\.kaltz\.frase\.normal: más de 20 palabras/);
+    expect(errors).toMatch(/consejeros\.kaltz\.frase: debe ser una sola frase/);
+  });
+
+  it('los respaldos de la IA no pasan de 50 palabras (objeción) ni de 40 (cierre)', () => {
+    const raw = realContent();
+    const fallbacks = raw.fallbacks as Record<string, Record<string, Record<string, unknown>>>;
+    const long = 'palabra '.repeat(51);
+    const d1A = fallbacks.d1?.A;
+    if (d1A) d1A.kaltz = { objecion: { normal: long }, cierre: { normal: long, facil: 'Bien.' } };
+    const errors = validate(raw).errors.join('\n');
+    expect(errors).toMatch(/d1\.A\.kaltz\.objecion\.normal: más de 50 palabras/);
+    expect(errors).toMatch(/d1\.A\.kaltz\.cierre\.normal: más de 40 palabras/);
+    expect(errors).not.toMatch(/cierre\.facil/);
+  });
+
   it('rechaza términos bloqueados que al normalizarse quedarían demasiado cortos', () => {
     const raw = { ...realContent(), blocked: { contiene: ['xxx'], exactas: [] } };
     expect(validate(raw).errors.join('\n')).toMatch(/demasiado corto/);

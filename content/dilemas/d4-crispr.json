@@ -21,6 +21,7 @@
   "consejeros": [
     {
       "id": "novak",
+      "frase": { "normal": "Esta técnica puede proteger del VIH a quien aún no ha nacido, y esperar también tiene un coste.", "facil": "Esta técnica puede proteger a bebés del VIH, y esperar también tiene un precio." },
       "argumento": {
         "normal": "Imagina un mundo sin VIH. Esta técnica puede proteger de una enfermedad grave a personas que todavía no han nacido. Cada año de espera tiene un coste. La ciencia avanza probando, con cuidado, pero probando: frenarla por miedo es el verdadero riesgo.",
         "facil": "Imagina un mundo sin VIH. Esta técnica puede proteger a bebés de una enfermedad grave. Esperar también tiene un precio. Frenar la ciencia por miedo es el mayor peligro."
@@ -28,6 +29,7 @@
     },
     {
       "id": "jonas",
+      "frase": { "normal": "El cambio pasará a las siguientes generaciones y no se puede deshacer: la prudencia es una obligación.", "facil": "Este cambio pasará a los hijos y a los nietos, y no se puede deshacer." },
       "argumento": {
         "normal": "Este cambio no se puede deshacer y pasará a las siguientes generaciones. Nadie sabe qué efectos tendrá dentro de veinte o cincuenta años, y quienes lo van a vivir no han podido opinar. Cuando el daño posible es irreversible, la prudencia no es cobardía: es una obligación.",
         "facil": "Este cambio no se puede deshacer. Pasará a los hijos y a los nietos. Nadie sabe qué efectos tendrá, y ellos no han podido opinar. Si un daño no tiene arreglo, hay que tener mucho cuidado."
@@ -35,6 +37,7 @@
     },
     {
       "id": "gil",
+      "frase": { "normal": "Hoy es el VIH; mañana, quizá la estatura o la inteligencia: la técnica va más deprisa que nuestro pensamiento.", "facil": "Hoy es para evitar una enfermedad; mañana, quizá para elegir la altura o la inteligencia." },
       "argumento": {
         "normal": "Sabemos cambiar un gen en un laboratorio, pero no somos capaces de imaginar qué significa para la vida entera de una persona, ni para una sociedad que empiece a elegir genes. Hoy es el VIH; mañana, quizá la estatura o la inteligencia. La técnica va mucho más deprisa que nuestra capacidad de pensar en ella.",
         "facil": "Sabemos cambiar un gen, pero no imaginamos lo que eso significa para toda una vida. Hoy es para evitar una enfermedad. Mañana quizá sea para elegir la altura o la inteligencia. La técnica va más rápido que nuestras ideas."
@@ -112,9 +115,9 @@
       "normal": "¿Por qué has elegido esta opción? Explica si todo lo que la ciencia puede hacer se debe hacer y a quién has tenido en cuenta: los bebés, sus futuros hijos, la sociedad…",
       "facil": "¿Por qué eliges esta opción? Explica si hay que hacer todo lo que la ciencia puede hacer. Piensa en los bebés, en sus hijos y en los demás."
     },
-    "palabras": [40, 80]
+    "palabras": [25, 50]
   },
-  "replica": { "palabras": [30, 60] },
+  "replica": { "palabras": [15, 35] },
   "archivoReal": {
     "texto": {
       "normal": "En 2018, el investigador He Jiankui anunció el nacimiento de dos gemelas con el gen CCR5 editado. El experimento siguió adelante y solo se conoció tras el nacimiento. La comunidad científica lo condenó, en 2019 fue condenado a prisión en China, y hubo llamamientos internacionales a una moratoria de la edición de la línea germinal, la que se hereda.",

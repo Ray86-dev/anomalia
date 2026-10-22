@@ -78,8 +78,9 @@ export const dilemmaSchema = z
     rolCronista: textoSchema,
     estetica: z.enum(AESTHETICS),
     escena: z.strictObject({ ink: z.string().min(1), inkFacil: z.string().min(1).optional() }),
+    /** `frase`: la idea en una sola frase (como mucho 20 palabras); `argumento`, tras «Leer más». */
     consejeros: z
-      .array(z.strictObject({ id, argumento: textoSchema }))
+      .array(z.strictObject({ id, frase: textoSchema, argumento: textoSchema }))
       .refine(
         (list) => list.length === 3 || list.length === 5,
         '3 consejeros (5 en el dilema final)',

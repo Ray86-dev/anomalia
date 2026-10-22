@@ -18,6 +18,7 @@
   "consejeros": [
     {
       "id": "kaltz",
+      "frase": { "normal": "Mentir en público, aunque sea para salvarte, sigue siendo mentir; pero proteger una vida también es un deber.", "facil": "Mentir para salvarte sigue siendo mentir, pero salvar una vida también es un deber." },
       "argumento": {
         "normal": "Hay deberes que no dependen de lo que pase después. Decir en público lo contrario de lo que sabes que es verdad es mentir, aunque sea para salvarte. Pero proteger una vida también es un deber. Antes de decidir, pregúntate qué regla estarías dispuesto a que siguiera todo el mundo.",
         "facil": "Hay deberes que se cumplen pase lo que pase. Decir en público lo contrario de lo que sabes es mentir. Pero proteger una vida también es un deber. Piensa qué norma te gustaría que siguiera todo el mundo."
@@ -25,6 +26,7 @@
     },
     {
       "id": "novak",
+      "frase": { "normal": "La ciencia no avanza con mártires, sino con gente viva que sigue investigando.", "facil": "La ciencia avanza con personas vivas que siguen investigando." },
       "argumento": {
         "normal": "La ciencia no avanza con mártires: avanza con gente viva que sigue investigando. Si Galileo lo pierde todo, se pierde también lo que aún podría descubrir. Lo importante es que el conocimiento siga circulando, por el camino que sea. Frenarlo es el verdadero riesgo.",
         "facil": "La ciencia avanza con personas vivas que siguen investigando. Si Galileo lo pierde todo, también se pierde lo que podría descubrir. Lo importante es que el saber siga adelante."
@@ -32,6 +34,7 @@
     },
     {
       "id": "jonas",
+      "frase": { "normal": "Si el daño no tiene vuelta atrás, la prudencia es una obligación: piensa en quién paga el precio.", "facil": "Si un daño no tiene arreglo, ten mucho cuidado y piensa en quién lo pagaría." },
       "argumento": {
         "normal": "No sabemos qué pasará después: quién más puede salir perjudicado, qué represalias habrá. Cuando el daño no tiene vuelta atrás, como una vida o la libertad de otras personas, la prudencia es una obligación. Antes de arriesgar, piensa en quién paga el precio.",
         "facil": "No sabemos qué pasará después. Otras personas podrían recibir un castigo. Cuando un daño no tiene arreglo, hay que tener mucho cuidado. Piensa en quién pagaría el precio."
@@ -109,9 +112,9 @@
       "normal": "¿Por qué has elegido esta opción? Explica qué has puesto por delante (la verdad, la vida de Galileo, el avance del conocimiento…) y por qué ese valor pesa más que los otros.",
       "facil": "¿Por qué eliges esta opción? Di qué es lo más importante para ti (la verdad, la vida de Galileo, el avance de la ciencia…) y por qué."
     },
-    "palabras": [40, 80]
+    "palabras": [25, 50]
   },
-  "replica": { "palabras": [30, 60] },
+  "replica": { "palabras": [15, 35] },
   "archivoReal": {
     "texto": {
       "normal": "Galileo abjuró en 1633, fue condenado a arresto domiciliario y siguió trabajando; sus Discorsi se publicaron en Leiden en 1638. En esa obra explicaba cómo había medido la caída de los cuerpos con bolas que rodaban por planos inclinados. TODO(verificar)",

@@ -21,6 +21,7 @@
   "consejeros": [
     {
       "id": "calvo",
+      "frase": { "normal": "Estas células podrían salvar millones de vidas: ¿no pesa eso más que una firma?", "facil": "Estas células pueden curar a millones de personas: ¿no vale eso más que un permiso?" },
       "argumento": {
         "normal": "Piensa en todo el bien que podrían hacer estas células: vacunas, tratamientos, vidas salvadas en todo el mundo. La muestra ya se ha tomado para tratarla. Cuando el beneficio para millones de personas es tan grande, ¿no debería pesar más que una firma?",
         "facil": "Estas células pueden ayudar a curar a millones de personas. La muestra ya está aquí. Si el bien para tanta gente es tan grande, ¿no vale más que pedir un permiso?"
@@ -28,6 +29,7 @@
     },
     {
       "id": "kaltz",
+      "frase": { "normal": "Su cuerpo es suyo: si no se le pregunta, se la trata como una cosa.", "facil": "Su cuerpo es suyo; si no le preguntas, la tratas como una cosa." },
       "argumento": {
         "normal": "Una persona nunca puede ser solo un medio, ni siquiera para curar a otras. Su cuerpo es suyo, y lo que sale de él también. Si no se le pregunta, se la trata como una cosa. Hay un deber de respeto que no depende de lo buenos que sean los resultados.",
         "facil": "Una persona no es una cosa que se pueda usar, ni siquiera para curar a otras. Su cuerpo es suyo. Si no le preguntas, la tratas como una cosa. Respetarla es un deber, aunque los resultados sean buenos."
@@ -35,6 +37,7 @@
     },
     {
       "id": "jonas",
+      "frase": { "normal": "No sabemos qué se hará con estas células dentro de cincuenta años: la prudencia también es preguntar.", "facil": "No sabemos qué pasará con estas células en el futuro; preguntar también es ser prudente." },
       "argumento": {
         "normal": "No sabemos qué se podrá hacer con estas células dentro de cincuenta años, ni qué se sabrá a través de ellas de esta mujer y de su familia. Cuando algo puede tener efectos tan largos, hay que pensar ahora en quién cargará con ellos. La prudencia también es preguntar.",
         "facil": "No sabemos qué se podrá hacer con estas células en el futuro. Tampoco qué se sabrá de ella y de su familia. Si algo puede durar tantos años, hay que pensarlo antes. Preguntar también es ser prudente."
@@ -112,9 +115,9 @@
       "normal": "¿Por qué has elegido esta opción? Explica qué debe pasar antes de investigar con el cuerpo de una persona y quién debería beneficiarse de lo que se descubra.",
       "facil": "¿Por qué eliges esta opción? Explica qué hay que hacer antes de investigar con el cuerpo de alguien y quién debe ganar con lo que se descubra."
     },
-    "palabras": [40, 80]
+    "palabras": [25, 50]
   },
-  "replica": { "palabras": [30, 60] },
+  "replica": { "palabras": [15, 35] },
   "archivoReal": {
     "texto": {
       "normal": "Las células del tumor de Henrietta Lacks se tomaron sin su consentimiento y dieron lugar a la línea HeLa, fundamental para la vacuna de la polio y para miles de investigaciones. Su familia no fue informada durante décadas. El caso se convirtió en un referente de la bioética del consentimiento informado.",

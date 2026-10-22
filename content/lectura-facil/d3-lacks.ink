@@ -3,14 +3,10 @@
 
 === escena ===
 Baltimore, 1951. # titulo
-Trabajas en el laboratorio de un hospital de Estados Unidos.
-Hoy ha llegado una muestra. Son células de un tumor de Henrietta Lacks.
-Henrietta Lacks es una mujer afroamericana. Está recibiendo tratamiento en este hospital.
-Nadie le ha pedido permiso para investigar con sus células.
-// TODO(verificar): antes de HeLa, las células humanas no sobrevivían mucho tiempo en cultivo.
-Hasta ahora, las células humanas mueren pronto en el laboratorio. Si estas viven, pueden ayudar a investigar vacunas.
+Trabajas en el laboratorio de un hospital de Estados Unidos. Hoy han llegado células del tumor de Henrietta Lacks, una mujer afroamericana que recibe tratamiento aquí.
 // TODO(verificar): segregación racial en los hospitales de Estados Unidos en 1951.
-En esa época, en Estados Unidos, a las personas negras se las separaba también en los hospitales.
-Tú decides qué hacer con la muestra.
+Nadie le ha pedido permiso. En esa época, a las personas negras se las separaba también en los hospitales.
+// TODO(verificar): antes de HeLa, las células humanas no sobrevivían mucho tiempo en cultivo.
+Las células humanas mueren pronto en el laboratorio. Si estas viven, pueden ayudar a investigar vacunas. Tú decides qué hacer.
 ¿Se puede investigar con el cuerpo de alguien sin preguntarle? ¿Quién debe ganar con lo que se descubra? # pregunta
 -> END
