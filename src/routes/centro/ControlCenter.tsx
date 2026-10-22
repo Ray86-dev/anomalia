@@ -1,7 +1,7 @@
 import { ambients, concepts, dilemmas, ui } from '@shared/generated/content.ts';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { audio } from '../../engine/audio.ts';
+import { audio, tensionFor } from '../../engine/audio.ts';
 import { assetUrl } from '../../engine/backdrop/Backdrop.tsx';
 import { getClient } from '../../lib/supabase.ts';
 import { useTeacherSession } from '../../lib/teacher.ts';
@@ -53,7 +53,7 @@ function Dashboard({ classId }: { readonly classId: string }) {
 
   // Atajos del docente (§8.3). Nada de esto se ve en la proyección salvo la ayuda (H).
   useEffect(() => {
-    const music = ambients['2077'].musica;
+    const music = ambients.centro.musica;
     let started = false;
     const startSound = () => {
       if (started || music === undefined) return;
@@ -93,6 +93,18 @@ function Dashboard({ classId }: { readonly classId: string }) {
       audio.play(null);
     };
   }, []);
+
+  // La disonancia sigue al Desnivel medio de la clase (agregado con k ≥ 5).
+  const tension = tensionFor(snapshot?.results.world?.desnivel ?? 0);
+  useEffect(() => {
+    audio.setTension(tension);
+  }, [tension]);
+  useEffect(
+    () => () => {
+      audio.setTension(0);
+    },
+    [],
+  );
 
   // Al revelar se publica lo último aunque no haya un lote completo de k decisiones nuevas.
   useEffect(() => {
@@ -152,6 +164,9 @@ function Dashboard({ classId }: { readonly classId: string }) {
               <li key={line}>{line}</li>
             ))}
           </ul>
+          {ambients.centro.musica !== undefined && (
+            <p className="cc-muted">{ambients.centro.musica.credito}</p>
+          )}
         </aside>
       )}
     </main>

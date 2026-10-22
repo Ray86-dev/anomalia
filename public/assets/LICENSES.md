@@ -42,6 +42,34 @@ Cada entrada indica el archivo, la obra y su autoría, la fuente, la licencia (v
 - **Atribución:** «Música: G. Frescobaldi, "Toccata avanti la Messa della Domenica". Grabación: Random pipings (Wikimedia Commons), CC BY 3.0.»
 - **Modificaciones:** ninguna. Es la transcodificación a MP3 que sirve Wikimedia.
 
+### `audio/d2/holst-mars.mp3`
+- **Obra:** Gustav Holst, *Marte, el portador de la guerra*, primer movimiento de *Los planetas* (1914). Holst murió en 1934: la obra es de dominio público.
+- **Grabación:** Skidmore College Orchestra, comienzo del movimiento.
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:Holst,_The_Planets,_Op._32_-_I._Mars,_the_Bringer_of_War.ogg>
+- **Licencia de la grabación:** CC0 1.0 (dominio público), verificada el 22/10/2026.
+- **Modificaciones:** fundidos de entrada y salida, normalización de volumen y conversión a MP3 de 128 kbps.
+
+### `audio/d3/macleod-cool-vibes.mp3`
+- **Obra:** *Cool Vibes*, Kevin MacLeod (incompetech.com).
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:Cool_Vibes_(ISRC_USUAN1100863).mp3>
+- **Licencia:** CC BY 3.0, <https://creativecommons.org/licenses/by/3.0/>, verificada el 22/10/2026.
+- **Atribución:** «Música: "Cool Vibes", Kevin MacLeod (incompetech.com), CC BY 3.0.»
+- **Modificaciones:** fundidos, normalización de volumen y conversión a MP3 de 128 kbps.
+
+### `audio/d4/macleod-lightless-dawn.mp3`
+- **Obra:** *Lightless Dawn*, Kevin MacLeod (incompetech.com).
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:Lightless_Dawn_(ISRC_USUAN1100655).mp3>
+- **Licencia:** CC BY 3.0, <https://creativecommons.org/licenses/by/3.0/>, verificada el 22/10/2026.
+- **Atribución:** «Música: "Lightless Dawn", Kevin MacLeod (incompetech.com), CC BY 3.0. Recortada.»
+- **Modificaciones:** recortada a los 4 primeros minutos, fundidos, normalización de volumen y conversión a MP3 de 128 kbps.
+
+### `audio/centro/macleod-floating-cities.mp3`
+- **Obra:** *Floating Cities*, Kevin MacLeod (incompetech.com). Ambiente del Centro de Control.
+- **Fuente:** <https://commons.wikimedia.org/wiki/File:Floating_Cities_(ISRC_USUAN1600018).mp3>
+- **Licencia:** CC BY 3.0, <https://creativecommons.org/licenses/by/3.0/>, verificada el 22/10/2026.
+- **Atribución:** «Música: "Floating Cities", Kevin MacLeod (incompetech.com), CC BY 3.0.» Se muestra en la ayuda del Centro (tecla H) y en los créditos del juego.
+- **Modificaciones:** fundidos, normalización de volumen y conversión a MP3 de 128 kbps.
+
 ### `audio/2077/outer-space-loop.mp3`
 - **Obra:** *Outer Space Loop*, wipics.
 - **Fuente:** <https://opengameart.org/content/outer-space-loop>

@@ -1,8 +1,20 @@
 {
   "barroco": { "paleta": ["#1a120b", "#5c3d22", "#e3c08a"], "capas": [] },
-  "artdeco": { "paleta": ["#0f1418", "#2f4a4f", "#d4af37"], "capas": [] },
-  "foto50": { "paleta": ["#121212", "#4a4a44", "#e8e2d0"], "capas": [] },
-  "clinico": { "paleta": ["#0a1014", "#1d3b48", "#9be7ff"], "capas": [] },
+  "artdeco": {
+    "paleta": ["#0f1418", "#2f4a4f", "#d4af37"],
+    "capas": [],
+    "musica": {"src": "audio/d2/holst-mars.mp3", "credito": "Música: G. Holst, «Marte», de Los planetas (1914), comienzo. Grabación: Skidmore College Orchestra (Wikimedia Commons), CC0."}
+  },
+  "foto50": {
+    "paleta": ["#121212", "#4a4a44", "#e8e2d0"],
+    "capas": [],
+    "musica": {"src": "audio/d3/macleod-cool-vibes.mp3", "credito": "Música: «Cool Vibes», Kevin MacLeod (incompetech.com), CC BY 3.0.", "licenciaUrl": "https://creativecommons.org/licenses/by/3.0/deed.es"}
+  },
+  "clinico": {
+    "paleta": ["#0a1014", "#1d3b48", "#9be7ff"],
+    "capas": [],
+    "musica": {"src": "audio/d4/macleod-lightless-dawn.mp3", "credito": "Música: «Lightless Dawn», Kevin MacLeod (incompetech.com), CC BY 3.0. Recortada.", "licenciaUrl": "https://creativecommons.org/licenses/by/3.0/deed.es"}
+  },
   "2077": {
     "paleta": ["#05070d", "#0d2a3a", "#7fe0d0"],
     "capas": [
@@ -21,5 +33,10 @@
       "src": "audio/2077/outer-space-loop.mp3",
       "credito": "Música: «Outer Space Loop», de wipics (OpenGameArt), CC0."
     }
+  },
+  "centro": {
+    "paleta": ["#05070d", "#0d2a3a", "#7fe0d0"],
+    "capas": [],
+    "musica": {"src": "audio/centro/macleod-floating-cities.mp3", "credito": "Música: «Floating Cities», Kevin MacLeod (incompetech.com), CC BY 3.0.", "licenciaUrl": "https://creativecommons.org/licenses/by/3.0/deed.es"}
   }
 }

@@ -48,7 +48,8 @@ export const ambientSchema = z.strictObject({
   capas: z.array(imageSchema),
   musica: trackSchema.optional(),
 });
-export const ambientsSchema = z.record(z.enum(AESTHETICS), ambientSchema);
+/** Un ambiente por época y otro para el Centro de Control (§10.2). */
+export const ambientsSchema = z.record(z.enum([...AESTHETICS, 'centro']), ambientSchema);
 const wordRange = z
   .tuple([z.number().int().positive(), z.number().int().positive()])
   .refine(([min, max]) => min <= max, 'el mínimo no puede superar al máximo');

@@ -10,7 +10,8 @@ import {
   type CSSProperties,
   type ReactNode,
 } from 'react';
-import { audio } from '../../../engine/audio.ts';
+import { desnivel } from '@shared/game/world.ts';
+import { audio, tensionFor } from '../../../engine/audio.ts';
 import { speech } from '../../../engine/speech.ts';
 import { assetUrl, Backdrop } from '../../../engine/backdrop/Backdrop.tsx';
 import { animateIn } from '../../../engine/motion.ts';
@@ -78,6 +79,18 @@ export function Game({ initial, onLost }: GameProps) {
   useEffect(() => {
     audio.play(trackUrl);
   }, [trackUrl]);
+
+  // La disonancia crece con el Desnivel del mundo del alumno (§10.2).
+  const tension = tensionFor(desnivel(run.world));
+  useEffect(() => {
+    audio.setTension(tension);
+  }, [tension]);
+  useEffect(
+    () => () => {
+      audio.setTension(0);
+    },
+    [],
+  );
 
   // La música baja mientras se lee en voz alta.
   useEffect(() => {
