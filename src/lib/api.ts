@@ -8,8 +8,10 @@ import {
   type RecoverResponse,
 } from '@shared/schemas/partida.ts';
 import {
+  myDossierSchema,
   myRecoverySchema,
   myStateSchema,
+  type MyDossier,
   type MyRecovery,
   type MyState,
 } from '@shared/schemas/state.ts';
@@ -92,5 +94,14 @@ export async function loadMyState(): Promise<MyState | null> {
   if (error !== null) throw new NetworkError(error.message);
   const parsed = myStateSchema.safeParse(data);
   if (!parsed.success) throw new NetworkError('Unexpected response from my_state');
+  return parsed.data;
+}
+
+/** Decisiones y textos para la reflexión final y el expediente; `null` antes del epílogo. */
+export async function loadMyDossier(): Promise<MyDossier | null> {
+  const { data, error } = await getClient('student').rpc('my_dossier');
+  if (error !== null) throw new NetworkError(error.message);
+  const parsed = myDossierSchema.safeParse(data);
+  if (!parsed.success) throw new NetworkError('Unexpected response from my_dossier');
   return parsed.data;
 }

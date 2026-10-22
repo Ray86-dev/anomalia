@@ -504,3 +504,33 @@
   letter-spacing: 0.18em;
   color: var(--accent);
 }
+
+/* ── Final de la partida ── */
+
+.ending-card h2 {
+  font-size: var(--text-h1);
+  color: var(--accent);
+}
+
+.decision-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.decision-place {
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+.verify-code {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 8vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}

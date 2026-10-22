@@ -71,7 +71,9 @@ describe.skipIf(!configured)('RLS y partida (integración)', () => {
       .select('id')
       .single();
     if (error !== null) throw error;
-    const alert = await admin.from('alerts').insert({ answer_id: answer.id, class_id: classA.id });
+    const alert = await admin
+      .from('alerts')
+      .insert({ answer_id: answer.id, player_id: hipatia.id, class_id: classA.id });
     if (alert.error !== null) throw alert.error;
   });
 

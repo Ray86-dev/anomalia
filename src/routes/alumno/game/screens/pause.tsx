@@ -1,4 +1,4 @@
-/** Espera entre capítulos y final provisional de la versión jugable. */
+/** Espera entre capítulos. */
 import { ui } from '@shared/generated/content.ts';
 import { useEffect, useState } from 'react';
 import { Notice } from '../../../../ui/Notice.tsx';
@@ -48,17 +48,6 @@ export function Waiting() {
           {t.espera.comprobar}
         </button>
       </ActionBar>
-    </>
-  );
-}
-
-export function Epilogue() {
-  return (
-    <>
-      <h1 tabIndex={-1} data-focus>
-        {t.epilogo.titulo}
-      </h1>
-      <p className="lead">{t.epilogo.texto}</p>
     </>
   );
 }

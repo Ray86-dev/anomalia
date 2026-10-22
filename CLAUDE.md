@@ -55,7 +55,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
   - Nudos Ink obligatorios: `prologo` en `content/prologo.ink` y `escena` en cada dilema.
   - Etiquetas Ink: `# titulo` y `# pregunta`.
 - **Recursos:** imágenes y música en `public/assets/`, siempre con su entrada en `public/assets/LICENSES.md` y `credito` (más `licenciaUrl` si es CC BY) en el JSON que las declara.
-  - Solo CC0, CC BY o dominio público.
+  - Solo CC0, CC BY o dominio público; las tipografías, con licencia SIL OFL.
   - Imágenes en WebP de unos 1050×1400 (recorte vertical); música en MP3 de unos 128 kbps.
 - **Juego del alumno** (`src/routes/alumno/game/`): una pantalla por fase. El servidor es la autoridad: el cliente adopta siempre el estado que devuelve `partida`.
   - Motor en `src/engine/`: Ink, Pixi, Howler y GSAP, todo cargado bajo demanda.
@@ -75,6 +75,11 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
   - el docente (tiene fila en `teachers`) accede a sus clases por RLS y por RPC con comprobación de propiedad;
   - las funciones auxiliares van en el esquema `private`.
 - **Sesiones separadas:** dos clientes de Supabase con `storageKey` distinto: `anomalia-alumno` para `/` y `anomalia-docente` para `/consola` y `/centro`.
+- **Expediente PDF** (§9):
+  - `src/engine/pdf/` lo maqueta con pdf-lib, fontkit y Atkinson Hyperlegible (D-40). Se carga bajo demanda y no conoce el contenido: recibe los textos ya resueltos.
+  - El ensamblado a partir de `my_dossier()` y de `content/` está en `src/routes/alumno/game/dossier.ts`.
+  - El nombre real solo vive en memoria mientras se genera (D-45).
+  - El docente comprueba los códigos con la RPC `verify_run` (D-41).
 - **Centro de Control** (`src/routes/centro/`): solo consume `class_snapshot` (agregados con k = 5, resultados publicados por lotes o al pulsar R; D-35) y se actualiza por Realtime Broadcast privado con sondeo de respaldo (D-36).
   - Nunca le pases alias, textos libres ni filas individuales, y no importes nada de `alumno` ni de `consola` (regla de ESLint).
 

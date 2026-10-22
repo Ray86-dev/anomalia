@@ -21,6 +21,7 @@ function realContent(): RawContent {
     ui: json('interfaz.json'),
     ambients: json('ambientes.json'),
     alerts: json('alertas.json'),
+    reflection: json('reflexion.json'),
   };
 }
 

@@ -41,3 +41,12 @@ Cada entrada indica el archivo, la obra y su autoría, la fuente, la licencia (v
 - **Fuente:** <https://opengameart.org/content/outer-space-loop>
 - **Licencia:** CC0, dominio público.
 - **Modificaciones:** recodificada a 128 kbps.
+
+## Tipografías
+
+### `fonts/AtkinsonHyperlegible-Regular.ttf` y `fonts/AtkinsonHyperlegible-Bold.ttf`
+- **Obra:** *Atkinson Hyperlegible*, Braille Institute of America, 2020. Diseñada para lectores con baja visión.
+- **Fuente:** <https://github.com/google/fonts/tree/main/ofl/atkinsonhyperlegible>
+- **Licencia:** SIL Open Font License 1.1 (texto completo en `fonts/OFL-AtkinsonHyperlegible.txt`). Permite incrustarla en documentos como el expediente PDF.
+- **Uso:** solo en el expediente PDF, que se genera en el móvil del alumno.
+- **Modificaciones:** ninguna. Se incrusta completa en el PDF.

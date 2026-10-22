@@ -137,8 +137,37 @@
       "bloqueado": "El capítulo II todavía está cerrado."
     },
     "epilogo": {
-      "titulo": "Fin de esta versión",
-      "texto": "Has llegado al final de lo que se puede jugar por ahora. El epílogo, la reflexión final y tu expediente llegarán en próximas versiones."
+      "titulo": "Epílogo · Tu 2077",
+      "texto": "Mnemósine ha cerrado todas las anomalías. Esta es la línea temporal que dejan tus decisiones.",
+      "final": "Final alcanzado",
+      "continuar": "Escribir la reflexión final"
+    },
+    "reflexion": {
+      "titulo": "Reflexión final",
+      "intro": "Antes de archivar tu expediente, Mnemósine te pide una última reflexión.",
+      "decisiones": "Tus decisiones",
+      "objetor": "te rebatió {nombre}",
+      "etiqueta": "Tu reflexión",
+      "ayuda": "Entre {min} y {max} palabras.",
+      "aviso": "Cuando la archives ya no podrás cambiarla.",
+      "enviar": "Archivar mi reflexión",
+      "enviando": "Archivando…"
+    },
+    "expediente": {
+      "titulo": "Tu expediente",
+      "texto": "Tu partida está archivada. Genera el expediente en PDF y súbelo al aula virtual.",
+      "codigo": "Código de verificación",
+      "codigoAyuda": "Con él, tu docente comprueba que el expediente es auténtico.",
+      "nombre": "Nombre y apellidos",
+      "nombreAyuda": "Solo aparece en la portada del PDF. Se escribe en este móvil y no se envía ni se guarda en ningún sitio.",
+      "faltaNombre": "Escribe tu nombre y apellidos para la portada.",
+      "generar": "Generar el expediente (PDF)",
+      "generando": "Generando el PDF…",
+      "listo": "Expediente listo.",
+      "compartir": "Compartir o subir",
+      "descargar": "Descargar el PDF",
+      "error": "No se ha podido generar el PDF. Inténtalo de nuevo.",
+      "fin": "Cuando lo hayas subido al aula virtual, habrás terminado. Gracias, cronista."
     },
     "audio": {
       "silenciar": "Silenciar el sonido",
@@ -215,6 +244,7 @@
     "sinAlertas": "No hay alertas.",
     "alertaAyuda": "Textos con indicios de malestar. Solo tú los ves; actúa según el protocolo del centro.",
     "alertaRespuesta": "Réplica",
+    "alertaReflexion": "Reflexión final",
     "marcarVista": "Marcar como vista",
     "vista": "Vista",
     "solicitudesTitulo": "Recuperaciones pendientes ({n})",
@@ -232,7 +262,20 @@
     "borrar": "Borrar todos los datos de esta clase",
     "borrarAyuda": "Se borran el alumnado, sus partidas y textos y las alertas. No se puede deshacer.",
     "confirmarBorrar": "Para confirmar, escribe el código de la clase ({codigo}):",
-    "borrada": "Clase borrada."
+    "borrada": "Clase borrada.",
+    "verificar": {
+      "titulo": "Verificar un expediente",
+      "ayuda": "Escribe el código de la portada del PDF para comprobar que corresponde a una partida real de tus clases y comparar sus textos.",
+      "etiqueta": "Código de verificación",
+      "marcador": "ANM-XXXX-XXXX",
+      "boton": "Verificar",
+      "buscando": "Comprobando…",
+      "noEncontrado": "Ese código no corresponde a ninguna partida de tus clases.",
+      "valido": "Código válido",
+      "resumen": "{alias} · {clase} · terminado el {fecha}",
+      "retirado": "Este alias está retirado de la clase.",
+      "final": "Final: {final}"
+    }
   },
   "centro": {
     "titulo": "Centro de Control",
@@ -281,6 +324,33 @@
       "conectados": "{n} CRONISTAS CONECTADOS",
       "espera": "ESPERANDO A LOS CRONISTAS…"
     }
+  },
+  "pdf": {
+    "titulo": "ANOMALÍA",
+    "subtitulo": "Expediente del cronista",
+    "materia": "Filosofía · 4.º ESO",
+    "nombre": "Nombre y apellidos",
+    "grupo": "Grupo",
+    "alias": "Alias",
+    "codigo": "Código de verificación",
+    "fecha": "Fecha",
+    "final": "Final alcanzado",
+    "verificacion": "Con este código, el docente comprueba en su consola que el expediente corresponde a una partida real.",
+    "ruta": "Ruta temporal",
+    "decision": "Decisión",
+    "justificacion": "Justificación",
+    "objecion": "Objeción de {nombre}",
+    "replica": "Réplica",
+    "archivo": "Archivo real",
+    "sinTexto": "(sin respuesta)",
+    "mundo": "Estado final del mundo",
+    "desnivel": "Desnivel prometeico (poder menos responsabilidad)",
+    "reflexion": "Reflexión final",
+    "rubrica": "Rúbrica (la completa el docente)",
+    "criterio": "Criterio",
+    "observaciones": "Observaciones",
+    "pie": "ANOMALÍA · {codigo} · Página {n} de {total}",
+    "archivoNombre": "ANOMALIA-expediente-{codigo}.pdf"
   },
   "fases": {
     "prologue": "Prólogo",

@@ -363,3 +363,15 @@ html[data-motion='reduced'] *::after {
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
 }
+
+/* ── Verificación de expedientes (consola) ── */
+
+.verify-entry {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.verify-entry h4 {
+  margin: 0;
+  font-size: var(--text-base);
+}

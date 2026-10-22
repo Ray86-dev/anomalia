@@ -20,7 +20,14 @@ const t = ui.juego;
 
 const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : '0');
 
-function WorldMeters({ world, deltas }: { readonly world: WorldState; readonly deltas: Deltas }) {
+/** Estado del mundo. Con `deltas`, las barras crecen desde el valor anterior a la decisión. */
+export function WorldMeters({
+  world,
+  deltas,
+}: {
+  readonly world: WorldState;
+  readonly deltas?: Deltas;
+}) {
   // Las barras parten del valor anterior a la decisión y crecen hasta el actual.
   const [grown, setGrown] = useState(false);
   useEffect(() => {
@@ -38,7 +45,7 @@ function WorldMeters({ world, deltas }: { readonly world: WorldState; readonly d
       <h2 id="estado-mundo">{t.ondas.estado}</h2>
       <ul className="meters">
         {WORLD_VARS.map((variable) => {
-          const delta = deltas[variable] ?? 0;
+          const delta = deltas?.[variable] ?? 0;
           const now = world[variable];
           const before = Math.min(WORLD_MAX, Math.max(WORLD_MIN, now - delta));
           return (
@@ -55,9 +62,11 @@ function WorldMeters({ world, deltas }: { readonly world: WorldState; readonly d
                 <span className="meter-fill" style={{ width: `${grown ? now : before}%` }} />
               </span>
               <span className="meter-value">{now}</span>
-              <span className={`meter-delta ${delta > 0 ? 'up' : delta < 0 ? 'down' : ''}`}>
-                {delta === 0 ? t.ondas.sinCambio : signed(delta)}
-              </span>
+              {deltas !== undefined && (
+                <span className={`meter-delta ${delta > 0 ? 'up' : delta < 0 ? 'down' : ''}`}>
+                  {delta === 0 ? t.ondas.sinCambio : signed(delta)}
+                </span>
+              )}
             </li>
           );
         })}

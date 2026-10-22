@@ -71,6 +71,8 @@ export default defineConfig(({ mode }) => {
               },
               { name: 'vendor-supabase', test: /node_modules[\\/]@supabase[\\/]/ },
               { name: 'vendor-zod', test: /node_modules[\\/]zod[\\/]/ },
+              // Solo se descarga al generar el expediente PDF (unos 500 kB gzip).
+              { name: 'vendor-pdf', test: /node_modules[\\/](pdf-lib|@pdf-lib)[\\/]/ },
             ],
           },
         },

@@ -4,8 +4,10 @@ import {
   concepts,
   counselors,
   dilemmas,
+  endings,
   fallbacks,
 } from '../../../shared/generated/content.ts';
+import { cleanText } from '../../../shared/game/words.ts';
 import type { SvcState } from '../../../shared/schemas/partida.ts';
 import { handlePartida, type AiDialogue, type PartidaDeps } from './handler.ts';
 
@@ -21,6 +23,7 @@ const content = (
   counselors,
   concepts,
   alertTerms,
+  endings,
 });
 
 function deps(overrides: Partial<PartidaDeps> = {}): PartidaDeps {
@@ -223,6 +226,7 @@ function loaded(run: Partial<Run> = {}, overrides: Partial<SvcState> = {}): SvcS
       currentDilemma: null,
       world: { poder: 50, responsabilidad: 50, equidad: 50, confianza: 50 },
       branches: [],
+      ending: null,
       ...run,
     },
     answer: null,
@@ -271,6 +275,7 @@ describe('partida · advance', () => {
           p_from_dilemma: null,
           p_to_phase: 'travel',
           p_to_dilemma: 'd1',
+          p_ending: null,
         },
       ],
     ]);
@@ -307,6 +312,68 @@ describe('partida · advance', () => {
     expect((await play(advance, loaded({}, { status: 'expelled' }))).body).toMatchObject({
       error: 'expelled',
     });
+  });
+});
+
+describe('partida · epílogo y reflexión final', () => {
+  // Desnivel 30 y equidad 30: «Tecnocracia genómica» (primer final de la tabla §5.6).
+  const technocracy = { poder: 80, responsabilidad: 50, equidad: 30, confianza: 50 };
+  const oneChapter = { chapter1: ['d1'], chapter2: [] };
+
+  it('al entrar en el epílogo fija el final según el estado del mundo', async () => {
+    const { rpc } = await play(
+      { action: 'advance', from: { phase: 'archive', dilemmaId: 'd1' } },
+      loaded({ phase: 'archive', currentDilemma: 'd1', world: technocracy }, oneChapter),
+    );
+    expect(writes(rpc)).toEqual([
+      ['svc_advance', expect.objectContaining({ p_to_phase: 'epilogue', p_ending: 'tecnocracia' })],
+    ]);
+  });
+
+  it('el resto de avances no tocan el final', async () => {
+    const { rpc } = await play(
+      { action: 'advance', from: { phase: 'epilogue', dilemmaId: null } },
+      loaded({ phase: 'epilogue', world: technocracy, ending: 'tecnocracia' }, oneChapter),
+    );
+    expect(writes(rpc)).toEqual([
+      ['svc_advance', expect.objectContaining({ p_to_phase: 'reflection', p_ending: null })],
+    ]);
+  });
+
+  it('guarda la reflexión limpia, con el final y sin alerta', async () => {
+    const text = '  La ciencia   explica, pero no decide por nosotros.  ';
+    const { body, rpc } = await play(
+      { action: 'reflect', text },
+      loaded({ phase: 'reflection', world: technocracy }),
+    );
+    expect(body).toMatchObject({ ok: true });
+    expect(writes(rpc)).toEqual([
+      [
+        'svc_reflect',
+        {
+          p_player_id: 'player-1',
+          p_text: cleanText(text),
+          p_ending: 'tecnocracia',
+          p_alert: false,
+        },
+      ],
+    ]);
+  });
+
+  it('avisa al docente si la reflexión muestra malestar', async () => {
+    const { rpc } = await play(
+      { action: 'reflect', text: 'No sé, últimamente me quiero morir' },
+      loaded({ phase: 'reflection' }),
+    );
+    expect(writes(rpc)[0]?.[1]).toMatchObject({ p_alert: true });
+  });
+
+  it('solo se reflexiona en su fase y con alguna palabra', async () => {
+    const late = await play({ action: 'reflect', text: 'Otra vez' }, loaded({ phase: 'dossier' }));
+    expect(late.body).toMatchObject({ ok: false, error: 'stale' });
+    const empty = await play({ action: 'reflect', text: ' … ' }, loaded({ phase: 'reflection' }));
+    expect(empty.body).toMatchObject({ ok: false, error: 'invalid' });
+    expect([...writes(late.rpc), ...writes(empty.rpc)]).toEqual([]);
   });
 });
 

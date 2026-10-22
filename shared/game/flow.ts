@@ -73,6 +73,8 @@ export function nextPosition(position: Position, ctx: FlowContext): Position | n
       return ctx.chapterUnlocked === 2 ? startOf(ctx.chapter2, ctx) : null;
     case 'archive':
       return dilemma === null ? null : afterDilemma(dilemma, ctx);
+    case 'epilogue':
+      return { phase: 'reflection', dilemma: null };
     default: {
       const next = ADVANCE_WITHIN_DILEMMA[phase];
       return next === undefined || dilemma === null ? null : { phase: next, dilemma };

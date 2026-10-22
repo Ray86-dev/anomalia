@@ -6,6 +6,7 @@
  */
 import { z } from 'zod';
 import { aliasProblem, cleanAlias, type BlockedTerms } from '../../../shared/game/alias.ts';
+import { computeEnding } from '../../../shared/game/endings.ts';
 import { nextPosition, samePosition, type FlowContext } from '../../../shared/game/flow.ts';
 import { mentionsDistress } from '../../../shared/game/privacy.ts';
 import { applyDeltas } from '../../../shared/game/world.ts';
@@ -15,6 +16,7 @@ import type {
   Concept,
   Counselor,
   Dilemma,
+  Ending,
   Fallbacks,
 } from '../../../shared/schemas/content.ts';
 import {
@@ -49,7 +51,8 @@ export type SvcFunction =
   | 'svc_justify'
   | 'svc_reply'
   | 'svc_ai_take'
-  | 'svc_alert';
+  | 'svc_alert'
+  | 'svc_reflect';
 
 /** Diálogo con la IA; cada llamada devuelve `null` si falla y entonces se usa el respaldo. */
 export type AiDialogue = {
@@ -76,6 +79,7 @@ export type PartidaDeps = {
     readonly counselors: readonly Counselor[];
     readonly concepts: readonly Concept[];
     readonly alertTerms: AlertTerms;
+    readonly endings: readonly Ending[];
   };
   /** `null` si no hay proveedor de IA configurado: entonces todo sale de los respaldos. */
   readonly ai: AiDialogue | null;
@@ -197,6 +201,21 @@ async function play(uid: string, request: GameRequest, deps: PartidaDeps): Promi
       p_from_dilemma: from.dilemma,
       p_to_phase: to.phase,
       p_to_dilemma: to.dilemma,
+      // El mundo ya no cambia después del último dilema: el final queda fijado aquí (§5.6).
+      p_ending: to.phase === 'epilogue' ? computeEnding(run.world, deps.content.endings).id : null,
+    });
+  }
+
+  // Reflexión final: sin IA; cierra la partida y genera el código de verificación del PDF.
+  if (request.action === 'reflect') {
+    if (run.phase !== 'reflection') return failure('stale', state);
+    const text = cleanText(request.text);
+    if (countWords(text) === 0) return failure('invalid', state);
+    return write(deps, 'svc_reflect', {
+      p_player_id: playerId,
+      p_text: text,
+      p_ending: computeEnding(run.world, deps.content.endings).id,
+      p_alert: mentionsDistress(text, deps.content.alertTerms.contiene),
     });
   }
 

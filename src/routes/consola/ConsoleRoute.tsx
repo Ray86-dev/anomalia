@@ -7,6 +7,7 @@ import { Screen } from '../../ui/Screen.tsx';
 import { ClassDetail } from './ClassDetail.tsx';
 import { ClassList, type ClassSummary } from './ClassList.tsx';
 import { LoginForm } from './LoginForm.tsx';
+import { VerifyDossier } from './VerifyDossier.tsx';
 
 const t = ui.consola;
 
@@ -51,7 +52,10 @@ export function ConsoleRoute() {
         <Screen kicker={session.displayName} title={t.titulo}>
           <SignOutButton />
           {open === null ? (
-            <ClassList onOpen={setOpen} />
+            <>
+              <ClassList onOpen={setOpen} />
+              <VerifyDossier />
+            </>
           ) : (
             <ClassDetail
               schoolClass={open}

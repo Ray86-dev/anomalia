@@ -187,6 +187,9 @@ export const rubricSchema = z.strictObject({
   ),
 });
 
+/** Reflexión final (§6): pregunta y palabras orientativas. */
+export const reflectionSchema = z.strictObject({ pregunta: textoSchema, palabras: wordRange });
+
 export const classModeSchema = z.strictObject({
   id,
   etiqueta: z.string().min(1),
@@ -226,6 +229,7 @@ export type Concept = z.infer<typeof conceptSchema>;
 export type Ending = z.infer<typeof endingSchema>;
 export type Rubric = z.infer<typeof rubricSchema>;
 export type ClassMode = z.infer<typeof classModeSchema>;
+export type Reflection = z.infer<typeof reflectionSchema>;
 export type Fallbacks = z.infer<typeof fallbacksSchema>;
 export type Aesthetic = (typeof AESTHETICS)[number];
 export type AlertTerms = z.infer<typeof alertTermsSchema>;

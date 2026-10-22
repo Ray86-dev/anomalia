@@ -6,6 +6,7 @@ import {
   concepts,
   counselors,
   dilemmas,
+  endings,
   fallbacks,
 } from '../../../shared/generated/content.ts';
 import { readAiConfig } from '../_shared/ai/config.ts';
@@ -53,7 +54,7 @@ Deno.serve((request) =>
       if (result.error !== null) throw new Error(`${fn}: ${result.error.message}`);
       return result.data;
     },
-    content: { blockedTerms, dilemmas, fallbacks, counselors, concepts, alertTerms },
+    content: { blockedTerms, dilemmas, fallbacks, counselors, concepts, alertTerms, endings },
     ai,
     allowedOrigins,
   }),

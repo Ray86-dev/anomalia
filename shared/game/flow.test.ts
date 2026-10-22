@@ -67,8 +67,12 @@ describe('nextPosition', () => {
     expect(nextPosition(at('waiting'), { ...ctx, chapterUnlocked: 2 })).toEqual(at('epilogue'));
   });
 
-  it('no avanza desde las fases finales', () => {
-    for (const phase of ['epilogue', 'reflection', 'dossier', 'done'] as const) {
+  it('del epílogo se pasa a la reflexión final', () => {
+    expect(nextPosition(at('epilogue'), twoSessions())).toEqual(at('reflection'));
+  });
+
+  it('la reflexión y el expediente no se superan con «continuar»', () => {
+    for (const phase of ['reflection', 'dossier', 'done'] as const) {
       expect(nextPosition(at(phase), twoSessions())).toBeNull();
     }
   });

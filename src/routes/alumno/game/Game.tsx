@@ -21,7 +21,8 @@ import { AudioToggle } from './parts.tsx';
 import { Council, Decision } from './screens/council.tsx';
 import { Prologue, Scene, Travel } from './screens/intro.tsx';
 import { Archive, Ripples } from './screens/outcome.tsx';
-import { Epilogue, Waiting } from './screens/pause.tsx';
+import { Dossier, Epilogue, Reflection } from './screens/finale.tsx';
+import { Waiting } from './screens/pause.tsx';
 import { Justification, Objection } from './screens/writing.tsx';
 import '../../../styles/game.css';
 
@@ -77,7 +78,10 @@ export function Game({ initial, onLost }: GameProps) {
   let screen: ReactNode;
   if (run.phase === 'prologue') screen = <Prologue />;
   else if (run.phase === 'waiting') screen = <Waiting />;
-  else if (run.phase === 'epilogue' || dilemma === undefined) screen = <Epilogue />;
+  else if (run.phase === 'epilogue') screen = <Epilogue />;
+  else if (run.phase === 'reflection') screen = <Reflection />;
+  else if (run.phase === 'dossier' || run.phase === 'done') screen = <Dossier />;
+  else if (dilemma === undefined) screen = <Notice tone="error">{ui.app.errorInesperado}</Notice>;
   else {
     const screens: Partial<Record<Phase, ReactNode>> = {
       travel: <Travel dilemma={dilemma} />,
@@ -89,7 +93,7 @@ export function Game({ initial, onLost }: GameProps) {
       ripples: <Ripples dilemma={dilemma} />,
       archive: <Archive dilemma={dilemma} />,
     };
-    screen = screens[run.phase] ?? <Epilogue />;
+    screen = screens[run.phase] ?? <Notice tone="error">{ui.app.errorInesperado}</Notice>;
   }
 
   const kicker = past

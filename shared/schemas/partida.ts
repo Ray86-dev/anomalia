@@ -8,6 +8,8 @@ const choiceSchema = z.enum(['A', 'B', 'C']);
 
 export const MAX_JUSTIFICATION_CHARS = 1200;
 export const MAX_REPLY_CHARS = 900;
+/** Igual que el CHECK de `runs.final_reflection`. */
+export const MAX_REFLECTION_CHARS = 3000;
 
 // ── Peticiones ──
 
@@ -49,6 +51,12 @@ export const replyRequestSchema = z.strictObject({
   text: z.string().max(MAX_REPLY_CHARS),
 });
 
+/** Reflexión final (§6): cierra la partida y genera el código de verificación del PDF. */
+export const reflectRequestSchema = z.strictObject({
+  action: z.literal('reflect'),
+  text: z.string().max(MAX_REFLECTION_CHARS),
+});
+
 export const partidaRequestSchema = z.discriminatedUnion('action', [
   joinRequestSchema,
   recoverRequestSchema,
@@ -56,6 +64,7 @@ export const partidaRequestSchema = z.discriminatedUnion('action', [
   chooseRequestSchema,
   justifyRequestSchema,
   replyRequestSchema,
+  reflectRequestSchema,
 ]);
 export type PartidaRequest = z.infer<typeof partidaRequestSchema>;
 export type JoinRequest = z.infer<typeof joinRequestSchema>;
@@ -76,6 +85,8 @@ export const runSnapshotSchema = z.object({
   currentDilemma: z.string().nullable(),
   world: worldSchema,
   branches: z.array(z.string()),
+  /** Final alcanzado: se fija al entrar en el epílogo (`null` antes). */
+  ending: z.string().nullable().default(null),
 });
 export type RunSnapshot = z.infer<typeof runSnapshotSchema>;
 

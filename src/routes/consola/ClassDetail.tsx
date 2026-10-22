@@ -32,7 +32,8 @@ const consoleSchema = z
         createdAt: z.string(),
         seenAt: z.string().nullable(),
         alias: z.string(),
-        dilemmaId: z.string(),
+        /** `null`: alerta de la reflexión final. */
+        dilemmaId: z.string().nullable(),
         text: z.string().nullable(),
         justification: z.string().nullable(),
         reply: z.string().nullable(),
@@ -205,7 +206,8 @@ export function ClassDetail({ schoolClass, onBack }: ClassDetailProps) {
               className={`card alert-card${alert.seenAt === null ? ' unseen' : ''}`}
             >
               <span className="card-title">
-                {alert.alias} · {dilemmaLabel(alert.dilemmaId)}
+                {alert.alias} ·{' '}
+                {alert.dilemmaId === null ? t.alertaReflexion : dilemmaLabel(alert.dilemmaId)}
               </span>
               <span className="muted">{formatRelative(alert.createdAt)}</span>
               <blockquote className="alert-text">

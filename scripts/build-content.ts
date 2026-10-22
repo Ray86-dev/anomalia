@@ -49,6 +49,7 @@ const raw: RawContent = {
   ui: readJson('interfaz.json'),
   ambients: readJson('ambientes.json'),
   alerts: readJson('alertas.json'),
+  reflection: readJson('reflexion.json'),
 };
 
 const assetExists = (src: string) => existsSync(join(root, 'public', 'assets', src));
@@ -81,6 +82,7 @@ import type {
   Dilemma,
   Ending,
   Fallbacks,
+  Reflection,
   Rubric,
   UiTree,
 } from '../schemas/content.ts';
@@ -94,6 +96,8 @@ export const concepts: readonly Concept[] = ${json(c.concepts)};
 export const endings: readonly Ending[] = ${json(c.endings)};
 
 export const rubric: Rubric = ${json(c.rubric)};
+
+export const reflection: Reflection = ${json(c.reflection)};
 
 export const classModes: readonly ClassMode[] = ${json(c.modes)};
 

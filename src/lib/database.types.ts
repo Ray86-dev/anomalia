@@ -18,26 +18,29 @@ export type Database = {
     Tables: {
       alerts: {
         Row: {
-          answer_id: string
+          answer_id: string | null
           class_id: string
           created_at: string
           id: string
+          player_id: string
           seen_at: string | null
           text: string | null
         }
         Insert: {
-          answer_id: string
+          answer_id?: string | null
           class_id: string
           created_at?: string
           id?: string
+          player_id: string
           seen_at?: string | null
           text?: string | null
         }
         Update: {
-          answer_id?: string
+          answer_id?: string | null
           class_id?: string
           created_at?: string
           id?: string
+          player_id?: string
           seen_at?: string | null
           text?: string | null
         }
@@ -54,6 +57,13 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: false
             referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
             referencedColumns: ["id"]
           },
         ]
@@ -390,6 +400,7 @@ export type Database = {
         Returns: Json
       }
       delete_class: { Args: { p_class_id: string }; Returns: undefined }
+      my_dossier: { Args: never; Returns: Json }
       my_recovery: { Args: never; Returns: Json }
       my_state: { Args: never; Returns: Json }
       ping: { Args: never; Returns: string }
@@ -399,6 +410,7 @@ export type Database = {
       }
       svc_advance: {
         Args: {
+          p_ending?: string
           p_from_dilemma: string
           p_from_phase: string
           p_player_id: string
@@ -456,6 +468,15 @@ export type Database = {
         }
         Returns: Json
       }
+      svc_reflect: {
+        Args: {
+          p_alert: boolean
+          p_ending: string
+          p_player_id: string
+          p_text: string
+        }
+        Returns: Json
+      }
       svc_reply: {
         Args: {
           p_alert: boolean
@@ -471,6 +492,7 @@ export type Database = {
         Args: { p_chapter: number; p_class_id: string }
         Returns: undefined
       }
+      verify_run: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never

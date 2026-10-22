@@ -1,6 +1,6 @@
 /** Resultado de la RPC `my_state()`: la partida del alumno y los ajustes de su clase. */
 import { z } from 'zod';
-import { answerSnapshotSchema, runSnapshotSchema } from './partida.ts';
+import { answerSnapshotSchema, runSnapshotSchema, worldSchema } from './partida.ts';
 
 export const myStateSchema = z
   .object({
@@ -15,10 +15,7 @@ export const myStateSchema = z
       chapter2: z.array(z.string()),
       chapterUnlocked: z.union([z.literal(1), z.literal(2)]),
     }),
-    run: runSnapshotSchema.extend({
-      ending: z.string().nullable(),
-      finishedAt: z.string().nullable(),
-    }),
+    run: runSnapshotSchema.extend({ finishedAt: z.string().nullable() }),
     answer: answerSnapshotSchema.nullable(),
   })
   .nullable();
@@ -34,3 +31,33 @@ export const myRecoverySchema = z
   })
   .nullable();
 export type MyRecovery = z.infer<typeof myRecoverySchema>;
+
+/** Una decisión con sus textos, tal como va al expediente PDF y a la verificación docente. */
+export const dossierAnswerSchema = z.object({
+  dilemmaId: z.string(),
+  choice: z.enum(['A', 'B', 'C']),
+  justification: z.string().nullable(),
+  objector: z.string().nullable(),
+  objection: z.string().nullable(),
+  reply: z.string().nullable(),
+});
+export type DossierAnswer = z.infer<typeof dossierAnswerSchema>;
+
+/**
+ * Datos del expediente del alumno (`my_dossier()`): disponibles desde el epílogo.
+ * `verifyCode` y `finishedAt` llegan al enviar la reflexión final. El nombre real
+ * nunca pasa por aquí: se escribe en el móvil al generar el PDF.
+ */
+export const myDossierSchema = z
+  .object({
+    alias: z.string(),
+    classLabel: z.string(),
+    verifyCode: z.string().nullable(),
+    ending: z.string().nullable(),
+    finishedAt: z.string().nullable(),
+    world: worldSchema,
+    reflection: z.string().nullable(),
+    answers: z.array(dossierAnswerSchema),
+  })
+  .nullable();
+export type MyDossier = NonNullable<z.infer<typeof myDossierSchema>>;

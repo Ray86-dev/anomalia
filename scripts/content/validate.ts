@@ -11,6 +11,7 @@ import {
   dilemmaSchema,
   endingsSchema,
   fallbacksSchema,
+  reflectionSchema,
   rubricSchema,
   uiSchema,
   type AlertTerms,
@@ -21,6 +22,7 @@ import {
   type Dilemma,
   type Ending,
   type Fallbacks,
+  type Reflection,
   type Rubric,
   type UiTree,
 } from '../../shared/schemas/content.ts';
@@ -37,6 +39,7 @@ export type RawContent = {
   readonly ui: unknown;
   readonly ambients: unknown;
   readonly alerts: unknown;
+  readonly reflection: unknown;
 };
 
 export type Content = {
@@ -50,6 +53,7 @@ export type Content = {
   readonly fallbacks: Fallbacks;
   readonly ambients: Ambients;
   readonly alerts: AlertTerms;
+  readonly reflection: Reflection;
   readonly dilemmas: readonly Dilemma[];
 };
 
@@ -152,6 +156,7 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   const fallbacks = parse(fallbacksSchema, raw.fallbacks, 'respaldos.json');
   const ambients = parse(ambientsSchema, raw.ambients, 'ambientes.json');
   const alerts = parse(alertTermsSchema, raw.alerts, 'alertas.json');
+  const reflection = parse(reflectionSchema, raw.reflection, 'reflexion.json');
   const dilemmas = raw.dilemmas.map(({ file, data }) => {
     const dilemma = parse(dilemmaSchema, data, file);
     if (dilemma && !basename(file).startsWith(`${dilemma.id}-`)) {
@@ -251,6 +256,7 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     ['consejeros.json', raw.counselors],
     ['finales.json', raw.endings],
     ['respaldos.json', raw.fallbacks],
+    ['reflexion.json', raw.reflection],
     ...raw.dilemmas.map(({ file, data }): [string, unknown] => [file, data]),
   ];
   for (const [file, data] of sources) {
@@ -273,8 +279,9 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     blocked &&
     fallbacks &&
     ambients &&
-    alerts
-      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks, ambients, alerts }
+    alerts &&
+    reflection
+      ? { ui, counselors, concepts, endings, rubric, modes, blocked, fallbacks, ambients, alerts, reflection }
       : null;
   const content =
     errors.length === 0 && complete

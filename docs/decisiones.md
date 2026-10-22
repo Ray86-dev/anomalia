@@ -153,3 +153,34 @@ Cada entrada modifica o concreta `docs/DISENO_ANOMALIA.md`. Si el diseño y este
 - Ambiente sonoro propio del Centro de Control.
 - Consulta al DPD sobre la IA externa y las alertas (sigue abierta).
 
+## 2026-10-22 · M4 (expediente PDF)
+
+### Tomadas por el docente
+- **D-40 · Tipografía incrustada en el PDF:** Atkinson Hyperlegible (SIL OFL), pensada para baja visión, con el complemento oficial `@pdf-lib/fontkit`.
+  - pdf-lib y fontkit pesan unos 500 kB gzip. Van en un chunk propio (`vendor-pdf`) que solo se descarga al pulsar «Generar», y su hash no cambia entre despliegues.
+  - Los caracteres que la fuente no tiene (emojis) se omiten en el PDF para que no salgan como cuadros.
+
+### Propuestas técnicas
+- **D-41 · Verificación con una RPC (`verify_run`) en lugar de la Edge Function `verify-code`** (cambio sobre §11.6).
+  - El docente ya tiene sesión, así que basta con comprobar en SQL que el código es de una de sus clases. Otro docente, o el propio alumno, recibe `null`.
+  - Acepta el código en minúsculas, con o sin «ANM» y con guiones o espacios.
+  - Devuelve las decisiones, los textos y la reflexión para compararlos con el PDF (D-03).
+- **D-42 · El final se fija al entrar en el epílogo.** Lo calcula `partida` con `shared/game` (§5.6) y queda en `runs.ending`. Con eso se llena el panel de finales del Centro de Control.
+- **D-43 · Reflexión final** (`content/reflexion.json`: pregunta y 150–250 palabras orientativas).
+  - No pasa por la IA.
+  - Es definitiva: el código de verificación certifica el texto, así que no se puede reescribir.
+  - Si muestra indicios de malestar, crea una alerta privada. Las alertas ya no exigen una respuesta (`answer_id` puede ser nulo y llevan `player_id`).
+- **D-44 · Código de verificación `ANM-XXXX-XXXX`.** Lo genera el servidor al archivar la reflexión, sin caracteres ambiguos (32⁸ combinaciones), y se imprime en la portada y en el pie de cada página.
+- **D-45 · Nombre real (§9).**
+  - Solo existe en la memoria de la pantalla del expediente y en la portada del PDF.
+  - No se guarda en borradores, no se envía y no va en los metadatos del PDF.
+  - El campo tiene `autocomplete="off"`. Si se cambia el nombre, hay que volver a generar el PDF.
+- **D-46 · Imagen del final.** Mientras no haya imágenes propias de cada final (M5/M6), el PDF usa la del 2077 con su crédito CC BY. El WebP se convierte a JPEG en el móvil, porque pdf-lib no lee WebP. Si falla, el PDF sale sin imagen.
+- **D-47 · Entrega.** Botón «Compartir o subir» (Web Share API con archivo) cuando el navegador lo permite y «Descargar el PDF» siempre.
+- **`my_dossier()`:** el alumno lee sus decisiones y textos desde el epílogo, para recordarlas al escribir la reflexión y para generar el PDF.
+
+### Pendientes (no bloquean M4)
+- Textos de los finales (M5): hasta entonces el epílogo y el PDF muestran la marca `TODO(contenido)`.
+- Imagen propia de cada final, con su crédito en `finales.json` (M5/M6).
+- Mapeo de la rúbrica con el currículo oficial (§15). El PDF imprime C1–C5 tal como están en `content/rubrica.json`.
+
