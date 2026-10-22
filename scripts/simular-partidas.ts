@@ -9,7 +9,9 @@
  * Por defecto escribe con las mismas funciones SQL que usa `partida` (svc_*), con la clave
  * secreta y sin coste de IA: los textos son de relleno, la objeción es el respaldo
  * preescrito y los movimientos se sortean. Tras el giro, uno de cada cuatro cambia de opción.
- * Al terminar resume los puntos y rangos de la clase para calibrar `content/logros.json`. Los alumnos son usuarios `sim-vivo-NN@anomalia.invalid` (contraseña
+ * Al terminar resume los puntos y rangos de la clase para calibrar `content/logros.json`.
+ * Con --api, también los tiempos de respuesta de `partida` por acción (mediana, p95 y máximo)
+ * y cuántas objeciones o cierres salieron del respaldo en vez de la IA (prueba de carga, M8). Los alumnos son usuarios `sim-vivo-NN@anomalia.invalid` (contraseña
  * SIM_PASSWORD). Si llegan a «Esperando el capítulo II», desbloquéalo en la consola y
  * seguirán solos.
  */
@@ -297,13 +299,47 @@ function directDriver(admin: Db, uid: string, code: string, alias: string): Driv
   };
 }
 
+/** Tiempos de `partida` por acción y origen de las objeciones y cierres (solo con --api). */
+const timings = new Map<string, number[]>();
+const aiSources = new Map<string, number>();
+
+function percentile(values: readonly number[], q: number): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))] ?? 0;
+}
+
+function printTimings() {
+  if (timings.size === 0) return;
+  console.log('  Tiempos de partida (ms): acción · llamadas · mediana · p95 · máx');
+  for (const [action, values] of [...timings.entries()].sort()) {
+    console.log(
+      `    ${action.padEnd(9)} ${String(values.length).padStart(4)} ${String(percentile(values, 0.5)).padStart(7)} ${String(percentile(values, 0.95)).padStart(6)} ${String(Math.max(...values)).padStart(6)}`,
+    );
+  }
+  const sources = [...aiSources.entries()].map(([k, n]) => `${k} ${String(n)}`).join(' · ');
+  if (sources !== '') console.log(`  Origen de objeciones y cierres: ${sources}`);
+}
+
 function apiDriver(client: Db, code: string, alias: string): Driver {
   const call = async (body: Record<string, unknown>) => {
+    const started = performance.now();
     const response = await client.functions.invoke<unknown>('partida', { body });
-    if (response.error !== null) throw new Error(`partida/${String(body.action)}: error HTTP`);
+    const action = String(body.action);
+    const list = timings.get(action) ?? [];
+    list.push(Math.round(performance.now() - started));
+    timings.set(action, list);
+    if (response.error !== null) throw new Error(`partida/${action}: error HTTP`);
     return response.data;
   };
-  const game = async (body: Record<string, unknown>) => gameResponseSchema.parse(await call(body));
+  const game = async (body: Record<string, unknown>) => {
+    const result = gameResponseSchema.parse(await call(body));
+    if (result.ok && (body.action === 'justify' || body.action === 'reply')) {
+      const source = result.answer?.aiSource ?? 'desconocido';
+      const key = `${body.action}:${source}`;
+      aiSources.set(key, (aiSources.get(key) ?? 0) + 1);
+    }
+    return result;
+  };
 
   return {
     async join() {
@@ -578,6 +614,7 @@ async function main() {
   }
   printStatus(students);
   printPoints(students);
+  printTimings();
   const gone = students.filter((s) => s.failed === GONE).length;
   if (gone > 0) {
     console.log(
