@@ -339,3 +339,14 @@ Los giros, los ecos, Ari y el Índice Ω son ficción. Llevan `TODO(verificar)`:
   - el titular de las ondas suena a alarma desde +25.
 - **D-83 · Fondos de época** para D2–D4 (instituto de Haber en 1913, Hospital Johns Hopkins hacia 1900 y un laboratorio de genética del NHGRI), con el año real de cada foto en su pie.
 - **D-84 · Zumbido más bajo y desactivable** (petición del docente tras probarlo): volumen máximo un 30 % menor y un ajuste «Zumbido de inestabilidad» en el panel «i» que lo quita sin quitar la música. En el Centro, la tecla Z.
+
+## 2026-10-22 · M8 (prueba real): lo que se puede probar sin el aula
+
+- **D-85 · Prueba de carga con 25 sesiones simultáneas** (`npm run simular -- --api --alumnos 25`), contra la Edge Function y la IA reales, con el Centro de Control abierto:
+  - el capítulo I completo de los 25 alumnos terminó sin errores;
+  - `partida`: avanzar, mediana de 0,37 s y p95 de 0,69 s; justificación y réplica con IA, mediana de 1,8–1,9 s, p95 de 2,3 s y máximo de 3,0 s (el límite es 6 s);
+  - la IA respondió en 148 de 150 ocasiones (2 respaldos);
+  - el Centro se actualizó en directo (de 0 a 25 conectados en un minuto) y enmascaró los grupos de menos de 5;
+  - los puntos tras tres anomalías (mediana de 158) encajan con la calibración de D-68.
+- **Guía para el docente** en `docs/guia-docente.md` y **hoja de verificación** de los 29 datos pendientes en `docs/verificacion.md`.
+- **Pendiente del docente para cerrar el M8:** verificar los datos, probar en móviles Android e iOS reales y hacer el ensayo cronometrado de las dos sesiones (objetivo: unos 11 minutos por anomalía como mucho).
