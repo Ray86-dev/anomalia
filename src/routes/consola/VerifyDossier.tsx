@@ -4,6 +4,7 @@ import { dossierAnswerSchema } from '@shared/schemas/state.ts';
 import { useState, type SubmitEvent } from 'react';
 import { z } from 'zod';
 import { getClient } from '../../lib/supabase.ts';
+import { replyLabel, twistNote } from '../../lib/answers.ts';
 import { fmt, formatDate } from '../../lib/text.ts';
 import { Field } from '../../ui/Field.tsx';
 import { Notice } from '../../ui/Notice.tsx';
@@ -48,16 +49,18 @@ function VerifiedRun({ run }: { readonly run: Verified }) {
         const option = dilemma.opciones.find((o) => o.id === answer?.choice);
         if (answer === undefined || option === undefined) return null;
         const objector = counselors.find((c) => c.id === answer.objector);
+        const twist = twistNote(option.id, answer.firstChoice);
         return (
           <section key={dilemma.id} className="stack verify-entry">
             <h4>
               {dilemma.lugar}, {dilemma.anio} · {p.decision}: {option.id}. {option.corto}
             </h4>
+            {twist !== null && <p className="muted">{twist}</p>}
             <p className="muted">{p.justificacion}</p>
             <blockquote className="alert-text">{answer.justification ?? p.sinTexto}</blockquote>
             <p className="muted">{fmt(p.objecion, { nombre: objector?.nombre ?? '' })}</p>
             <blockquote className="alert-text">{answer.objection ?? p.sinTexto}</blockquote>
-            <p className="muted">{p.replica}</p>
+            <p className="muted">{replyLabel(answer.replyStance)}</p>
             <blockquote className="alert-text">{answer.reply ?? p.sinTexto}</blockquote>
           </section>
         );

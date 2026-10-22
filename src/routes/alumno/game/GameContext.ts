@@ -1,4 +1,5 @@
-import { ui } from '@shared/generated/content.ts';
+import { newlyEarned } from '@shared/game/achievements.ts';
+import { rewards, ui } from '@shared/generated/content.ts';
 import type {
   AnswerSnapshot,
   GameRequest,
@@ -6,8 +7,13 @@ import type {
   RunSnapshot,
 } from '@shared/schemas/partida.ts';
 import type { MyState } from '@shared/schemas/state.ts';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
+import { vibrate } from '../../../engine/motion.ts';
 import { playAction } from '../../../lib/api.ts';
+import { noveltyText, summaryOf } from './rewards.ts';
+
+/** Aviso de logro (M6): se calcula comparando el progreso antes y después de cada acción. */
+export type Toast = { readonly id: number; readonly text: string };
 
 export type Game = {
   readonly alias: string;
@@ -20,6 +26,8 @@ export type Game = {
   /** Envía una acción a `partida`; devuelve la respuesta o `null` si falló la red. */
   readonly act: (request: GameRequest) => Promise<GameResponse | null>;
   readonly retry: () => void;
+  readonly toasts: readonly Toast[];
+  readonly dismissToast: (id: number) => void;
   /** Avance de la narración, para el parallax del fondo. */
   readonly setStep: (step: number) => void;
 };
@@ -33,6 +41,7 @@ export function useGameContext(): Game {
 }
 
 const t = ui.juego;
+let nextToast = 1;
 
 /** Estado de la partida en el cliente: siempre adopta el estado que devuelve el servidor. */
 export function useGameState(initial: MyState, onLost: () => void): Omit<Game, 'setStep'> {
@@ -41,6 +50,11 @@ export function useGameState(initial: MyState, onLost: () => void): Omit<Game, '
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [failed, setFailed] = useState<GameRequest | null>(null);
+  const [toasts, setToasts] = useState<readonly Toast[]>([]);
+  // Estable entre renderizados: el temporizador de cada aviso no se reinicia al repintar.
+  const dismissToast = useCallback((id: number) => {
+    setToasts((current) => current.filter((toast) => toast.id !== id));
+  }, []);
 
   async function act(request: GameRequest): Promise<GameResponse | null> {
     setPending(true);
@@ -49,6 +63,15 @@ export function useGameState(initial: MyState, onLost: () => void): Omit<Game, '
     try {
       const response = await playAction(request);
       if (response.run !== null) {
+        const before = summaryOf(run.progress);
+        const news = newlyEarned(before, summaryOf(response.run.progress), rewards);
+        if (news.length > 0) {
+          vibrate(40);
+          setToasts((current) => [
+            ...current,
+            ...news.map((novelty) => ({ id: nextToast++, text: noveltyText(novelty, before) })),
+          ]);
+        }
         setRun(response.run);
         setAnswer(response.answer);
       }
@@ -77,5 +100,7 @@ export function useGameState(initial: MyState, onLost: () => void): Omit<Game, '
     retry: () => {
       if (failed !== null) void act(failed);
     },
+    toasts,
+    dismissToast,
   };
 }

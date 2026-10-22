@@ -156,6 +156,48 @@
         "ficticio": "El Índice Ω y estas personas son inventados."
       }
     },
+    "logros": {
+      "abrir": "Tus logros: {puntos} puntos, rango {rango}",
+      "puntos": "{n} pts",
+      "titulo": "Tus logros",
+      "nota": "Los logros son parte del juego: no forman parte de la nota.",
+      "cerrar": "Cerrar",
+      "rangoPuntos": "{rango} · {n} puntos",
+      "siguiente": "Te faltan {n} puntos para {rango}.",
+      "maximo": "Has llegado al rango más alto.",
+      "pestanas": {
+        "logros": "Logros",
+        "constelacion": "Constelación",
+        "fichas": "Fichas",
+        "emblema": "Emblema"
+      },
+      "movimientos": "Lo que Mnemósine reconoce en tus textos",
+      "hitos": "Hitos del viaje",
+      "veces": "×{n}",
+      "conseguido": "Conseguido",
+      "pendiente": "Pendiente",
+      "estrellas": "{n} de {total} estrellas encendidas",
+      "constelacionAyuda": "Cada concepto que usas con sentido en tus textos enciende una estrella.",
+      "encendida": "{concepto}: encendida",
+      "apagada": "{concepto}: apagada",
+      "fichasAyuda": "Fichas secretas del Archivo: se abren al jugar su anomalía y sumar puntos.",
+      "fichaSinJugar": "Ficha secreta de {lugar}. Juega esa anomalía para abrirla.",
+      "fichaBloqueada": "Ficha secreta de {lugar}. Se abre con {n} puntos.",
+      "emblemaAyuda": "Elige el símbolo y el color de tu emblema. Con más puntos se abren más piezas.",
+      "simbolo": "Símbolo",
+      "color": "Color",
+      "bloqueado": "se abre con {n} puntos",
+      "guardar": "Guardar mi emblema",
+      "guardado": "Emblema guardado.",
+      "aviso": {
+        "region": "Avisos de logros",
+        "nuevo": "¡Nuevo logro! {etiqueta} +{puntos}",
+        "repetido": "{etiqueta} otra vez +{puntos}",
+        "estrella": "Nueva estrella: {concepto} +{puntos}",
+        "rango": "Nuevo rango: {rango}",
+        "ficha": "Ficha secreta desbloqueada: {titulo}"
+      }
+    },
     "ari": {
       "remitente": "Ari · 2077",
       "mensaje": "Mensaje de Ari"
@@ -441,7 +483,18 @@
     "observaciones": "Observaciones",
     "curriculo": "Criterios de evaluación: {codigos}",
     "pie": "ANOMALÍA · {codigo} · Página {n} de {total}",
-    "archivoNombre": "ANOMALIA-expediente-{codigo}.pdf"
+    "archivoNombre": "ANOMALIA-expediente-{codigo}.pdf",
+    "decisionMantenida": "La mantuvo tras el giro.",
+    "decisionCambiada": "La cambió tras el giro (antes eligió la {opcion}).",
+    "replicaPostura": "Réplica · {postura}",
+    "logros": "Logros del cronista",
+    "logrosNota": "Los logros, los puntos y el emblema son parte del juego: no forman parte de la nota.",
+    "rango": "Rango",
+    "puntos": "{n} puntos",
+    "logrosLista": "Logros",
+    "estrellas": "Estrellas de conceptos ({n} de {total})",
+    "fichas": "Fichas secretas abiertas",
+    "ninguno": "(ninguno)"
   },
   "fases": {
     "prologue": "Prólogo",

@@ -63,6 +63,18 @@ export type DossierPdfInput = {
       readonly curriculum: string | null;
     }[];
   };
+  /** Sello de la portada (M6): rango y emblema del cronista (trazado SVG de 24×24). */
+  readonly badge: {
+    readonly rank: string;
+    readonly emblemPath: string;
+    readonly emblemColor: string;
+  };
+  /** Última página (M6): logros del juego, con la nota de que no forman parte de la nota. */
+  readonly achievements: {
+    readonly title: string;
+    readonly note: string;
+    readonly groups: readonly { readonly label: string; readonly items: readonly string[] }[];
+  };
   /** Pie de cada página: «… Página n de total». */
   readonly footer: (page: number, total: number) => string;
 };
@@ -82,6 +94,12 @@ const MUTED = rgb(0.36, 0.39, 0.45);
 const ACCENT = rgb(0.03, 0.4, 0.36);
 const RULE = rgb(0.8, 0.82, 0.86);
 const TRACK = rgb(0.9, 0.91, 0.93);
+
+/** «#7fe0d0» → color de pdf-lib. */
+function hexColor(hex: string): RGB {
+  const channel = (i: number) => Number.parseInt(hex.slice(i, i + 2), 16) / 255;
+  return rgb(channel(1), channel(3), channel(5));
+}
 
 type Style = {
   readonly font: PDFFont;
@@ -200,7 +218,27 @@ export async function buildDossierPdf(
   const w = new Writer(doc, printable);
   const { labels, cover } = input;
 
-  // ── Portada ──
+  // ── Portada: sello con el emblema y el rango (arriba a la derecha) ──
+  const seal = { x: A4[0] - MARGIN - 50, y: A4[1] - MARGIN - 62, r: 44 };
+  w.page.drawCircle({ ...seal, size: seal.r, borderColor: ACCENT, borderWidth: 1.5 });
+  w.page.drawCircle({ ...seal, size: 27, color: hexColor(input.badge.emblemColor) });
+  // drawSvgPath usa el origen arriba a la izquierda, como SVG: caja de 24 escalada a 30 puntos.
+  w.page.drawSvgPath(input.badge.emblemPath, {
+    x: seal.x - 15,
+    y: seal.y + 15,
+    scale: 1.25,
+    color: INK,
+  });
+  const rank = printable(input.badge.rank);
+  const rankWidth = bold.widthOfTextAtSize(rank, s.label.size);
+  w.page.drawText(rank, {
+    x: seal.x - rankWidth / 2,
+    y: seal.y - seal.r - 14,
+    size: s.label.size,
+    font: bold,
+    color: ACCENT,
+  });
+
   w.space(40);
   w.line(labels.titulo, s.title);
   w.line(labels.subtitulo, s.subtitle);
@@ -419,6 +457,18 @@ export async function buildDossierPdf(
   w.ensure(140);
   w.line(labels.observaciones.toUpperCase(), s.label);
   w.page.drawRectangle({ x: MARGIN, y: w.y - 120, width: WIDTH, height: 120, ...cell });
+
+  // ── Logros del cronista (M6): juego, no evaluación ──
+  w.newPage();
+  w.line(input.achievements.title, s.h1);
+  w.text(input.achievements.note, s.muted);
+  w.space(12);
+  for (const group of input.achievements.groups) {
+    w.ensure(s.label.leading + 2 * s.body.leading);
+    w.line(group.label.toUpperCase(), s.label);
+    w.text(group.items.join(' · '), s.body);
+    w.space(12);
+  }
 
   // ── Pie con el código en todas las páginas ──
   const pages = doc.getPages();

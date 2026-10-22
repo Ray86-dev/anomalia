@@ -72,6 +72,46 @@ describe('dossierPdfInput', () => {
       'Archivo real',
     ]);
     expect(entry?.sections[3]?.text).toBe('(sin respuesta)');
+    // M6: si mantuvo o cambió su decisión tras el giro.
+    expect(entry?.sections[0]?.text).toMatch(/La mantuvo tras el giro\.$/);
+  });
+
+  it('la réplica indica la postura y la decisión cambiada dice cuál era la primera', () => {
+    const changed = dossierPdfInput(
+      {
+        ...dossier,
+        answers: [
+          {
+            ...dossier.answers[0],
+            dilemmaId: 'd1',
+            choice: 'B',
+            firstChoice: 'A',
+            justification: null,
+            objector: 'novak',
+            objection: null,
+            reply: 'Sí, pero no siempre.',
+            replyStance: 'matiza',
+          },
+        ],
+      },
+      'Ada',
+      new Date(),
+    );
+    const [entry] = changed.entries;
+    expect(entry?.sections[0]?.text).toMatch(/La cambió tras el giro \(antes eligió la A\)/);
+    expect(entry?.sections[3]?.label).toBe('Réplica · Matizo mi postura');
+  });
+
+  it('sello de rango y página de logros, que no cuentan para la nota', () => {
+    expect(input.badge.rank).toBe('Aprendiz del Archivo');
+    expect(input.badge.emblemColor).toMatch(/^#[0-9a-f]{6}$/i);
+    expect(input.achievements.note).toMatch(/no forman parte de la nota/);
+    expect(input.achievements.groups.map((g) => g.items[0])).toEqual([
+      'Aprendiz del Archivo · 0 puntos',
+      '(ninguno)',
+      '(ninguno)',
+      '(ninguno)',
+    ]);
   });
 
   it('la rúbrica indica los criterios de evaluación oficiales de cada criterio', () => {

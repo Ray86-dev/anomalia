@@ -1,13 +1,23 @@
 /** Datos del expediente PDF a partir de la partida archivada y del contenido (§9). */
-import { dilemmas, endings, reflection, rubric, ui } from '@shared/generated/content.ts';
+import {
+  concepts,
+  dilemmas,
+  endings,
+  fichas,
+  reflection,
+  rubric,
+  ui,
+} from '@shared/generated/content.ts';
 import { computeEnding } from '@shared/game/endings.ts';
 import { desnivel, WORLD_VARS, type WorldState } from '@shared/game/world.ts';
 import type { Ending } from '@shared/schemas/content.ts';
 import type { MyDossier } from '@shared/schemas/state.ts';
 // Solo tipos: pdf-lib se carga bajo demanda al generar el PDF.
 import type { DossierPdfInput } from '../../../engine/pdf/dossier.ts';
+import { replyLabel, twistNote } from '../../../lib/answers.ts';
 import { fmt, formatDate } from '../../../lib/text.ts';
 import { findCounselor, texto } from './helpers.ts';
+import { ACHIEVEMENTS, emblemPieces, summaryOf } from './rewards.ts';
 
 const p = ui.pdf;
 
@@ -38,17 +48,32 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
       {
         heading: `${dilemma.lugar}, ${String(dilemma.anio)} · ${texto(dilemma.titulo)}`,
         sections: [
-          { label: p.decision, text: `${option.id}. ${texto(option.texto)}` },
+          {
+            label: p.decision,
+            text: [`${option.id}. ${texto(option.texto)}`, twistNote(option.id, answer.firstChoice)]
+              .filter((part) => part !== null)
+              .join(' '),
+          },
           { label: p.justificacion, text: answer.justification ?? p.sinTexto },
           {
             label: fmt(p.objecion, { nombre: objector?.nombre ?? '' }),
             text: answer.objection ?? p.sinTexto,
           },
-          { label: p.replica, text: answer.reply ?? p.sinTexto },
+          { label: replyLabel(answer.replyStance), text: answer.reply ?? p.sinTexto },
           { label: p.archivo, text: texto(dilemma.archivoReal.texto) },
         ],
       },
     ];
+  });
+
+  // Logros (M6): juego, no evaluación. Se dice en la propia página.
+  const summary = summaryOf(dossier.progress);
+  const pieces = emblemPieces(dossier.emblem);
+  const listOrNone = (items: readonly string[]) => (items.length > 0 ? items : [p.ninguno]);
+  const earned = ACHIEVEMENTS.flatMap((achievement) => {
+    const count = summary.earned.get(achievement.id) ?? 0;
+    if (count === 0) return [];
+    return [count > 1 ? `${achievement.etiqueta} ×${String(count)}` : achievement.etiqueta];
   });
 
   return {
@@ -101,6 +126,34 @@ export function dossierPdfInput(dossier: MyDossier, name: string, now: Date): Do
             ? null
             : fmt(p.curriculo, { codigos: listFormat.format(c.curriculo) }),
       })),
+    },
+    badge: {
+      rank: summary.rank.label,
+      emblemPath: pieces.symbol.path,
+      emblemColor: pieces.color.hex,
+    },
+    achievements: {
+      title: p.logros,
+      note: p.logrosNota,
+      groups: [
+        {
+          label: p.rango,
+          items: [`${summary.rank.label} · ${fmt(p.puntos, { n: summary.points })}`],
+        },
+        { label: p.logrosLista, items: listOrNone(earned) },
+        {
+          label: fmt(p.estrellas, { n: summary.stars.length, total: concepts.length }),
+          items: listOrNone(
+            concepts.filter((c) => summary.stars.includes(c.id)).map((c) => c.etiqueta),
+          ),
+        },
+        {
+          label: p.fichas,
+          items: listOrNone(
+            fichas.filter((f) => summary.fichas.includes(f.id)).map((f) => texto(f.titulo)),
+          ),
+        },
+      ],
     },
     footer: (page, total) => fmt(p.pie, { codigo: code, n: page, total }),
   };

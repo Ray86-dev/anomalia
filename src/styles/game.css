@@ -40,9 +40,8 @@
   top: 0;
   z-index: 2;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  flex-direction: column;
+  gap: var(--space-2);
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
@@ -64,12 +63,280 @@
   gap: var(--space-2);
 }
 
-/* Con alias largos en móviles de 360 px, el rótulo se recorta en vez de desbordar la barra. */
-.game-bar .kicker {
+.game-bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Rótulo del lugar o del cronista, ya dentro de la pantalla (M6). */
+.game-place {
+  margin-bottom: var(--space-2);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+/* ── Logros (M6): botón de la barra, avisos y panel ── */
+
+.rewards-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-height: var(--tap);
+  padding: 0 var(--space-3) 0 var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.rewards-points {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
   white-space: nowrap;
+}
+
+.toasts:empty {
+  display: none;
+}
+
+.toast {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--focus);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+  color: var(--focus);
+  font-weight: 700;
+  animation: toast-in 260ms ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.rewards-dialog {
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.rewards-dialog h2 {
+  margin-bottom: var(--space-1);
+}
+
+.rewards-dialog p {
+  margin-bottom: 0;
+}
+
+.rewards-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rewards-rank {
+  font-weight: 700;
+}
+
+.rewards-note {
+  margin: var(--space-3) 0;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-1);
+  margin: var(--space-3) 0;
+}
+
+.tab {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab[aria-selected='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.tab-panel {
+  margin-bottom: var(--space-4);
+}
+
+.achievement-list,
+.ficha-list,
+.star-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.achievement-list li {
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.achievement-list li.is-earned {
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+.achievement-name {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+
+.achievement-count {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.is-earned .achievement-count {
+  color: var(--accent);
+}
+
+.constellation {
+  width: 100%;
+  border-radius: var(--radius);
+  background: radial-gradient(circle at 50% 40%, #121a2c, #05070c 80%);
+}
+
+.constellation-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 0.35;
+  stroke-opacity: 0.6;
+}
+
+.star {
+  fill: #4a5468;
+}
+
+.star.is-lit {
+  fill: #ffe7a3;
+}
+
+.star-list {
+  flex-flow: row wrap;
+}
+
+.star-list li {
+  padding: 0 var(--space-2);
+  border: 1px dashed var(--line);
+  border-radius: 999px;
+  color: var(--text-muted);
+}
+
+.star-list li.is-lit {
+  border: 1px solid #ffe7a3;
+  color: #ffe7a3;
+}
+
+.ficha {
+  padding: var(--space-3);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.ficha.is-open {
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+.ficha h3 {
+  margin: var(--space-1) 0;
+}
+
+.emblem-preview {
+  display: flex;
+  justify-content: center;
+}
+
+.emblem-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.emblem-choices legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-weight: 700;
+}
+
+.emblem-choice {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.emblem-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.emblem-choice.is-selected {
+  border-color: var(--focus);
+}
+
+.emblem-choice:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.emblem-choice:has(input:disabled) {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.emblem-lock {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 }
 
 .game-screen {

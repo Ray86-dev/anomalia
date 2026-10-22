@@ -16,6 +16,7 @@ import { animateIn } from '../../../engine/motion.ts';
 import { reading } from '../../../lib/reading.ts';
 import { fmt } from '../../../lib/text.ts';
 import { Notice } from '../../../ui/Notice.tsx';
+import { Achievements } from './Achievements.tsx';
 import { Credits } from './Credits.tsx';
 import { GameContext, useGameState } from './GameContext.ts';
 import { findDilemma } from './helpers.ts';
@@ -28,6 +29,7 @@ import { Archive, Ripples } from './screens/outcome.tsx';
 import { Dossier, Epilogue, Reflection } from './screens/finale.tsx';
 import { Waiting } from './screens/pause.tsx';
 import { Justification, Objection } from './screens/writing.tsx';
+import { Toasts } from './Toasts.tsx';
 import '../../../styles/game.css';
 
 const t = ui.juego;
@@ -129,14 +131,19 @@ export function Game({ initial, onLost }: GameProps) {
         style={{ '--accent': ambient.paleta[2] } as CSSProperties}
       >
         <header className="game-bar">
-          <span className="kicker">{kicker}</span>
-          <span className="game-bar-actions">
-            <ReadingToggle />
-            <Credits />
-            <AudioToggle />
-          </span>
+          <div className="game-bar-row">
+            <Achievements />
+            <span className="game-bar-actions">
+              <ReadingToggle />
+              <Credits />
+              <AudioToggle />
+            </span>
+          </div>
+          <Toasts />
         </header>
         <main key={screenKey} ref={main} className="screen game-screen">
+          {/* El rótulo del lugar o del cronista baja a la pantalla: la barra es del emblema (M6). */}
+          <p className="kicker game-place">{kicker}</p>
           {initial.player.status === 'expelled' ? (
             <Notice tone="error">{t.errores.expulsado}</Notice>
           ) : (
