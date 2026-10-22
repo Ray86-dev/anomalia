@@ -150,7 +150,7 @@ export function Game({ initial, onLost }: GameProps) {
         },
       }}
     >
-      <Backdrop palette={ambient.paleta} layers={layers} step={step} />
+      <Backdrop palette={ambient.paleta} layers={layers} step={step} instability={tension} />
       <div
         className="game"
         data-era={era}

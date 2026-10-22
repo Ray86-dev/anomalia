@@ -18,6 +18,9 @@ import { ActionBar, AdvanceButton, AriMessage, Avatar, Listen } from '../parts.t
 
 const t = ui.juego;
 
+/** A partir de este Desnivel, el titular de las ondas suena a alarma (como el teletipo del Centro). */
+const UNSTABLE_GAP = 25;
+
 const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : '0');
 
 /** Estado del mundo. Con `deltas`, las barras crecen desde el valor anterior a la decisión. */
@@ -119,7 +122,12 @@ export function Ripples({ dilemma }: { readonly dilemma: Dilemma }) {
       <p className="kicker">{t.ondas.titulo}</p>
       {option !== undefined && (
         <>
-          <h1 className="headline" tabIndex={-1} data-focus>
+          <h1
+            className="headline"
+            tabIndex={-1}
+            data-focus
+            data-unstable={desnivel(run.world) >= UNSTABLE_GAP ? '' : undefined}
+          >
             {texto(option.ondas.titular)}
           </h1>
           <p className="lead">{texto(option.ondas.texto)}</p>
