@@ -1,7 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import { concepts, counselors, dilemmas } from '../../../../shared/generated/content.ts';
 import { readAiConfig, type AiConfig } from './config.ts';
-import { extractJson, generateClosing, generateObjection, type DialogueDeps } from './dialogue.ts';
+import {
+  extractJson,
+  generateClosing,
+  generateObjection,
+  withoutTrailingQuestions,
+  type DialogueDeps,
+} from './dialogue.ts';
 import { asData, objectionPrompt, type DialogueContext } from './prompts.ts';
 import type { FetchLike } from './provider.ts';
 
@@ -177,6 +183,22 @@ describe('generateObjection', () => {
 });
 
 describe('generateClosing', () => {
+  it('nunca termina con una pregunta: la quita, o usa el respaldo si no queda nada', async () => {
+    const reply = (reaccion: string) =>
+      deps(openAiReply(JSON.stringify({ reaccion, conceptos: [], alerta: false })));
+    expect(
+      await generateClosing(
+        reply('Has defendido bien la confianza en la verdad. ¿Pero a qué precio?'),
+        context,
+        'objeción',
+        'réplica',
+      ),
+    ).toMatchObject({ reaccion: 'Has defendido bien la confianza en la verdad.' });
+    expect(
+      await generateClosing(reply('¿Y qué pasaría después?'), context, 'objeción', 'réplica'),
+    ).toBeNull();
+  });
+
   it('valida la reacción del consejero', async () => {
     const reply = {
       reaccion: 'Me has hecho dudar: la confianza también es un motor de la ciencia.',
@@ -194,6 +216,34 @@ describe('generateClosing', () => {
       ...reply,
       conceptos: [],
     });
+  });
+});
+
+describe('withoutTrailingQuestions', () => {
+  it('quita la pregunta final y deja la reacción', () => {
+    expect(
+      withoutTrailingQuestions(
+        'Distingues bien quién amenaza y quién cede. Pero la culpa no hace verdadera la frase. Si la regla fuese «cede», ¿podría sostenerse?',
+      ),
+    ).toBe('Distingues bien quién amenaza y quién cede. Pero la culpa no hace verdadera la frase.');
+  });
+
+  it('quita varias preguntas seguidas, también entre comillas', () => {
+    expect(
+      withoutTrailingQuestions(
+        'Tu firmeza merece respeto y lo reconozco. ¿Y si te equivocas? «¿Quién paga el precio?»',
+      ),
+    ).toBe('Tu firmeza merece respeto y lo reconozco.');
+  });
+
+  it('respeta las preguntas que no van al final y los textos sin preguntas', () => {
+    const text = 'Te preguntas, ¿quién decide?, y es justo lo importante. Lo dejo archivado.';
+    expect(withoutTrailingQuestions(text)).toBe(text);
+  });
+
+  it('sin una reacción con sentido devuelve null (→ respaldo)', () => {
+    expect(withoutTrailingQuestions('¿Seguro?')).toBeNull();
+    expect(withoutTrailingQuestions('Bien. ¿Y ahora qué harías si fueras Galileo?')).toBeNull();
   });
 });
 

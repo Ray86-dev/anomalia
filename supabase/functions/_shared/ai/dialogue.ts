@@ -46,6 +46,25 @@ export function extractJson(text: string): unknown {
   }
 }
 
+const ENDS_WITH_QUESTION = /\?["»”')]*$/u;
+/** Fin de frase de verdad: signo seguido de espacio (un «¿…?,» intercalado no corta). */
+const SENTENCE_END = /[.!?…]["»”')]*\s/gu;
+
+/**
+ * El cierre de un consejero no termina con una pregunta (§7.1): la conversación del dilema
+ * acaba ahí y el alumno ya no puede contestar. Quita las preguntas finales; si no queda una
+ * reacción con sentido (menos de 6 palabras), devuelve `null` y se usa el respaldo.
+ */
+export function withoutTrailingQuestions(text: string): string | null {
+  let result = text.trim();
+  while (ENDS_WITH_QUESTION.test(result)) {
+    const body = result.replace(ENDS_WITH_QUESTION, '');
+    const ends = [...body.matchAll(SENTENCE_END)].map((m) => m.index + m[0].length);
+    result = result.slice(0, Math.max(0, ...ends)).trim();
+  }
+  return countWords(result) >= 6 ? result : null;
+}
+
 function offensive(text: string, blocked: BlockedTerms): boolean {
   const normalized = canonical(text);
   return blocked.contiene.some((term) => normalized.includes(canonical(term)));
@@ -119,6 +138,10 @@ export function generateClosing(
     const output = parsed.data;
     if (countWords(output.reaccion) > MAX_CLOSING_WORDS) return { reason: 'too_long' };
     if (offensive(output.reaccion, deps.blockedTerms)) return { reason: 'unsafe' };
-    return { value: { ...output, conceptos: knownConcepts(output.conceptos, context) } };
+    const reaccion = withoutTrailingQuestions(output.reaccion);
+    if (reaccion === null) return { reason: 'question_only' };
+    return {
+      value: { ...output, reaccion, conceptos: knownConcepts(output.conceptos, context) },
+    };
   });
 }

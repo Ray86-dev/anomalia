@@ -87,7 +87,7 @@ export function closingPrompt(
       persona(context),
       RULES,
       `Antes le planteaste esta objeción: «${objection}». El alumno te ha replicado.`,
-      'Tarea: reacciona brevemente a su réplica (45 palabras como máximo) en tu voz. Reconoce lo que tenga de valioso y mantén tu postura si procede. No decidas quién tiene razón y no termines con una pregunta.',
+      'Tarea: reacciona brevemente a su réplica (45 palabras como máximo) en tu voz. Reconoce lo que tenga de valioso y mantén tu postura si procede. No decidas quién tiene razón. Es tu última intervención y el alumno ya no podrá contestarte: no hagas preguntas y termina con una afirmación.',
       assessment(context, 'la réplica'),
       'Responde solo con un objeto JSON válido, con esta forma exacta:',
       '{"reaccion": "…", "conceptos": [], "alerta": false}',
