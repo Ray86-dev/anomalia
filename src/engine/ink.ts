@@ -12,7 +12,7 @@ export function hasStory(storyId: string): boolean {
 }
 
 /** Variables que la historia puede consultar (p. ej., el estado del mundo en D5). */
-export type InkVariables = Readonly<Record<string, number | boolean>>;
+export type InkVariables = Readonly<Record<string, number | boolean | string>>;
 
 export type InkLine = {
   readonly text: string;

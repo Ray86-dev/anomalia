@@ -126,6 +126,12 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "giro": {
+    "titulo": {"normal": "Una carta del frente", "facil": "Una carta del frente"},
+    "texto": {"normal": "Un compañero del laboratorio te enseña una carta de su hermano, que está en el frente. Él cree que el gas acabará antes la guerra; otros temen que el otro bando responda con la misma arma.", "facil": "Un compañero te enseña una carta de su hermano, que está en la guerra. Él cree que el gas acabará antes la guerra. Otros temen que el otro bando haga lo mismo."},
+    "fuente": "ficcion",
+    "verificado": true
+  },
   "archivoReal": {
     "texto": {
       "normal": "Haber recibió el Premio Nobel de Química de 1918 por la síntesis del amoníaco. El uso de gas cloro en Ypres, en abril de 1915, inauguró la guerra química a gran escala.",

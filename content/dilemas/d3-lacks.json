@@ -118,6 +118,12 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "giro": {
+    "titulo": {"normal": "Piden más células", "facil": "Piden más células"},
+    "texto": {"normal": "El jefe del laboratorio te cuenta que otros laboratorios del país ya piden muestras. Si estas células sobreviven, lo que decidas hoy viajará con ellas a muchos sitios.", "facil": "Tu jefe te cuenta que otros laboratorios ya piden estas células. Si viven, lo que decidas hoy llegará a muchos sitios."},
+    "fuente": "ficcion",
+    "verificado": true
+  },
   "archivoReal": {
     "texto": {
       "normal": "Las células del tumor de Henrietta Lacks se tomaron sin su consentimiento y dieron lugar a la línea HeLa, fundamental para la vacuna de la polio y para miles de investigaciones. Su familia no fue informada durante décadas. El caso se convirtió en un referente de la bioética del consentimiento informado.",

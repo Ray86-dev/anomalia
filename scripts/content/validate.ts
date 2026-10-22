@@ -134,7 +134,11 @@ function missingEasyReading(value: unknown, path: string[] = []): string[] {
 }
 
 /** Menos texto (M6): la frase de cada consejero y los respaldos de la IA tienen tope. */
-const MAX_WORDS = { frase: 20, objecion: 50, cierre: 40 } as const;
+const MAX_WORDS = { frase: 20, objecion: 50, cierre: 40, giro: 45 } as const;
+
+/** Dilemas a los que mira una escena con sus ecos (`eleccion_d1`…). */
+const echoesIn = (source: string) =>
+  [...source.matchAll(/\beleccion_(d\d+)\b/gu)].map((match) => match[1] ?? '');
 
 /** Versiones (normal y fácil) de un Texto que pasan del tope de palabras. */
 function tooLong(text: Readonly<Record<string, string | undefined>>, max: number): string[] {
@@ -264,6 +268,26 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
         if (fallbacks[d.id]?.[o.id]?.[o.objetor] === undefined) {
           errors.push(`respaldos.json › ${d.id}.${o.id}.${o.objetor}: falta el respaldo de la objeción`);
         }
+      }
+    }
+    if (d.giro !== undefined) {
+      for (const variant of tooLong(d.giro.texto, MAX_WORDS.giro)) {
+        errors.push(`${file} › giro.texto.${variant}: más de ${String(MAX_WORDS.giro)} palabras`);
+      }
+      if (d.giro.fuente === 'historia' && !d.giro.verificado) {
+        notice(`${file} › giro: dato histórico pendiente de verificar por el docente`);
+      }
+    }
+    // Ecos (M6): una escena solo puede recordar decisiones de dilemas anteriores.
+    for (const path of [d.escena.ink, d.escena.inkFacil]) {
+      const source = path === undefined ? null : options.readText(path);
+      for (const echoed of new Set(source === null ? [] : echoesIn(source))) {
+        const earlier = validDilemmas.find((other) => other.id === echoed);
+        const before =
+          earlier !== undefined &&
+          (earlier.capitulo < d.capitulo ||
+            (earlier.capitulo === d.capitulo && earlier.orden < d.orden));
+        if (!before) errors.push(`${path ?? ''}: el eco «eleccion_${echoed}» no es de un dilema anterior`);
       }
     }
     checkInk(d.id, d.escena.ink, SCENE_KNOTS, `${file} › escena`);

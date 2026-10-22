@@ -107,13 +107,21 @@ export function Travel({ dilemma }: { readonly dilemma: Dilemma }) {
 
 /**
  * Lo que una escena puede consultar (D5 cambia según el mundo construido): las cuatro
- * variables, el Desnivel y las ramas abiertas como `rama_d1_firme`.
+ * variables, el Desnivel, las ramas abiertas como `rama_d1_firme` y, para los ecos (M6), la
+ * decisión final de cada dilema ya jugado como `eleccion_d1` («A», «B» o «C»).
  */
-function sceneVariables({ world, branches }: Pick<RunSnapshot, 'world' | 'branches'>) {
+function sceneVariables({
+  world,
+  branches,
+  progress,
+}: Pick<RunSnapshot, 'world' | 'branches' | 'progress'>) {
   return {
     ...world,
     desnivel: desnivel(world),
     ...Object.fromEntries(branches.map((b) => [`rama_${b.replaceAll('-', '_')}`, true])),
+    ...Object.fromEntries(
+      Object.entries(progress.choices).map(([dilemma, choice]) => [`eleccion_${dilemma}`, choice]),
+    ),
   };
 }
 

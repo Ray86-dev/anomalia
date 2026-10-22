@@ -131,6 +131,12 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "giro": {
+    "titulo": {"normal": "Alguien pide la palabra", "facil": "Alguien pide la palabra"},
+    "texto": {"normal": "Antes de votar, una familia pide la palabra: su hija tiene una enfermedad genética que la edición podría curar. En la sala también hay personas que temen que las clasifiquen por sus genes.", "facil": "Antes de votar, una familia habla: su hija tiene una enfermedad de los genes que se podría curar. En la sala hay también personas que temen que las separen por sus genes."},
+    "fuente": "ficcion",
+    "verificado": true
+  },
   "archivoReal": {
     "texto": {
       "normal": "El 2077 de este juego es ficción, pero el debate es real. En 1997, la UNESCO aprobó la Declaración Universal sobre el Genoma Humano y los Derechos Humanos, que establece que nadie podrá ser discriminado por sus características genéticas. Ese mismo año se firmó el Convenio de Oviedo del Consejo de Europa, que España ha ratificado: solo permite modificar el genoma humano con fines preventivos, diagnósticos o terapéuticos, y nunca para cambiar el de la descendencia. TODO(verificar)",

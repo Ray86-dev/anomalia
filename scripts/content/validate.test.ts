@@ -139,6 +139,22 @@ describe('validateContent', () => {
     expect(errors).not.toMatch(/cierre\.facil/);
   });
 
+  it('un eco solo puede recordar decisiones de dilemas anteriores', () => {
+    const files: Record<string, string> = {
+      ...inkFiles,
+      'dilemas/d2-haber.ink':
+        'VAR eleccion_d3 = ""\n=== escena ===\n{ eleccion_d3 == "A": Eco. }\n-> END',
+    };
+    const result = validateContent(realContent(), {
+      strict: false,
+      readText: (path) => files[path] ?? readText(path),
+      compileInk,
+      assetExists: () => true,
+    });
+    expect(result.errors.join('\n')).toMatch(/«eleccion_d3» no es de un dilema anterior/);
+    expect(result.errors.join('\n')).not.toMatch(/eleccion_d1/);
+  });
+
   it('rechaza términos bloqueados que al normalizarse quedarían demasiado cortos', () => {
     const raw = { ...realContent(), blocked: { contiene: ['xxx'], exactas: [] } };
     expect(validate(raw).errors.join('\n')).toMatch(/demasiado corto/);

@@ -4,10 +4,28 @@
 // al que se consulta antes de la implantación.
 // Sensibilidad: el investigador real no habla ni se nombra en la escena (solo en el Archivo real).
 // Lo marcado con TODO(verificar) no está en el documento de diseño: debe revisarlo el docente.
-// Escena breve (M6): título, tres líneas y la pregunta.
+// Escena breve (M6): título, eco, tres líneas y la pregunta (seis como mucho).
+
+VAR eleccion_d3 = ""
+VAR eleccion_d2 = ""
 
 === escena ===
 Shenzhen, 2018. # titulo
+// Eco (M6): una sola línea que recuerda la decisión del dilema anterior que se haya jugado.
+{
+- eleccion_d3 == "A":
+    Todavía recuerdas Baltimore: usaste las células de Henrietta Lacks sin pedirle permiso. # eco
+- eleccion_d3 == "B":
+    Todavía recuerdas Baltimore: no usaste las células hasta pedirle permiso a Henrietta Lacks. # eco
+- eleccion_d3 == "C":
+    Todavía recuerdas Baltimore: usaste las células, pero pediste informar a Henrietta Lacks y compartir los beneficios. # eco
+- eleccion_d2 == "A":
+    Todavía recuerdas Berlín: trabajaste en el programa de gas de Haber. # eco
+- eleccion_d2 == "B":
+    Todavía recuerdas Berlín: te negaste a fabricar el gas y te marchaste del laboratorio. # eco
+- eleccion_d2 == "C":
+    Todavía recuerdas Berlín: contaste a todo el mundo lo que se preparaba en el laboratorio. # eco
+}
 // TODO(verificar): CRISPR existe desde 2012 (dato de la ficha de Gattaca del docente).
 Eres científico en un laboratorio de genética. Desde hace pocos años existe CRISPR, una técnica que permite cambiar genes con mucha precisión.
 // Línea germinal: el cambio está en todas las células y pasa a la descendencia.

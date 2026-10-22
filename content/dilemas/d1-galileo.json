@@ -115,6 +115,12 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "giro": {
+    "titulo": {"normal": "Llega un mensaje", "facil": "Llega un mensaje"},
+    "texto": {"normal": "Un mensajero trae noticias: varios estudiantes de Galileo han copiado sus cuadernos y esperan saber qué hará mañana. Lo que decida será un ejemplo para ellos.", "facil": "Llega un mensaje: unos estudiantes de Galileo han copiado sus cuadernos. Esperan saber qué hará mañana. Su decisión será un ejemplo para ellos."},
+    "fuente": "ficcion",
+    "verificado": true
+  },
   "archivoReal": {
     "texto": {
       "normal": "Galileo abjuró en 1633, fue condenado a arresto domiciliario y siguió trabajando; sus Discorsi se publicaron en Leiden en 1638. En esa obra explicaba cómo había medido la caída de los cuerpos con bolas que rodaban por planos inclinados. TODO(verificar)",

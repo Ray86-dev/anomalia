@@ -137,6 +137,14 @@
   color: var(--accent);
 }
 
+/* Eco (M6): el recuerdo de una decisión anterior, separado del resto de la escena. */
+.ink-eco {
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+  color: var(--text-muted);
+}
+
 .ink-pregunta {
   padding: var(--space-4);
   border: 1px solid var(--accent);
