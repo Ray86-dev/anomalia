@@ -93,7 +93,68 @@
       "titulo": "Laboratorio",
       "texto": "Antes de decidir, comprueba. En el laboratorio se miden los datos; en el ágora se decide con razones.",
       "dato": "Dato del laboratorio",
-      "irAlAgora": "Ir al ágora"
+      "datoAyuda": "Esto es un dato: se puede comprobar. Lo que hagas con él es una decisión.",
+      "irAlAgora": "Ir al ágora",
+      "modelo": "Modelo simplificado para comprobar una idea.",
+      "telescopio": {
+        "cielo": "Júpiter en el telescopio",
+        "enfoque": "Enfoque",
+        "borroso": "La imagen está borrosa: mueve el enfoque.",
+        "enfocado": "¡Imagen nítida! Observa Júpiter varias noches.",
+        "observar": "Observar otra noche",
+        "noche": "Noche {n} de {total}: {izquierda} a la izquierda y {derecha} a la derecha de Júpiter.",
+        "cuaderno": "Tu cuaderno de observación",
+        "fila": "Noche {n}"
+      },
+      "amoniaco": {
+        "presion": "Presión",
+        "temperatura": "Temperatura",
+        "atm": "{n} atm",
+        "grados": "{n} °C",
+        "catalizador": "Usar catalizador",
+        "rendimiento": "Amoníaco en la mezcla",
+        "velocidad": "Velocidad de la reacción",
+        "produccion": "Producción",
+        "meta": "Meta: {n}",
+        "falta": "Todavía no basta. Prueba otra combinación.",
+        "conseguido": "¡Ya hay amoníaco suficiente para abonar los campos!"
+      },
+      "microscopio": {
+        "dia": "Día {n} de {total}",
+        "pasarDia": "Pasar un día",
+        "normales": "Células normales",
+        "muestra": "Células de la muestra",
+        "recuento": "{n} células",
+        "placa": "{nombre}: {n} células"
+      },
+      "crispr": {
+        "secuencia": "ADN de ejemplo",
+        "guia": "Guía",
+        "posicion": "Posición de la guía",
+        "coinciden": "{n} de {total} letras coinciden.",
+        "coincide": "¡Coinciden todas! Ya puedes cortar.",
+        "cortar": "Cortar aquí",
+        "cortado": "Cortado. Pero mira el trozo marcado: {n} de {total} letras son iguales. CRISPR también podría cortar ahí.",
+        "posicionTexto": "Letras {desde} a {hasta}"
+      },
+      "probabilidad": {
+        "umbral": "Umbral del Índice Ω",
+        "pregunta": "¿Quién llega a pilotar drones de rescate?",
+        "dentro": "Pasa",
+        "fuera": "Fuera",
+        "loConsigue": "Lo consigue",
+        "noLoConsigue": "No lo consigue",
+        "simboloSi": "✓",
+        "simboloNo": "✗",
+        "persona": "Persona con índice {indice}: {estado}, {resultado}.",
+        "pasanYLoConsiguen": "Pasan y lo consiguen: {n}",
+        "pasanYNo": "Pasan y no lo consiguen: {n}",
+        "fueraYLoHabrian": "Fuera, pero lo habrían conseguido: {n}",
+        "fueraYNo": "Fuera y no lo habrían conseguido: {n}",
+        "prueba": "Prueba {total} umbrales distintos ({n} de {total}).",
+        "leyenda": "✓ lo consigue · ✗ no lo consigue · recuadro iluminado: pasa el umbral",
+        "ficticio": "El Índice Ω y estas personas son inventados."
+      }
     },
     "ari": {
       "remitente": "Ari · 2077",

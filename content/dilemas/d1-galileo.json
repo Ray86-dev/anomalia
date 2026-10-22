@@ -118,6 +118,13 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "laboratorio": {
+    "tipo": "telescopio",
+    "titulo": {"normal": "Las lunas de Júpiter", "facil": "Las lunas de Júpiter"},
+    "instrucciones": {"normal": "Enfoca el telescopio y observa Júpiter varias noches. Fíjate en los puntos de luz que lo acompañan.", "facil": "Mueve el enfoque hasta ver bien. Después mira Júpiter varias noches. Fíjate en los puntos de luz."},
+    "dato": {"normal": "Los puntos de luz cambian de lado cada noche: giran alrededor de Júpiter. Así que no todo gira alrededor de la Tierra. Galileo observó estas lunas con su telescopio. TODO(verificar)", "facil": "Los puntos de luz cambian de lado cada noche: giran alrededor de Júpiter. No todo gira alrededor de la Tierra. Galileo vio estas lunas con su telescopio. TODO(verificar)"},
+    "verificado": false
+  },
   "giro": {
     "titulo": {"normal": "Llega un mensaje", "facil": "Llega un mensaje"},
     "texto": {"normal": "Un mensajero trae noticias: varios estudiantes de Galileo han copiado sus cuadernos y esperan saber qué hará mañana. Lo que decida será un ejemplo para ellos.", "facil": "Llega un mensaje: unos estudiantes de Galileo han copiado sus cuadernos. Esperan saber qué hará mañana. Su decisión será un ejemplo para ellos."},

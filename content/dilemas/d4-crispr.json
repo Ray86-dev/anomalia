@@ -121,6 +121,13 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "laboratorio": {
+    "tipo": "crispr",
+    "titulo": {"normal": "Buscar y cortar", "facil": "Buscar y cortar"},
+    "instrucciones": {"normal": "Mueve la guía por un trozo de ADN de ejemplo hasta encontrar dónde coincide entera. Después, corta.", "facil": "Mueve la guía por un trozo de ADN de ejemplo. Busca dónde coinciden todas las letras. Después, corta."},
+    "dato": {"normal": "CRISPR encuentra un trozo de ADN y lo corta con mucha precisión, pero a veces también corta en sitios parecidos. En un embrión, el cambio pasaría a todas sus células y a sus hijos. TODO(verificar)", "facil": "CRISPR busca un trozo de ADN y lo corta. Es muy preciso, pero a veces corta también en sitios parecidos. En un embrión, el cambio pasaría a todo su cuerpo y a sus hijos. TODO(verificar)"},
+    "verificado": false
+  },
   "giro": {
     "titulo": {"normal": "Hay menos tiempo", "facil": "Hay menos tiempo"},
     "texto": {"normal": "Te llega un correo sin firma de otra persona del equipo: los padres ya han firmado y la implantación será la semana que viene. Tienes menos tiempo del que creías.", "facil": "Te llega un correo sin nombre de alguien del equipo: los padres ya han firmado y todo será la semana que viene. Hay menos tiempo del que creías."},

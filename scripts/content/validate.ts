@@ -275,6 +275,9 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
         errors.push(`${file} › opciones.${o.id}.ondas.ari.${variant}: más de ${String(MAX_WORDS.ari)} palabras`);
       }
     }
+    if (!d.laboratorio.verificado) {
+      notice(`${file} › laboratorio: dato pendiente de verificar por el docente`);
+    }
     if (d.giro !== undefined) {
       for (const variant of tooLong(d.giro.texto, MAX_WORDS.giro)) {
         errors.push(`${file} › giro.texto.${variant}: más de ${String(MAX_WORDS.giro)} palabras`);

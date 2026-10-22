@@ -683,3 +683,212 @@
   color: var(--text-muted);
   font-size: var(--text-small);
 }
+
+/* ── Laboratorios (M6): SVG y controles nativos, sin temporizador ── */
+
+.lab input[type='range'] {
+  width: 100%;
+  min-height: var(--tap);
+  accent-color: var(--accent);
+}
+
+.lab-status {
+  min-height: 3em;
+  font-weight: 600;
+}
+
+.lab-view {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: radial-gradient(circle at 50% 50%, #10182a, #05070c 75%);
+}
+
+.lab-jupiter {
+  fill: #e3c79b;
+}
+
+.lab-moon {
+  fill: #f4f1e8;
+}
+
+.lab-notebook {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.lab-notebook-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+.lab-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+}
+
+.lab-check input {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--accent);
+}
+
+.lab-meter {
+  position: relative;
+  overflow: visible;
+}
+
+.lab-meter .meter-fill {
+  transition: width 300ms ease-out;
+}
+
+.lab-goal {
+  position: absolute;
+  top: -0.3rem;
+  bottom: -0.3rem;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--focus);
+}
+
+.lab-dishes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.lab-dish {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.lab-dish figcaption {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-small);
+}
+
+.lab-dish-plate {
+  fill: #0f1a24;
+  stroke: var(--line);
+  stroke-width: 0.03;
+}
+
+.lab-cell {
+  fill: #f2a7c3;
+}
+
+.lab-dna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.lab-dna-row {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 2px;
+}
+
+.lab-base {
+  display: grid;
+  place-items: center;
+  min-height: 2.25rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  background: var(--bg-raised);
+}
+
+.lab-dna-guide .lab-base {
+  background: none;
+  color: var(--accent);
+}
+
+.lab-base.is-window {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.lab-base.is-match {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.lab-base.is-similar {
+  outline: 2px dashed var(--focus);
+  outline-offset: -2px;
+  text-decoration: underline;
+}
+
+.lab-base.is-cut {
+  box-shadow: inset 3px 0 0 var(--danger);
+}
+
+.lab-question {
+  font-weight: 700;
+}
+
+.lab-people {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-1) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+}
+
+.lab-person.is-inside {
+  border-color: var(--accent);
+  background: rgba(127, 224, 208, 0.14);
+}
+
+.lab-person.is-outside {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+.lab-person-result {
+  font-weight: 700;
+}
+
+.lab-tally {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-tally .is-lost {
+  font-weight: 700;
+  color: var(--focus);
+}
+
+.lab-result {
+  border-color: var(--accent);
+}

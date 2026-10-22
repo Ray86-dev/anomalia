@@ -121,6 +121,13 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "laboratorio": {
+    "tipo": "microscopio",
+    "titulo": {"normal": "Células que no mueren", "facil": "Células que no mueren"},
+    "instrucciones": {"normal": "Compara dos cultivos al microscopio: células normales y células de la muestra. Pasa los días y mira qué ocurre.", "facil": "Mira dos cultivos: células normales y células de la muestra. Pasa los días y mira qué pasa."},
+    "dato": {"normal": "Las células normales mueren en pocos días; las de la muestra se siguen dividiendo. Podrían servir para investigar durante años. Son de Henrietta Lacks, y nadie le ha pedido permiso. TODO(verificar)", "facil": "Las células normales mueren pronto. Las de la muestra siguen creciendo. Podrían servir para investigar durante años. Son de Henrietta Lacks, y nadie le ha pedido permiso. TODO(verificar)"},
+    "verificado": false
+  },
   "giro": {
     "titulo": {"normal": "Piden más células", "facil": "Piden más células"},
     "texto": {"normal": "El jefe del laboratorio te cuenta que otros laboratorios del país ya piden muestras. Si estas células sobreviven, lo que decidas hoy viajará con ellas a muchos sitios.", "facil": "Tu jefe te cuenta que otros laboratorios ya piden estas células. Si viven, lo que decidas hoy llegará a muchos sitios."},

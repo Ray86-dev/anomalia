@@ -3,7 +3,7 @@
  * los archivos los edita el docente (ver CLAUDE.md · Convenciones).
  */
 import { z } from 'zod';
-import { MILESTONE_IDS } from '../game/milestones.ts';
+import { LAB_TYPES, MILESTONE_IDS } from '../game/milestones.ts';
 import { WORLD_VARS } from '../game/world.ts';
 
 const id = z.string().regex(/^[a-z0-9-]+$/, 'solo minúsculas, números y guiones');
@@ -92,6 +92,18 @@ export const dilemmaSchema = z
     justificacion: z.strictObject({ pregunta: textoSchema, palabras: wordRange }),
     replica: z.strictObject({ palabras: wordRange }),
     archivoReal: z.strictObject({ texto: textoSchema, verificado: z.boolean() }),
+    /**
+     * Laboratorio (M6): un experimento corto para comprobar un dato antes de decidir con
+     * razones. `dato` es la conclusión que aparece al terminar; si es un hecho que no está en
+     * el diseño, lleva TODO(verificar) y `verificado: false` hasta que lo revise el docente.
+     */
+    laboratorio: z.strictObject({
+      tipo: z.enum(LAB_TYPES),
+      titulo: textoSchema,
+      instrucciones: textoSchema,
+      dato: textoSchema,
+      verificado: z.boolean(),
+    }),
     /**
      * Giro (M6): información nueva tras la decisión provisional. `ficcion` si es una presión
      * inventada sobre el Cronista; `historia` si es un hecho real (debe verificarlo el docente).

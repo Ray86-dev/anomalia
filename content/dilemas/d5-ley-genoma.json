@@ -134,6 +134,13 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "laboratorio": {
+    "tipo": "probabilidad",
+    "titulo": {"normal": "¿Predice el índice?", "facil": "¿Acierta el índice?"},
+    "instrucciones": {"normal": "El Índice Ω es inventado. Mueve el umbral y mira a quién deja pasar y a quién deja fuera.", "facil": "El Índice Ω es inventado. Mueve el umbral. Mira quién pasa y quién se queda fuera."},
+    "dato": {"normal": "Un índice da probabilidades para grupos, no certezas para cada persona. Con cualquier umbral, deja fuera a alguien que sí lo habría conseguido y deja pasar a alguien que no.", "facil": "Un índice dice lo que es probable en un grupo. No dice qué hará cada persona. Con cualquier umbral, deja fuera a alguien que sí lo habría conseguido."},
+    "verificado": true
+  },
   "giro": {
     "titulo": {"normal": "Alguien pide la palabra", "facil": "Alguien pide la palabra"},
     "texto": {"normal": "Antes de votar, una familia pide la palabra: su hija tiene una enfermedad genética que la edición podría curar. En la sala también hay personas que temen que las clasifiquen por sus genes.", "facil": "Antes de votar, una familia habla: su hija tiene una enfermedad de los genes que se podría curar. En la sala hay también personas que temen que las separen por sus genes."},

@@ -129,6 +129,13 @@
     "palabras": [25, 50]
   },
   "replica": { "palabras": [15, 35] },
+  "laboratorio": {
+    "tipo": "amoniaco",
+    "titulo": {"normal": "Del aire al abono", "facil": "Del aire al abono"},
+    "instrucciones": {"normal": "Ajusta la presión, la temperatura y el catalizador hasta producir amoníaco suficiente para abonar los campos.", "facil": "Mueve la presión y la temperatura, y prueba el catalizador. Tienes que llegar a la meta de amoníaco."},
+    "dato": {"normal": "Con mucha presión, una temperatura media y un catalizador, el nitrógeno del aire se convierte en amoníaco: abono para millones de personas. La misma química del nitrógeno sirve también para fabricar explosivos. TODO(verificar)", "facil": "Con mucha presión, una temperatura media y un catalizador, el aire se convierte en amoníaco. Con él se hace abono para millones de personas. La misma química sirve también para hacer explosivos. TODO(verificar)"},
+    "verificado": false
+  },
   "giro": {
     "titulo": {"normal": "Una carta del frente", "facil": "Una carta del frente"},
     "texto": {"normal": "Un compañero del laboratorio te enseña una carta de su hermano, que está en el frente. Él cree que el gas acabará antes la guerra; otros temen que el otro bando responda con la misma arma.", "facil": "Un compañero te enseña una carta de su hermano, que está en la guerra. Él cree que el gas acabará antes la guerra. Otros temen que el otro bando haga lo mismo."},
