@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { endings } from '../generated/content.ts';
-import { computeEnding, type EndingRule } from './endings.ts';
+import { computeEnding, explainEnding, type EndingRule } from './endings.ts';
 import { INITIAL_WORLD, type WorldState } from './world.ts';
 
 const world = (partial: Partial<WorldState>): WorldState => ({ ...INITIAL_WORLD, ...partial });
@@ -72,5 +72,23 @@ describe('computeEnding con los finales de content/finales.json (§5.6)', () => 
     expect(end({ poder: 90, responsabilidad: 50, equidad: 20, confianza: 10 })).toBe('tecnocracia');
     expect(end({ responsabilidad: 70, equidad: 70, confianza: 10, poder: 20 })).toBe('cuidado');
     expect(end({ confianza: 20, poder: 20 })).toBe('fractura');
+  });
+});
+
+describe('explainEnding', () => {
+  it('da cada condición del final con el valor real del mundo', () => {
+    const state = world({ poder: 75, responsabilidad: 40, equidad: 30 });
+    const ending = computeEnding(state, endings);
+    expect(ending.id).toBe('tecnocracia');
+    expect(explainEnding(ending, state)).toEqual([
+      { var: 'desnivel', op: '>=', valor: 25, actual: 35 },
+      { var: 'equidad', op: '<', valor: 40, actual: 30 },
+    ]);
+  });
+
+  it('el final por defecto no tiene condiciones que explicar', () => {
+    const ending = computeEnding(INITIAL_WORLD, endings);
+    expect(ending.condicion).toBeNull();
+    expect(explainEnding(ending, INITIAL_WORLD)).toEqual([]);
   });
 });

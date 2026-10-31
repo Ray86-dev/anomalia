@@ -13,6 +13,9 @@ export function storyFor(id: string): string {
   return reading.isEasy() && hasStory(`${id}-facil`) ? `${id}-facil` : id;
 }
 
+/** Número con signo para los cambios del mundo: «+15», «−10», «0». */
+export const signed = (n: number) => (n > 0 ? `+${String(n)}` : n < 0 ? `−${String(-n)}` : '0');
+
 export function findDilemma(id: string | null): Dilemma | undefined {
   return id === null ? undefined : dilemmas.find((d) => d.id === id);
 }

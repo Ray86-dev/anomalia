@@ -67,6 +67,10 @@
       },
       "corto": "Índice genómico obligatorio",
       "deltas": { "poder": 10, "equidad": -20 },
+      "porque": {
+        "poder": {"normal": "Los genes se usan para organizar estudios y empleos con eficiencia.", "facil": "Los genes sirven para decidir estudios y trabajos."},
+        "equidad": {"normal": "Tus genes deciden lo que puedes estudiar y dónde puedes trabajar.", "facil": "Tus genes deciden lo que puedes ser."}
+      },
       "rama": null,
       "objetor": "kaltz",
       "ondas": {
@@ -78,7 +82,7 @@
           "normal": "La ley se aprobó. Desde el colegio, un índice genómico decide quién estudia qué y quién trabaja dónde. Todo funciona con eficiencia… para quien tiene buenos genes. Los demás aprenden pronto lo que no podrán ser.",
           "facil": "La ley se aprobó. Desde el colegio, un análisis de genes decide qué estudias y en qué trabajas. Todo funciona bien para quien tiene «buenos» genes. Los demás saben pronto lo que no podrán ser."
         },
-        "ari": {"normal": "Hoy me han dado mi índice genómico. Dice qué puedo estudiar y qué no. Mi mejor amigo y yo ya no iremos a la misma clase.", "facil": "Hoy me han dado mi análisis de genes. Dice qué puedo estudiar. Mi mejor amigo y yo ya no iremos juntos a clase."}
+        "ari": {"normal": "Hoy me han dado mi índice genómico. Dice qué puedo estudiar y qué no. Mi mejor amigo y yo ya no seguiremos juntos en el San Nicolás.", "facil": "Hoy me han dado mi análisis de genes. Dice qué puedo estudiar. Mi mejor amigo y yo ya no estaremos juntos en el San Nicolás."}
       }
     },
     {
@@ -89,6 +93,10 @@
       },
       "corto": "Solo para curar, para todos",
       "deltas": { "equidad": 10, "responsabilidad": 10 },
+      "porque": {
+        "equidad": {"normal": "La edición es pública y gratuita: nadie se queda fuera por su dinero.", "facil": "Es gratis para todos: nadie se queda fuera."},
+        "responsabilidad": {"normal": "Se usa solo para curar enfermedades graves, con límites claros.", "facil": "Solo se usa para curar, con límites."}
+      },
       "rama": null,
       "objetor": "novak",
       "ondas": {
@@ -111,6 +119,10 @@
       },
       "corto": "Moratoria total",
       "deltas": { "responsabilidad": 10, "poder": -15 },
+      "porque": {
+        "responsabilidad": {"normal": "Se frena todo hasta poder prever sus riesgos.", "facil": "Se para todo hasta conocer los riesgos."},
+        "poder": {"normal": "Sin edición genética no hay mejoras, pero tampoco nuevas curas.", "facil": "No hay mejoras, pero tampoco curas nuevas."}
+      },
       "rama": null,
       "objetor": "calvo",
       "ondas": {

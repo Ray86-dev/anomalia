@@ -1,16 +1,28 @@
 /** Final de la partida (§6): epílogo, reflexión final y expediente PDF (§9). */
-import { ambients, dilemmas, reflection, ui } from '@shared/generated/content.ts';
+import { ambients, dilemmas, endings, reflection, ui } from '@shared/generated/content.ts';
+import {
+  explainEnding,
+  type Comparison,
+  type EndingReason,
+  type EndingVar,
+} from '@shared/game/endings.ts';
+import { worldHistory, type HistoryStep } from '@shared/game/history.ts';
+import { desnivel, gapZone, WORLD_VARS, type WorldVar } from '@shared/game/world.ts';
+import type { Ending, Panel } from '@shared/schemas/content.ts';
 import { MAX_REFLECTION_CHARS } from '@shared/schemas/partida.ts';
 import type { MyDossier } from '@shared/schemas/state.ts';
 import { useEffect, useId, useState, type SubmitEvent } from 'react';
+import { tensionFor } from '../../../../engine/audio.ts';
 import { assetUrl } from '../../../../engine/backdrop/Backdrop.tsx';
+import { Cinematic } from '../../../../engine/cinematic/Cinematic.tsx';
 import { loadMyDossier } from '../../../../lib/api.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { Notice } from '../../../../ui/Notice.tsx';
+import { CinematicPlayer } from '../CinematicPlayer.tsx';
 import { dossierFileName, dossierPdfInput, endingFor } from '../dossier.ts';
 import { useGameContext } from '../GameContext.ts';
-import { findCounselor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, AriMessage, Listen, TextAnswer } from '../parts.tsx';
+import { findCounselor, signed, texto } from '../helpers.ts';
+import { ActionBar, AdvanceButton, Listen, TextAnswer, useSubScreen } from '../parts.tsx';
 import { WorldMeters } from './outcome.tsx';
 
 const t = ui.juego;
@@ -35,30 +47,230 @@ function useMyDossier(): MyDossier | null | undefined {
   return dossier;
 }
 
-export function Epilogue() {
+/** «menos de 40», «25 o más»… */
+const RULES = {
+  '<': t.epilogo.reglas.menor,
+  '<=': t.epilogo.reglas.menorIgual,
+  '>': t.epilogo.reglas.mayor,
+  '>=': t.epilogo.reglas.mayorIgual,
+} as const;
+
+const variableLabel = (variable: EndingVar) =>
+  variable === 'desnivel' ? t.ondas.desnivel : t.mundo[variable];
+
+/** El Desnivel lleva signo; las barras, no. */
+const valueText = (variable: EndingVar, value: number) =>
+  variable === 'desnivel' ? signed(value) : String(value);
+
+const ruleText = (c: Comparison) => fmt(RULES[c.op], { n: valueText(c.var, c.valor) });
+
+/** Cómo se llega a un final, en palabras («Equidad menos de 40 · …»). */
+function conditionText(ending: Ending): string {
+  if (ending.condicion === null) return t.epilogo.porDefecto;
+  return ending.condicion.todas.map((c) => `${variableLabel(c.var)} ${ruleText(c)}`).join(' · ');
+}
+
+const reasonText = (reason: EndingReason) =>
+  fmt(t.epilogo.condicion, {
+    variable: variableLabel(reason.var),
+    valor: valueText(reason.var, reason.actual),
+    regla: ruleText(reason),
+  });
+
+/** Cambios reales de una decisión («Poder +5 · Confianza +10»). */
+function changesOf(step: HistoryStep): { readonly variable: WorldVar; readonly change: number }[] {
+  return WORLD_VARS.map((variable) => ({
+    variable,
+    change: step.after[variable] - step.before[variable],
+  })).filter(({ change }) => change !== 0);
+}
+
+/** Paso 1 del epílogo (D-89): cada decisión, en orden, con lo que movió. */
+function Recap({ onNext }: { readonly onNext: () => void }) {
   const { run } = useGameContext();
-  const ending = endingFor(run.ending, run.world);
+  const items = worldHistory(run.progress.classDilemmas, run.progress.choices, dilemmas).flatMap(
+    (step) => {
+      const dilemma = dilemmas.find((d) => d.id === step.dilemmaId);
+      const option = dilemma?.opciones.find((o) => o.id === step.choice);
+      return dilemma === undefined || option === undefined ? [] : [{ step, dilemma, option }];
+    },
+  );
+  const gap = desnivel(run.world);
+  const zone = gapZone(gap);
+  const gapText = fmt(t.epilogo.desnivelFinal, {
+    valor: signed(gap),
+    zona: t.ondas.zonas[zone],
+  });
+  const place = (lugar: string, anio: number) => fmt(t.epilogo.lugar, { lugar, anio });
+  const spoken = [
+    t.epilogo.texto,
+    ...items.map(
+      ({ dilemma, option }) =>
+        `${place(dilemma.lugar, dilemma.anio)}: ${option.corto}. ${texto(option.ondas.titular)}.`,
+    ),
+    gapText,
+  ].join(' ');
+
+  return (
+    <>
+      <p className="kicker">{t.epilogo.titulo}</p>
+      <h1 tabIndex={-1} data-focus>
+        {t.epilogo.decisiones}
+      </h1>
+      <p className="lead">{t.epilogo.texto}</p>
+      <p className="help">{t.epilogo.decisionesAyuda}</p>
+      <Listen auto text={spoken} />
+      <ol className="recap-list">
+        {items.map(({ step, dilemma, option }, i) => {
+          const changes = changesOf(step);
+          return (
+            <li
+              key={dilemma.id}
+              className="recap-item"
+              style={{ animationDelay: `${String(0.3 + i * 0.6)}s` }}
+            >
+              <span className="recap-when">{place(dilemma.lugar, dilemma.anio)}</span>
+              <strong className="recap-choice">{option.corto}</strong>
+              <span className="recap-headline">{texto(option.ondas.titular)}</span>
+              {changes.length === 0 ? (
+                <span className="help">{t.epilogo.sinCambios}</span>
+              ) : (
+                <span className="recap-changes">
+                  {changes.map(({ variable, change }) => (
+                    <span key={variable} className={`recap-change ${change > 0 ? 'up' : 'down'}`}>
+                      {t.mundo[variable]} {signed(change)}
+                    </span>
+                  ))}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+      <p
+        className="recap-gap"
+        data-zone={zone}
+        style={{ animationDelay: `${String(0.3 + items.length * 0.6)}s` }}
+      >
+        {gapText}
+      </p>
+      <ActionBar>
+        <button className="btn" type="button" onClick={onNext}>
+          {t.epilogo.verFuturo}
+        </button>
+      </ActionBar>
+    </>
+  );
+}
+
+/** Último paso del epílogo: el final, por qué se llegó a él y los otros 2077 posibles. */
+function EndingSummary({ ending }: { readonly ending: Ending }) {
+  const { run } = useGameContext();
+  const reasons = explainEnding(ending, run.world);
+  const why = reasons.length === 0 ? [t.epilogo.sinExtremos] : reasons.map(reasonText);
   return (
     <>
       <h1 tabIndex={-1} data-focus>
         {t.epilogo.titulo}
       </h1>
-      <p className="lead">{t.epilogo.texto}</p>
       <section className="panel stack ending-card" aria-labelledby="final-alcanzado">
         <p className="kicker">{t.epilogo.final}</p>
         <h2 id="final-alcanzado">{texto(ending.titulo)}</h2>
         <p className="headline">{texto(ending.resumen)}</p>
         <p>{texto(ending.texto)}</p>
       </section>
-      <AriMessage text={texto(ending.ari)} />
+      <section className="panel stack" aria-labelledby="por-que-final">
+        <h2 id="por-que-final">{t.epilogo.porQue}</h2>
+        {reasons.length > 0 && <p className="help">{t.epilogo.porQueAyuda}</p>}
+        <ul className="reasons">
+          {why.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </section>
       <Listen
         auto
-        text={`${texto(ending.titulo)}. ${texto(ending.texto)} ${t.ari.remitente}: ${texto(ending.ari)}`}
+        text={`${texto(ending.titulo)}. ${texto(ending.resumen)} ${t.epilogo.porQue}: ${why.join('. ')}`}
       />
       <WorldMeters world={run.world} />
+      <details className="panel explain other-endings">
+        <summary>{t.epilogo.otros}</summary>
+        <p className="help">{t.epilogo.otrosAyuda}</p>
+        <ul className="other-list">
+          {endings
+            .filter((other) => other.id !== ending.id)
+            .map((other) => (
+              <li key={other.id}>
+                <strong>{texto(other.titulo)}</strong>
+                <span>{texto(other.resumen)}</span>
+                <span className="help">{conditionText(other)}</span>
+              </li>
+            ))}
+        </ul>
+      </details>
       <ActionBar>
         <AdvanceButton label={t.epilogo.continuar} />
       </ActionBar>
+    </>
+  );
+}
+
+type EpilogueStep =
+  | { readonly kind: 'recap' }
+  | { readonly kind: 'cine'; readonly index: number }
+  | { readonly kind: 'summary' };
+
+/**
+ * Epílogo animado (D-89): repaso de las decisiones sobre el hilo temporal ya cerrado, la
+ * transformación del 2077 según el final, el mensaje de Ari y el resumen. Los pasos son
+ * locales: al recargar se vuelve al repaso.
+ */
+export function Epilogue() {
+  const { run } = useGameContext();
+  const ending = endingFor(run.ending, run.world);
+  const [step, setStep] = useState<EpilogueStep>({ kind: 'recap' });
+  useSubScreen(step.kind);
+
+  const panels: Panel[] = [...ending.secuencia, { plano: 'ari', voz: 'ari', texto: ending.ari }];
+  const endingShot = ending.secuencia[0]?.plano ?? 'final-equilibrio';
+  const shot =
+    step.kind === 'recap'
+      ? 'recap'
+      : step.kind === 'cine'
+        ? (panels[step.index]?.plano ?? endingShot)
+        : endingShot;
+  const toSummary = () => {
+    setStep({ kind: 'summary' });
+  };
+
+  return (
+    <>
+      <Cinematic shot={shot} instability={tensionFor(desnivel(run.world))} />
+      {step.kind === 'recap' && (
+        <Recap
+          onNext={() => {
+            setStep({ kind: 'cine', index: 0 });
+          }}
+        />
+      )}
+      {step.kind === 'cine' && (
+        <CinematicPlayer
+          panels={panels}
+          index={step.index}
+          onIndex={(index) => {
+            setStep({ kind: 'cine', index });
+          }}
+          title={texto(ending.titulo)}
+          skipLabel={t.epilogo.saltar}
+          onSkip={toSummary}
+          finalAction={
+            <button className="btn" type="button" onClick={toSummary}>
+              {t.epilogo.verResumen}
+            </button>
+          }
+        />
+      )}
+      {step.kind === 'summary' && <EndingSummary ending={ending} />}
     </>
   );
 }

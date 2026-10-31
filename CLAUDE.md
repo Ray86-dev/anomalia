@@ -7,7 +7,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 
 ## Reglas innegociables
 
-1. **Stack:** Vite + React + TypeScript estricto + React Router, inkjs, Pixi.js, GSAP, Howler.js, pdf-lib, zod y Supabase (Auth, Postgres con RLS, Edge Functions, Realtime). **No añadas librerías pesadas sin preguntar.**
+1. **Stack:** Vite + React + TypeScript estricto + React Router, inkjs, Pixi.js, Three.js (solo las cinemáticas, D-87), GSAP, Howler.js, pdf-lib, zod y Supabase (Auth, Postgres con RLS, Edge Functions, Realtime). **No añadas librerías pesadas sin preguntar.**
 2. **Hosting:** GitHub Pages con repo **público**. **Nunca Vercel** ni dependencias específicas de Vercel.
 3. **Privacidad de menores:**
    - El alumnado entra solo con alias y código de clase (inicio de sesión anónimo de Supabase).
@@ -58,17 +58,19 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 ## Arquitectura (resumen)
 
 - **Contenido:** `content/` (JSON + Ink) → `npm run content` (`scripts/build-content.ts`) valida con zod, compila Ink con `inkjs/full` y genera `shared/generated/` (`content.ts` y `ink/<id>.json`). Esos archivos no se versionan ni se editan a mano.
-  - Nudos Ink obligatorios: `prologo` en `content/prologo.ink` y `escena` en cada dilema.
+  - Nudo Ink obligatorio: `escena` en cada dilema. El prólogo ya no es Ink: es la intro animada de `content/intro.json` (D-87).
   - Etiquetas Ink: `# titulo`, `# pregunta`, `# eco` (recuerdo de una decisión anterior) y `# ari` (mensaje de Ari).
   - Variables que el juego pasa a las escenas: el mundo, `desnivel`, `rama_<id>` y `eleccion_dN` (decisión final de cada dilema jugado). Ninguna escena pasa de 6 líneas (test en `src/engine/ink.test.ts`).
   - Logros, fichas secretas y emblemas: `content/logros.json`, `fichas.json` y `emblemas.json`.
+  - Barras del mundo (D-86): `content/mundo.json` define cada barra y el Desnivel; cada opción de un dilema lleva `porque`, una frase por cada variable que mueve (ni más ni menos). Las Ondas temporales sacan el antes y el después reales de `shared/game/history.ts`.
 - **Recursos:** imágenes y música en `public/assets/`, siempre con su entrada en `public/assets/LICENSES.md` y `credito` (más `licenciaUrl` si es CC BY) en el JSON que las declara.
   - La música de cada época y la del Centro están en `content/ambientes.json` (clave `centro` para el Centro de Control).
   - Sin rostros de personas reales en el Archivo de D3–D5 (D-80).
   - Solo CC0, CC BY o dominio público; las tipografías, con licencia SIL OFL.
   - Imágenes en WebP de unos 1050×1400 (recorte vertical); música en MP3 de unos 128 kbps.
 - **Juego del alumno** (`src/routes/alumno/game/`): una pantalla por fase. El servidor es la autoridad: el cliente adopta siempre el estado que devuelve `partida`.
-  - Motor en `src/engine/`: Ink, Pixi, Howler y GSAP, todo cargado bajo demanda.
+  - Motor en `src/engine/`: Ink, Pixi, Three, Howler y GSAP, todo cargado bajo demanda.
+  - **Cinemáticas** (D-87): `src/engine/cinematic/`. `shapes.ts` son formas de partículas puras (con tests), `shots.ts` el aspecto de cada plano, `particles.ts` el motor con Three (lazy) y `Cinematic.tsx` el lienzo, en un portal al `body`. Los planos válidos están en `shared/game/shots.ts`; los paneles (`plano`, `voz`, `texto` con `facil`, 35 palabras como mucho) en `content/intro.json` y en la `secuencia` de cada final de `finales.json` (D-89), y los muestra `CinematicPlayer.tsx` al ritmo del alumno, con «Saltar». En esos paneles, y solo en ellos, `{grupo}` se sustituye por el nombre de la clase (D-90); la validación rechaza huecos en cualquier otro texto. En las fases con cinemática, el fondo Pixi se suspende (`<Backdrop suspended>`) para no tener dos WebGL a la vez.
   - Accesibilidad (M7): `src/lib/settings.ts` (voz, tamaño del texto y movimiento) y `src/engine/speech.ts` (Web Speech API). La voz solo lee textos del juego, nunca lo que escribe el alumno.
   - Audio: `audio.setTension(tensionFor(desnivel))` añade la disonancia del Desnivel; el fondo recibe la misma inestabilidad (`<Backdrop instability>`).
   - Laboratorios en `labs/` (modelos puros en `labs/models.ts`, con tests). Logros, avisos y rango se calculan en el móvil con `shared/game/achievements.ts` a partir de `run.progress`; nunca llegan al Centro ni a la consola (D-69).
@@ -108,7 +110,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
 - **Claves e identificadores en inglés** en todo lo demás: tablas y columnas SQL, payloads de Edge Functions y RPC (camelCase en JSON), código TS. Excepción: las cuatro variables del mundo (`poder`, `responsabilidad`, `equidad`, `confianza`), que son términos del dominio.
 - **Textos de interfaz:** `import { ui } from '@shared/generated/content'` y `fmt(ui.x.y, { alias })` para sustituir `{alias}`.
 - **React:** componentes de función. La UI compartida va en `src/ui/` y lo específico de cada ruta en `src/routes/<ruta>/`.
-- **Carga diferida:** Pixi, Ink, Howler y pdf-lib se cargan bajo demanda, nunca en el bundle inicial.
+- **Carga diferida:** Pixi, Three, Ink, Howler y pdf-lib se cargan bajo demanda, nunca en el bundle inicial.
 - **Tests:**
   - unitarios en `*.test.ts`, junto al código (Vitest);
   - de integración en `tests/integration/`, contra el proyecto de Supabase. Necesitan `.env.local` y siempre crean y borran sus propios datos.

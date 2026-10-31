@@ -49,6 +49,9 @@ const IN_THE_PAST: ReadonlySet<Phase> = new Set([
   'objection',
 ]);
 
+/** Fases con cinemática de partículas: el fondo de Pixi se aparta (D-87). */
+const CINEMATIC: ReadonlySet<Phase> = new Set(['prologue', 'epilogue']);
+
 type GameProps = {
   readonly initial: MyState;
   /** La sesión ya no tiene partida (retirada por el docente, clase borrada…). */
@@ -160,7 +163,13 @@ export function Game({ initial, onLost }: GameProps) {
         },
       }}
     >
-      <Backdrop palette={ambient.paleta} layers={layers} step={step} instability={tension} />
+      <Backdrop
+        palette={ambient.paleta}
+        layers={layers}
+        step={step}
+        instability={tension}
+        suspended={CINEMATIC.has(run.phase)}
+      />
       <div
         className="game"
         data-era={era}

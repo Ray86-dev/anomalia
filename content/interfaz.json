@@ -74,6 +74,12 @@
     "prologo": {
       "viajar": "Viajar a la primera anomalía"
     },
+    "cinematica": {
+      "anterior": "Atrás",
+      "saltar": "Saltar la intro",
+      "progreso": "{n} de {total}",
+      "mnemosine": "Mnemósine · Archivo"
+    },
     "escena": {
       "irAlLaboratorio": "Ir al laboratorio"
     },
@@ -249,7 +255,26 @@
       "desnivel": "Desnivel prometeico",
       "desnivelAyuda": "Poder menos responsabilidad: cuanto más alto, más inestable es el futuro.",
       "sinCambio": "sin cambios",
-      "verArchivo": "Ver lo que ocurrió de verdad"
+      "verArchivo": "Ver lo que ocurrió de verdad",
+      "verCambios": "Ver cómo ha cambiado el 2077",
+      "queCambia": "Qué ha cambiado y por qué",
+      "queCambiaAyuda": "Tu decisión ha movido estas barras. Cada una va de 0 a 100.",
+      "antesAhora": "{antes} → {ahora}",
+      "enElTope": "ya estaba en {valor}",
+      "calculo": "Desnivel = Poder − Responsabilidad = {poder} − {responsabilidad} = {desnivel}",
+      "sube": "Esta decisión hace subir el Desnivel: de {antes} a {ahora}.",
+      "baja": "Esta decisión hace bajar el Desnivel: de {antes} a {ahora}.",
+      "igual": "Esta decisión no cambia el Desnivel: sigue en {ahora}.",
+      "hueco": "Desnivel",
+      "zona": "Zona: {zona}",
+      "zonas": {
+        "estable": "Estable",
+        "tension": "En tensión",
+        "inestable": "Inestable"
+      },
+      "leyenda": "Estable: menos de 10 · En tensión: de 10 a 24 · Inestable: 25 o más",
+      "queEs": "¿Qué es el Desnivel prometeico?",
+      "resumenVoz": "{variable}: {cambio}. {porque}"
     },
     "mundo": {
       "poder": "Poder",
@@ -272,7 +297,28 @@
       "titulo": "Epílogo · Tu 2077",
       "texto": "Mnemósine ha cerrado todas las anomalías. Esta es la línea temporal que dejan tus decisiones.",
       "final": "Final alcanzado",
-      "continuar": "Escribir la reflexión final"
+      "continuar": "Escribir la reflexión final",
+      "decisiones": "Tus decisiones",
+      "decisionesAyuda": "Cada decisión movió las barras del mundo. Así llegaste a tu 2077:",
+      "lugar": "{lugar}, {anio}",
+      "sinCambios": "No movió ninguna barra.",
+      "desnivelFinal": "Desnivel prometeico al final: {valor} ({zona})",
+      "verFuturo": "Ver cómo es tu 2077",
+      "verResumen": "Ver el resumen",
+      "saltar": "Saltar la animación",
+      "porQue": "Por qué este final",
+      "porQueAyuda": "Llegaste a este final porque se cumplió todo esto:",
+      "sinExtremos": "No se cumplió la condición de ningún otro final: tu mundo no llegó a ningún extremo.",
+      "condicion": "{variable}: {valor} ({regla})",
+      "otros": "Otros 2077 posibles",
+      "otrosAyuda": "Con otras decisiones, tu 2077 habría sido distinto. Así se llega a cada final:",
+      "porDefecto": "Si no se cumple ninguna de las condiciones de los demás finales.",
+      "reglas": {
+        "menor": "menos de {n}",
+        "menorIgual": "{n} o menos",
+        "mayor": "más de {n}",
+        "mayorIgual": "{n} o más"
+      }
     },
     "reflexion": {
       "titulo": "Reflexión final",
@@ -359,7 +405,7 @@
     "sinClases": "Todavía no has creado ninguna clase.",
     "crearTitulo": "Nueva clase",
     "nombreClaseEtiqueta": "Nombre de la clase",
-    "nombreClaseAyuda": "Por ejemplo, «4.º ESO B». Sin datos personales.",
+    "nombreClaseAyuda": "Por ejemplo, «4.º A+B». Sale en la intro del alumnado («Os he elegido a vosotros, 4.º A+B…») y en su expediente. Sin datos personales.",
     "modoEtiqueta": "Modo",
     "retencionEtiqueta": "Borrar los datos pasados (días)",
     "retencionAyuda": "Entre 1 y 90. Después se borra todo automáticamente.",

@@ -54,6 +54,10 @@
       },
       "corto": "Apoyar el experimento",
       "deltas": { "poder": 15, "responsabilidad": -10 },
+      "porque": {
+        "poder": {"normal": "Editar embriones se vuelve posible y, después, habitual.", "facil": "Cambiar los genes de los bebés se vuelve normal."},
+        "responsabilidad": {"normal": "Se actúa sin conocer los riesgos y sin discutirlo antes.", "facil": "Se hace sin conocer los riesgos y sin hablarlo antes."}
+      },
       "rama": null,
       "objetor": "jonas",
       "ondas": {
@@ -76,6 +80,11 @@
       },
       "corto": "Denunciarlo",
       "deltas": { "responsabilidad": 15, "confianza": 5, "poder": -5 },
+      "porque": {
+        "responsabilidad": {"normal": "Frenar el experimento obliga a discutir los riesgos antes de actuar.", "facil": "Paraste el experimento: primero hay que hablar de los riesgos."},
+        "confianza": {"normal": "La gente confía en quienes vigilan que se cumplan las normas.", "facil": "La gente se fía de quienes vigilan."},
+        "poder": {"normal": "La edición de embriones tarda años en permitirse.", "facil": "Cambiar los genes de los bebés tarda años en permitirse."}
+      },
       "rama": null,
       "objetor": "novak",
       "ondas": {
@@ -87,7 +96,7 @@
           "normal": "Tu denuncia frenó el experimento a tiempo. La edición de embriones se discutió en público durante años antes de permitir nada. Hoy solo se usa con normas estrictas, y la gente confía en quienes las vigilan.",
           "facil": "Tu aviso paró el experimento a tiempo. Durante años se discutió en público antes de permitir nada. Hoy hay normas muy claras y la gente confía en quienes las vigilan."
         },
-        "ari": {"normal": "Hoy hemos debatido en clase si está bien editar genes. No nos hemos puesto de acuerdo, pero sabemos quién vigila las normas. Eso me da tranquilidad.", "facil": "Hoy hemos hablado en clase de cambiar genes. No nos pusimos de acuerdo, pero sabemos quién vigila las normas."}
+        "ari": {"normal": "Hoy hemos debatido en Filosofía si está bien editar genes. No nos hemos puesto de acuerdo, pero sabemos quién vigila las normas. Eso me da tranquilidad.", "facil": "Hoy hemos hablado en Filosofía de cambiar genes. No nos pusimos de acuerdo, pero sabemos quién vigila las normas."}
       }
     },
     {
@@ -98,6 +107,10 @@
       },
       "corto": "Callar",
       "deltas": { "confianza": -10, "responsabilidad": -5 },
+      "porque": {
+        "confianza": {"normal": "Cuando se sabe, la gente se pregunta cuántos científicos callaron.", "facil": "Cuando se sabe, la gente sospecha de los científicos."},
+        "responsabilidad": {"normal": "Saber algo grave y no hacer nada es no responder.", "facil": "Sabías algo grave y no hiciste nada."}
+      },
       "rama": null,
       "objetor": "gil",
       "ondas": {

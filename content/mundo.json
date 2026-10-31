@@ -1,0 +1,46 @@
+{
+  "variables": {
+    "poder": {
+      "definicion": {
+        "normal": "Lo que la humanidad puede hacer con la ciencia y la técnica.",
+        "facil": "Lo que podemos hacer con la ciencia y los inventos."
+      }
+    },
+    "responsabilidad": {
+      "definicion": {
+        "normal": "Lo capaces que somos de prever lo que hacemos y de responder de ello.",
+        "facil": "Pensar antes en lo que puede pasar y hacerse cargo."
+      }
+    },
+    "equidad": {
+      "definicion": {
+        "normal": "Si los beneficios y los riesgos de la ciencia se reparten con justicia.",
+        "facil": "Si lo bueno y lo malo de la ciencia se reparte bien."
+      }
+    },
+    "confianza": {
+      "definicion": {
+        "normal": "Cuánto confía la gente en la ciencia y en quienes la hacen.",
+        "facil": "Cuánto se fía la gente de la ciencia."
+      }
+    }
+  },
+  "desnivel": {
+    "definicion": {
+      "normal": "Es el poder menos la responsabilidad. Mide cuánto va por delante lo que podemos hacer de lo que somos capaces de prever y de responder.",
+      "facil": "Es el poder menos la responsabilidad. Mide si podemos hacer más cosas de las que sabemos controlar."
+    },
+    "negativo": {
+      "normal": "Si es negativo, la responsabilidad va por delante del poder.",
+      "facil": "Si es negativo, la responsabilidad va por delante."
+    },
+    "efectos": {
+      "normal": "Cuanto más alto, más inestable es el 2077: la imagen falla, suena un zumbido y los titulares suenan a alarma.",
+      "facil": "Si sube mucho, el 2077 se vuelve inestable: la imagen falla y suena un zumbido."
+    },
+    "origen": {
+      "normal": "El nombre viene del filósofo Günther Anders TODO(verificar). Recuerda a Prometeo, el titán del mito griego que robó el fuego a los dioses para dárselo a los humanos.",
+      "facil": "El nombre viene del filósofo Günther Anders TODO(verificar). Prometeo es un personaje de los mitos griegos: robó el fuego a los dioses."
+    }
+  }
+}

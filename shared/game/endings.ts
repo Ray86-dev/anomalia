@@ -50,3 +50,16 @@ export function computeEnding<T extends EndingRule>(state: WorldState, endings: 
   }
   return match;
 }
+
+/** Una condición de un final, con el valor que tenía el mundo. */
+export type EndingReason = Comparison & { readonly actual: number };
+
+/**
+ * Por qué se llegó a un final (D-89): las comparaciones de su condición con el valor real de
+ * cada variable. El final por defecto no tiene ninguna: se llega a él cuando no se cumple
+ * ninguno de los anteriores.
+ */
+export function explainEnding(ending: EndingRule, state: WorldState): EndingReason[] {
+  if (ending.condicion === null) return [];
+  return ending.condicion.todas.map((c) => ({ ...c, actual: read(state, c.var) }));
+}

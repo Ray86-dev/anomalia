@@ -34,3 +34,14 @@ export function applyDeltas(state: WorldState, deltas: Deltas): WorldState {
 export function desnivel(state: WorldState): number {
   return state.poder - state.responsabilidad;
 }
+
+/** Umbrales del Desnivel (D-82): desde 10 el 2077 está en tensión; desde 25, inestable. */
+export const GAP_TENSE = 10;
+export const GAP_UNSTABLE = 25;
+
+export type GapZone = 'estable' | 'tension' | 'inestable';
+
+export function gapZone(gap: number): GapZone {
+  if (gap >= GAP_UNSTABLE) return 'inestable';
+  return gap >= GAP_TENSE ? 'tension' : 'estable';
+}

@@ -58,6 +58,8 @@ const raw: RawContent = {
   rewards: readJson('logros.json'),
   fichas: readJson('fichas.json'),
   emblems: readJson('emblemas.json'),
+  world: readJson('mundo.json'),
+  intro: readJson('intro.json'),
 };
 
 const assetExists = (src: string) => existsSync(join(root, 'public', 'assets', src));
@@ -98,10 +100,12 @@ import type {
   Ending,
   Fallbacks,
   Ficha,
+  Intro,
   Reflection,
   Rewards,
   Rubric,
   UiTree,
+  WorldInfo,
 } from '../schemas/content.ts';
 
 export const ui = ${json(c.ui)} as const satisfies UiTree;
@@ -121,6 +125,10 @@ export const rewards: Rewards = ${json(c.rewards)};
 export const fichas: readonly Ficha[] = ${json(c.fichas)};
 
 export const emblems: Emblems = ${json(c.emblems)};
+
+export const worldInfo: WorldInfo = ${json(c.worldInfo)};
+
+export const intro: Intro = ${json(c.intro)};
 
 export const classModes: readonly ClassMode[] = ${json(c.modes)};
 

@@ -4,6 +4,7 @@
  */
 import { z } from 'zod';
 import { LAB_TYPES, MILESTONE_IDS } from '../game/milestones.ts';
+import { SHOTS, VOICES } from '../game/shots.ts';
 import { WORLD_VARS } from '../game/world.ts';
 
 const id = z.string().regex(/^[a-z0-9-]+$/, 'solo minúsculas, números y guiones');
@@ -62,6 +63,8 @@ const optionSchema = z.strictObject({
   /** Etiqueta breve para la línea temporal, el teletipo y las leyendas del Centro de Control. */
   corto: z.string().min(2).max(40),
   deltas: z.partialRecord(worldVar, z.number().int().min(-30).max(30)),
+  /** Por qué cambia cada variable con esta opción (una frase por delta distinto de 0, D-86). */
+  porque: z.partialRecord(worldVar, textoSchema),
   rama: id.nullable(),
   objetor: id,
   /** `ari`: mensaje de Ari desde el 2077 que deja esta opción (M6). */
@@ -148,6 +151,20 @@ export const dilemmaSchema = z
           message: `«${o.objetor}» no es uno de los consejeros de este dilema`,
         });
       }
+      // Cada variable que se mueve explica por qué, y no se explica lo que no se mueve.
+      for (const variable of WORLD_VARS) {
+        const moves = (o.deltas[variable] ?? 0) !== 0;
+        const explained = o.porque[variable] !== undefined;
+        if (moves !== explained) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['opciones', i, 'porque', variable],
+            message: moves
+              ? `falta la frase que explica por qué cambia «${variable}»`
+              : `«${variable}» no cambia con esta opción: sobra su frase`,
+          });
+        }
+      }
     });
   });
 
@@ -167,6 +184,30 @@ export const counselorSchema = z.strictObject({
 
 export const conceptSchema = z.strictObject({ id, etiqueta: z.string().min(1) });
 
+/** Panel de una cinemática (D-87): un plano del motor de partículas y un texto. */
+export const panelSchema = z.strictObject({
+  plano: z.enum(SHOTS),
+  voz: z.enum(VOICES),
+  texto: textoSchema,
+});
+
+/** Intro animada (content/intro.json): sustituye al prólogo de Ink (D-87). */
+export const introSchema = z.strictObject({ paneles: z.array(panelSchema).min(3) });
+
+/**
+ * Qué significa cada barra del mundo y el Desnivel prometeico (content/mundo.json, D-86).
+ * Lo leen las Ondas temporales y el epílogo.
+ */
+export const worldInfoSchema = z.strictObject({
+  variables: z.record(worldVar, z.strictObject({ definicion: textoSchema })),
+  desnivel: z.strictObject({
+    definicion: textoSchema,
+    negativo: textoSchema,
+    efectos: textoSchema,
+    origen: textoSchema,
+  }),
+});
+
 const comparisonSchema = z.strictObject({
   var: z.enum([...WORLD_VARS, 'desnivel']),
   op: z.enum(['<', '<=', '>', '>=']),
@@ -183,6 +224,8 @@ export const endingSchema = z.strictObject({
   texto: textoSchema,
   /** Lo que cuenta Ari de su vida en ese 2077 (M6). */
   ari: textoSchema,
+  /** Cinemática del epílogo (D-89): cómo se transforma el 2077, antes del mensaje de Ari. */
+  secuencia: z.array(panelSchema).min(1).max(4),
   assets: z.strictObject({ imagen: z.string().optional(), musica: z.string().optional() }),
 });
 
@@ -337,6 +380,9 @@ export type Dilemma = z.infer<typeof dilemmaSchema>;
 export type DilemmaOption = Dilemma['opciones'][number];
 export type Counselor = z.infer<typeof counselorSchema>;
 export type Concept = z.infer<typeof conceptSchema>;
+export type WorldInfo = z.infer<typeof worldInfoSchema>;
+export type Panel = z.infer<typeof panelSchema>;
+export type Intro = z.infer<typeof introSchema>;
 export type Ending = z.infer<typeof endingSchema>;
 export type Rubric = z.infer<typeof rubricSchema>;
 export type ClassMode = z.infer<typeof classModeSchema>;

@@ -15,10 +15,12 @@ import {
   endingsSchema,
   fichaSchema,
   fallbacksSchema,
+  introSchema,
   reflectionSchema,
   rewardsSchema,
   rubricSchema,
   uiSchema,
+  worldInfoSchema,
   type AlertTerms,
   type Ambients,
   type ClassMode,
@@ -29,10 +31,13 @@ import {
   type Ending,
   type Ficha,
   type Fallbacks,
+  type Intro,
   type Reflection,
   type Rewards,
   type Rubric,
+  type Texto,
   type UiTree,
+  type WorldInfo,
 } from '../../shared/schemas/content.ts';
 
 export type RawContent = {
@@ -51,6 +56,8 @@ export type RawContent = {
   readonly rewards: unknown;
   readonly fichas: unknown;
   readonly emblems: unknown;
+  readonly world: unknown;
+  readonly intro: unknown;
 };
 
 export type Content = {
@@ -68,6 +75,8 @@ export type Content = {
   readonly rewards: Rewards;
   readonly fichas: readonly Ficha[];
   readonly emblems: Emblems;
+  readonly worldInfo: WorldInfo;
+  readonly intro: Intro;
   readonly dilemmas: readonly Dilemma[];
 };
 
@@ -89,20 +98,17 @@ export type ValidationOptions = {
   readonly compileInk: (source: string, requiredKnots: readonly string[]) => InkResult;
 };
 
-/** Historias Ink del juego: id → archivo y nudos que debe tener. */
-export const PROLOGUE_INK = { id: 'prologo', path: 'prologo.ink', knots: ['prologo'] } as const;
-export const PROLOGUE_EASY_INK = {
-  id: 'prologo-facil',
-  path: 'lectura-facil/prologo.ink',
-  knots: ['prologo'],
-} as const;
+/** Huecos que se sustituyen en los paneles de las cinemáticas (D-90): el nombre de la clase. */
+export const PANEL_HOLES = ['grupo'] as const;
+
+/** Nudo que debe tener la escena Ink de cada dilema (el prólogo es la intro animada, D-87). */
 export const SCENE_KNOTS = ['escena'] as const;
 
 export type ValidationResult = {
   readonly errors: readonly string[];
   readonly warnings: readonly string[];
   readonly content: Content | null;
-  /** JSON compilado de cada historia Ink, por id (`prologo`, `d1`, `d1-facil`…). */
+  /** JSON compilado de cada historia Ink, por id (`d1`, `d1-facil`…). */
   readonly inks: Readonly<Record<string, string>>;
 };
 
@@ -134,7 +140,18 @@ function missingEasyReading(value: unknown, path: string[] = []): string[] {
 }
 
 /** Menos texto (M6): la frase de cada consejero y los respaldos de la IA tienen tope. */
-const MAX_WORDS = { frase: 20, objecion: 50, cierre: 40, giro: 45, ari: 35 } as const;
+const MAX_WORDS = {
+  frase: 20,
+  objecion: 50,
+  cierre: 40,
+  giro: 45,
+  ari: 35,
+  /** Por qué se mueve una barra (D-86) y qué significa cada una. */
+  porque: 18,
+  definicion: 16,
+  /** Un panel de cinemática se lee de un vistazo, sobre la animación (D-87). */
+  panel: 35,
+} as const;
 
 /** Dilemas a los que mira una escena con sus ecos (`eleccion_d1`…). */
 const echoesIn = (source: string) =>
@@ -205,6 +222,8 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   const rewards = parse(rewardsSchema, raw.rewards, 'logros.json');
   const fichas = parse(z.array(fichaSchema), raw.fichas, 'fichas.json');
   const emblems = parse(emblemsSchema, raw.emblems, 'emblemas.json');
+  const worldInfo = parse(worldInfoSchema, raw.world, 'mundo.json');
+  const intro = parse(introSchema, raw.intro, 'intro.json');
   const dilemmas = raw.dilemmas.map(({ file, data }) => {
     const dilemma = parse(dilemmaSchema, data, file);
     if (dilemma && !basename(file).startsWith(`${dilemma.id}-`)) {
@@ -213,10 +232,6 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     return dilemma;
   });
 
-  checkInk(PROLOGUE_INK.id, PROLOGUE_INK.path, PROLOGUE_INK.knots, 'prólogo');
-  if (options.readText(PROLOGUE_EASY_INK.path) !== null || options.strict) {
-    checkInk(PROLOGUE_EASY_INK.id, PROLOGUE_EASY_INK.path, PROLOGUE_EASY_INK.knots, 'prólogo');
-  }
 
   /** Imágenes y pistas declaradas deben existir en public/assets/ (si faltan, el juego usa el fondo procedural). */
   function checkAssets(owner: string, assets: { src: string }[]): void {
@@ -281,6 +296,11 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     for (const o of d.opciones) {
       for (const variant of tooLong(o.ondas.ari, MAX_WORDS.ari)) {
         errors.push(`${file} › opciones.${o.id}.ondas.ari.${variant}: más de ${String(MAX_WORDS.ari)} palabras`);
+      }
+      for (const [variable, why] of Object.entries(o.porque)) {
+        for (const variant of tooLong(why, MAX_WORDS.porque)) {
+          errors.push(`${file} › opciones.${o.id}.porque.${variable}.${variant}: más de ${String(MAX_WORDS.porque)} palabras`);
+        }
       }
     }
     if (!d.laboratorio.verificado) {
@@ -374,6 +394,59 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     if (!emblems.colores.some((c) => c.puntos === 0)) errors.push('emblemas.json: hace falta un color gratis (0 puntos)');
   }
 
+  for (const [variable, info] of Object.entries(worldInfo?.variables ?? {})) {
+    for (const variant of tooLong(info.definicion, MAX_WORDS.definicion)) {
+      errors.push(`mundo.json › variables.${variable}.definicion.${variant}: más de ${String(MAX_WORDS.definicion)} palabras`);
+    }
+  }
+
+  intro?.paneles.forEach((panel, i) => {
+    for (const variant of tooLong(panel.texto, MAX_WORDS.panel)) {
+      errors.push(`intro.json › paneles.${String(i)}.texto.${variant}: más de ${String(MAX_WORDS.panel)} palabras`);
+    }
+  });
+  for (const ending of endings ?? []) {
+    ending.secuencia.forEach((panel, i) => {
+      for (const variant of tooLong(panel.texto, MAX_WORDS.panel)) {
+        errors.push(`finales.json › ${ending.id}.secuencia.${String(i)}.texto.${variant}: más de ${String(MAX_WORDS.panel)} palabras`);
+      }
+    });
+  }
+
+  // Huecos (D-90): {grupo} solo se sustituye en los paneles de las cinemáticas; en cualquier
+  // otro texto el alumno vería la llave tal cual.
+  const checkHoles = (where: string, text: Texto, allowed: readonly string[]) => {
+    for (const variant of [text.normal, text.facil ?? '']) {
+      for (const [, hole = ''] of variant.matchAll(/\{(\w+)\}/gu)) {
+        if (!allowed.includes(hole)) {
+          errors.push(
+            allowed.length === 0
+              ? `${where}: «{${hole}}» no se sustituye en este texto`
+              : `${where}: «{${hole}}» no existe (solo ${allowed.map((h) => `{${h}}`).join(', ')})`,
+          );
+        }
+      }
+    }
+  };
+  intro?.paneles.forEach((panel, i) => {
+    checkHoles(`intro.json › paneles.${String(i)}.texto`, panel.texto, PANEL_HOLES);
+  });
+  for (const ending of endings ?? []) {
+    ending.secuencia.forEach((panel, i) => {
+      checkHoles(`finales.json › ${ending.id}.secuencia.${String(i)}.texto`, panel.texto, PANEL_HOLES);
+    });
+    for (const key of ['titulo', 'resumen', 'texto', 'ari'] as const) {
+      checkHoles(`finales.json › ${ending.id}.${key}`, ending[key], []);
+    }
+  }
+  for (const d of validDilemmas) {
+    for (const o of d.opciones) {
+      for (const key of ['titular', 'texto', 'ari'] as const) {
+        checkHoles(`dilemas/${d.id} › opciones.${o.id}.ondas.${key}`, o.ondas[key], []);
+      }
+    }
+  }
+
   for (const term of blocked?.contiene ?? []) {
     if (canonical(term).length < 3) {
       errors.push(`alias-bloqueados.json › contiene: «${term}» es demasiado corto al normalizarlo y bloquearía alias inocentes`);
@@ -389,6 +462,8 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     ['reflexion.json', raw.reflection],
     ['logros.json', raw.rewards],
     ['fichas.json', raw.fichas],
+    ['mundo.json', raw.world],
+    ['intro.json', raw.intro],
     ...raw.dilemmas.map(({ file, data }): [string, unknown] => [file, data]),
   ];
   for (const [file, data] of sources) {
@@ -415,7 +490,9 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
     reflection &&
     rewards &&
     fichas &&
-    emblems
+    emblems &&
+    worldInfo &&
+    intro
       ? {
           ui,
           counselors,
@@ -431,6 +508,8 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
           rewards,
           fichas,
           emblems,
+          worldInfo,
+          intro,
         }
       : null;
   const content =

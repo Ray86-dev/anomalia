@@ -62,6 +62,11 @@
       },
       "corto": "Participar",
       "deltas": { "poder": 15, "responsabilidad": -15, "confianza": -10 },
+      "porque": {
+        "poder": {"normal": "La química se convierte en arma: crece lo que se puede hacer con ella.", "facil": "La química sirve ahora para hacer armas: se puede hacer más."},
+        "responsabilidad": {"normal": "Se trabaja sin preguntar para qué sirve ni responder de los daños.", "facil": "Nadie se pregunta para qué sirve su trabajo ni responde del daño."},
+        "confianza": {"normal": "La gente ve la ciencia como un arma más y desconfía.", "facil": "La gente ve la ciencia como un arma y no se fía."}
+      },
       "rama": null,
       "objetor": "gil",
       "ondas": {
@@ -73,7 +78,7 @@
           "normal": "En esta línea temporal, los laboratorios aprendieron a obedecer sin preguntar para qué servía su trabajo. Hay técnicas asombrosas, pero mucha gente desconfía de la ciencia: la ve como un arma más.",
           "facil": "Los laboratorios aprendieron a obedecer sin preguntar para qué sirve su trabajo. Hay inventos asombrosos, pero mucha gente ve la ciencia como un arma."
         },
-        "ari": {"normal": "Cerca de casa hay una fábrica que nadie sabe qué hace. Cuando pregunto, me dicen que no es asunto mío. Ya no me fío mucho de los laboratorios.", "facil": "Cerca de casa hay una fábrica. Nadie sabe qué hace. Si pregunto, me dicen que no es asunto mío."}
+        "ari": {"normal": "Cerca de casa, en El Sauzal, hay una fábrica que nadie sabe qué hace. Cuando pregunto, me dicen que no es asunto mío. Ya no me fío mucho de los laboratorios.", "facil": "Cerca de casa, en El Sauzal, hay una fábrica. Nadie sabe qué hace. Si pregunto, me dicen que no es asunto mío."}
       }
     },
     {
@@ -84,6 +89,10 @@
       },
       "corto": "Negarse y marcharse",
       "deltas": { "responsabilidad": 10, "poder": -5 },
+      "porque": {
+        "responsabilidad": {"normal": "Negarse enseña que quien investiga responde de para qué sirve su trabajo.", "facil": "Dijiste que no: quien investiga responde de lo que hace."},
+        "poder": {"normal": "Sin tu trabajo, la técnica avanza un poco más despacio.", "facil": "Sin tu ayuda, los inventos llegan un poco más tarde."}
+      },
       "rama": null,
       "objetor": "calvo",
       "ondas": {
@@ -95,7 +104,7 @@
           "normal": "Tu renuncia no paró la guerra, pero no se olvidó. Hoy, en Canarias, quien estudia ciencias aprende que puede negarse a investigar algo que va contra su conciencia. La técnica avanza un poco más despacio.",
           "facil": "Tu renuncia no paró la guerra, pero nadie la olvidó. Hoy, en Canarias, quien estudia ciencias sabe que puede negarse a investigar algo que le parece mal. La técnica avanza un poco más despacio."
         },
-        "ari": {"normal": "En el instituto nos han explicado que, si estudio ciencias, podré negarme a investigar algo que vaya contra mi conciencia. Me ha gustado saberlo.", "facil": "En el instituto nos han dicho que puedes decir que no a un trabajo de ciencia si crees que está mal."}
+        "ari": {"normal": "En el San Nicolás nos han explicado que, si estudio ciencias, podré negarme a investigar algo que vaya contra mi conciencia. Me ha gustado saberlo.", "facil": "En el San Nicolás nos han dicho que puedes decir que no a un trabajo de ciencia si crees que está mal."}
       }
     },
     {
@@ -106,6 +115,11 @@
       },
       "corto": "Hacerlo público",
       "deltas": { "confianza": 5, "responsabilidad": 10, "equidad": 5 },
+      "porque": {
+        "confianza": {"normal": "La gente sabe en qué se investiga y puede fiarse más.", "facil": "La gente sabe en qué se investiga y se fía más."},
+        "responsabilidad": {"normal": "Contar el peligro obliga a responder de lo que se prepara.", "facil": "Contaste el peligro: así alguien tiene que responder de él."},
+        "equidad": {"normal": "Todos pueden opinar sobre un riesgo que antes decidían unos pocos.", "facil": "Ahora todos pueden opinar, no solo unos pocos."}
+      },
       "rama": "d2-denuncia",
       "objetor": "novak",
       "ondas": {

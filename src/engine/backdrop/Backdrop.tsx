@@ -10,6 +10,11 @@ type BackdropProps = {
   readonly step?: number;
   /** Inestabilidad de 0 a 1 según el Desnivel: glitch en la escena y un velo rojizo. */
   readonly instability?: number;
+  /**
+   * Sin escena de Pixi (queda el degradado CSS): durante las cinemáticas de partículas, para
+   * no tener dos contextos WebGL a la vez en el móvil (D-87).
+   */
+  readonly suspended?: boolean;
 };
 
 export const assetUrl = (src: string) => `${import.meta.env.BASE_URL}assets/${src}`;
@@ -24,15 +29,21 @@ function parseFocus(focus: string | undefined): readonly [number, number] {
  * Fondo a pantalla completa. El degradado CSS es el respaldo inmediato (y el definitivo si
  * WebGL no está disponible); encima se monta la escena de Pixi cuando termina de cargar.
  */
-export function Backdrop({ palette, layers, step = 0, instability = 0 }: BackdropProps) {
+export function Backdrop({
+  palette,
+  layers,
+  step = 0,
+  instability = 0,
+  suspended = false,
+}: BackdropProps) {
   const host = useRef<HTMLDivElement>(null);
   const scene = useRef<BackdropScene | null>(null);
   const [deep, mid] = palette;
-  const key = `${palette.join()}|${layers.map((l) => l.src).join()}`;
+  const key = `${palette.join()}|${layers.map((l) => l.src).join()}|${String(suspended)}`;
 
   useEffect(() => {
     const element = host.current;
-    if (element === null) return;
+    if (element === null || suspended) return;
     let disposed = false;
     let created: BackdropScene | null = null;
     import('./pixi-backdrop.ts')
@@ -61,7 +72,7 @@ export function Backdrop({ palette, layers, step = 0, instability = 0 }: Backdro
       created?.destroy();
       scene.current = null;
     };
-    // `key` resume palette y layers: solo se recrea la escena si cambian de verdad.
+    // `key` resume palette, layers y suspended: solo se recrea la escena si cambian de verdad.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 

@@ -33,15 +33,16 @@ function realContent(): RawContent {
     rewards: json('logros.json'),
     fichas: json('fichas.json'),
     emblems: json('emblemas.json'),
+    world: json('mundo.json'),
+    intro: json('intro.json'),
   };
 }
 
-const VALID_PROLOGUE = '=== prologo ===\nAño 2077.\n-> END';
+const VALID_SCENE = '=== escena ===\nRoma.\n-> END';
 const inkFiles: Record<string, string> = {
-  'prologo.ink': VALID_PROLOGUE,
-  'dilemas/d1-galileo.ink': '=== escena ===\nRoma.\n-> END',
+  'dilemas/d1-galileo.ink': VALID_SCENE,
 };
-/** Escenas de prueba para el prólogo y D1; el resto, las reales del repo. */
+/** Escena de prueba para D1; el resto, las reales del repo. */
 const readText = (path: string) => {
   const file = join(contentDir, path);
   return inkFiles[path] ?? (existsSync(file) ? readFileSync(file, 'utf8') : null);
@@ -95,6 +96,30 @@ describe('validateContent', () => {
     expect(validate(raw).errors.length).toBeGreaterThan(0);
   });
 
+  it('exige una frase «porque» por cada variable que mueve una opción, y ninguna más', () => {
+    const raw = realContent();
+    const option = d1(raw).opciones[0] as { porque: Record<string, unknown> } | undefined;
+    if (option) {
+      delete option.porque.confianza;
+      option.porque.equidad = { normal: 'No cambia.', facil: 'No cambia.' };
+    }
+    const errors = validate(raw).errors.join('\n');
+    expect(errors).toMatch(/porque\.confianza: falta la frase/);
+    expect(errors).toMatch(/porque\.equidad: «equidad» no cambia/);
+  });
+
+  it('limita la frase «porque» y la definición de cada barra', () => {
+    const raw = realContent();
+    const option = d1(raw).opciones[0] as { porque: Record<string, unknown> } | undefined;
+    if (option) option.porque.confianza = { normal: 'palabra '.repeat(19), facil: 'Corta.' };
+    const world = raw.world as { variables: Record<string, { definicion: unknown }> };
+    const poder = world.variables.poder;
+    if (poder) poder.definicion = { normal: 'palabra '.repeat(17), facil: 'Corta.' };
+    const errors = validate(raw).errors.join('\n');
+    expect(errors).toMatch(/opciones\.A\.porque\.confianza\.normal: más de 18 palabras/);
+    expect(errors).toMatch(/mundo\.json › variables\.poder\.definicion\.normal: más de 16/);
+  });
+
   it('exige que solo el último final sea el caso por defecto', () => {
     const raw = realContent();
     const endings = raw.endings as Record<string, unknown>[];
@@ -110,7 +135,7 @@ describe('validateContent', () => {
     expect(validate(raw).errors.join('\n')).toMatch(/no existe content\/dilemas\/no-existe\.ink/);
   });
 
-  it('compila el prólogo y las escenas, e informa de los errores de Ink', () => {
+  it('compila las escenas e informa de los errores de Ink', () => {
     expect(Object.keys(validate(realContent()).inks).sort()).toEqual([
       'd1',
       'd1-facil',
@@ -122,15 +147,43 @@ describe('validateContent', () => {
       'd4-facil',
       'd5',
       'd5-facil',
-      'prologo',
-      'prologo-facil',
     ]);
-    inkFiles['prologo.ink'] = 'ROTO';
+    inkFiles['dilemas/d1-galileo.ink'] = 'ROTO';
     try {
-      expect(validate(realContent()).errors.join('\n')).toMatch(/prologo\.ink: error de sintaxis/);
+      expect(validate(realContent()).errors.join('\n')).toMatch(
+        /d1-galileo\.ink: error de sintaxis/,
+      );
     } finally {
-      inkFiles['prologo.ink'] = VALID_PROLOGUE;
+      inkFiles['dilemas/d1-galileo.ink'] = VALID_SCENE;
     }
+  });
+
+  it('solo acepta el hueco {grupo}, y solo en los paneles de las cinemáticas', () => {
+    const raw = realContent();
+    const [first] = (raw.intro as { paneles: { texto: Record<string, string> }[] }).paneles;
+    if (first) first.texto = { normal: 'Hola, {grupo} y {grup}.', facil: 'Hola, {grupo}.' };
+    const [ending] = raw.endings as { ari: Record<string, string> }[];
+    if (ending) ending.ari = { normal: 'Saludos al {grupo}.', facil: 'Hola.' };
+    const errors = validate(raw).errors.join('\n');
+    expect(errors).toMatch(/intro\.json › paneles\.0\.texto: «\{grup\}» no existe/);
+    expect(errors).not.toMatch(/paneles\.0\.texto: «\{grupo\}»/);
+    expect(errors).toMatch(/finales\.json › tecnocracia\.ari: «\{grupo\}» no se sustituye/);
+  });
+
+  it('valida la intro: planos conocidos y paneles cortos', () => {
+    const panels = (raw: RawContent) => (raw.intro as { paneles: Record<string, unknown>[] }).paneles;
+
+    const unknownShot = realContent();
+    const [first] = panels(unknownShot);
+    if (first) first.plano = 'luna';
+    expect(validate(unknownShot).errors.join('\n')).toMatch(/intro\.json › paneles\.0\.plano/);
+
+    const tooLongPanel = realContent();
+    const [, second] = panels(tooLongPanel);
+    if (second) second.texto = { normal: 'palabra '.repeat(36), facil: 'Corta.' };
+    expect(validate(tooLongPanel).errors.join('\n')).toMatch(
+      /intro\.json › paneles\.1\.texto\.normal: más de 35 palabras/,
+    );
   });
 
   it('la frase de un consejero es una sola frase de como mucho 20 palabras', () => {

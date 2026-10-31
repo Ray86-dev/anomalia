@@ -51,6 +51,10 @@
       },
       "corto": "Abjurar y seguir investigando",
       "deltas": { "confianza": -5, "responsabilidad": 5 },
+      "porque": {
+        "responsabilidad": {"normal": "Salvar la vida para seguir investigando es medir las consecuencias antes de actuar.", "facil": "Pensaste en lo que podía pasar antes de actuar."},
+        "confianza": {"normal": "Ceder en público hace sospechar que los científicos no dicen lo que piensan.", "facil": "Si los científicos callan, la gente sospecha de ellos."}
+      },
       "rama": null,
       "objetor": "kaltz",
       "ondas": {
@@ -73,6 +77,10 @@
       },
       "corto": "Mantenerse firme",
       "deltas": { "confianza": 10, "poder": 5 },
+      "porque": {
+        "confianza": {"normal": "Defender la evidencia en público enseña que la ciencia no se dobla ante la autoridad.", "facil": "La gente ve que la ciencia defiende lo que ha comprobado."},
+        "poder": {"normal": "Las ideas de Galileo siguen circulando y la ciencia gana terreno.", "facil": "Las ideas de Galileo siguen adelante y la ciencia avanza."}
+      },
       "rama": "d1-firme",
       "objetor": "novak",
       "ondas": {
@@ -84,7 +92,7 @@
           "normal": "La firmeza de aquella noche se convirtió en un ejemplo que se enseña en todas las escuelas, también en las de Canarias. La gente confía más en la ciencia… pero el Archivo guarda una pregunta abierta: cuánto le costó a Galileo esa firmeza.",
           "facil": "Su firmeza se enseña en todas las escuelas, también en Canarias. La gente confía más en la ciencia. Pero queda una pregunta: cuánto le costó a Galileo."
         },
-        "ari": {"normal": "Hoy hemos estudiado a Galileo. Todo el mundo dice que fue muy valiente, pero nadie sabe decirme cuánto le costó. ¿Tú lo sabes?", "facil": "Hoy hemos estudiado a Galileo. Dicen que fue muy valiente. Pero nadie sabe decirme cuánto le costó. ¿Tú lo sabes?"}
+        "ari": {"normal": "Hoy hemos estudiado a Galileo en Filosofía. Todo el mundo dice que fue muy valiente, pero nadie sabe decirme cuánto le costó. ¿Tú lo sabes?", "facil": "Hoy hemos estudiado a Galileo en Filosofía. Dicen que fue muy valiente. Pero nadie sabe decirme cuánto le costó. ¿Tú lo sabes?"}
       }
     },
     {
@@ -95,6 +103,10 @@
       },
       "corto": "Difundir en secreto",
       "deltas": { "poder": 10, "equidad": 5 },
+      "porque": {
+        "poder": {"normal": "Sus escritos se copian fuera de Italia y la técnica avanza más deprisa.", "facil": "Sus escritos salen de Italia y la ciencia avanza más rápido."},
+        "equidad": {"normal": "El conocimiento llega a más personas y a más lugares.", "facil": "Más personas pueden leer lo que descubrió."}
+      },
       "rama": null,
       "objetor": "jonas",
       "ondas": {

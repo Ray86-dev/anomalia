@@ -1,0 +1,108 @@
+{
+  "paneles": [
+    {
+      "plano": "canarias",
+      "voz": "narrador",
+      "texto": {
+        "normal": "Año 2077. El Sauzal, Tenerife.",
+        "facil": "Año 2077. El Sauzal, Tenerife."
+      }
+    },
+    {
+      "plano": "ciudad",
+      "voz": "ari",
+      "texto": {
+        "normal": "Me llamo Ari y tengo quince años. Vivo en El Sauzal y estudio 4.º de la ESO en el IES San Nicolás. Sí, en vuestro instituto, medio siglo después.",
+        "facil": "Me llamo Ari y tengo quince años. Vivo en El Sauzal. Estudio en el IES San Nicolás, vuestro instituto, pero en el año 2077."
+      }
+    },
+    {
+      "plano": "ciudad",
+      "voz": "ari",
+      "texto": {
+        "normal": "Bebemos agua del mar que unas máquinas vuelven dulce. Una IA organiza el tráfico, las clases y las citas del médico. Al nacer, te leen los genes.",
+        "facil": "Unas máquinas quitan la sal al agua del mar para que podamos beberla. Una IA organiza el tráfico y las clases. Al nacer, los médicos leen tus genes."
+      }
+    },
+    {
+      "plano": "calor",
+      "voz": "ari",
+      "texto": {
+        "normal": "Pero hay problemas. Los veranos queman, la calima dura semanas y nadie se pone de acuerdo en qué hacer con todo lo que la ciencia puede hacer.",
+        "facil": "Pero hay problemas. En verano hace muchísimo calor y hay calima durante semanas. Y nadie se pone de acuerdo sobre cómo usar la ciencia."
+      }
+    },
+    {
+      "plano": "parpadeo",
+      "voz": "ari",
+      "texto": {
+        "normal": "Hace unos días se fue la luz en clase. Nada raro: en el San Nicolás pasa a menudo. Pero esta vez, cuando volvió, algo había cambiado.",
+        "facil": "Hace unos días se fue la luz en clase. Eso pasa mucho en el San Nicolás. Pero esta vez, al volver la luz, algo había cambiado."
+      }
+    },
+    {
+      "plano": "parpadeo",
+      "voz": "ari",
+      "texto": {
+        "normal": "El hospital de mi barrio ya no estaba. Al día siguiente, volvía a estar. Nadie más lo recuerda. Desde entonces, el mundo parpadea.",
+        "facil": "El hospital de mi barrio había desaparecido. Al día siguiente estaba otra vez. Nadie más se acuerda. Desde entonces, el mundo parpadea."
+      }
+    },
+    {
+      "plano": "archivo",
+      "voz": "mnemosine",
+      "texto": {
+        "normal": "Soy Mnemósine, la inteligencia que custodia el Archivo bajo el Teide. Aquí están todos los datos: lo que la ciencia ha medido, contado y comprobado.",
+        "facil": "Soy Mnemósine, una inteligencia artificial. Cuido el Archivo, que está bajo el Teide. En el Archivo están los datos: lo que la ciencia ha medido y comprobado."
+      }
+    },
+    {
+      "plano": "hilo",
+      "voz": "mnemosine",
+      "texto": {
+        "normal": "He encontrado una anomalía: cinco decisiones del pasado han quedado abiertas. La línea temporal se deshilacha, y por eso el mundo de Ari parpadea.",
+        "facil": "He encontrado un problema en el tiempo: cinco decisiones del pasado no están cerradas. Por eso el mundo de Ari parpadea."
+      }
+    },
+    {
+      "plano": "datos-razones",
+      "voz": "mnemosine",
+      "texto": {
+        "normal": "Mis datos dicen cómo son las cosas, pero no qué debemos hacer con ellas. Eso no se mide: se decide con razones. Y yo no puedo decidir por vosotros.",
+        "facil": "Los datos dicen cómo son las cosas. Pero no dicen qué debemos hacer. Eso hay que decidirlo con razones. Y yo no puedo decidir por vosotros."
+      }
+    },
+    {
+      "plano": "cronistas",
+      "voz": "mnemosine",
+      "texto": {
+        "normal": "La gente de 2077 no puede viajar: su mundo depende de esas decisiones. Por eso he abierto un canal hacia vuestro presente, hacia el instituto de Ari.",
+        "facil": "La gente de 2077 no puede viajar, porque su mundo depende de esas decisiones. Por eso os llamo desde vuestro presente, desde el instituto de Ari."
+      }
+    },
+    {
+      "plano": "cronistas",
+      "voz": "mnemosine",
+      "texto": {
+        "normal": "Os he elegido a vosotros, {grupo}, porque este curso tenéis Filosofía por primera vez: vais a aprender a dar razones. Seréis mi grupo de Cronistas.",
+        "facil": "Os he elegido a vosotros, {grupo}. Este curso tenéis Filosofía por primera vez y vais a aprender a dar razones. Seréis mi grupo de Cronistas."
+      }
+    },
+    {
+      "plano": "portal",
+      "voz": "mnemosine",
+      "texto": {
+        "normal": "Viajarás a cada decisión y elegirás. No te diré qué es lo correcto. Cada elección cambiará el 2077 al que vuelvas.",
+        "facil": "Viajarás a cada decisión y elegirás. Yo no te diré qué está bien. Lo que elijas cambiará el 2077."
+      }
+    },
+    {
+      "plano": "ari",
+      "voz": "ari",
+      "texto": {
+        "normal": "Mnemósine dice que tus decisiones pueden cambiar mi mundo. Te escribiré después de cada viaje. Nos vemos en el San Nicolás, dentro de cincuenta años.",
+        "facil": "Mnemósine dice que tus decisiones pueden cambiar mi mundo. Te escribiré después de cada viaje. ¡Nos vemos en el San Nicolás!"
+      }
+    }
+  ]
+}

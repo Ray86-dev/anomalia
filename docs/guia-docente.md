@@ -31,12 +31,14 @@ Consejo: proyecta o escribe en la pizarra la dirección del alumnado. Si quieres
 - Ten la consola abierta en otra pestaña (o en tu móvil) para las alertas y las recuperaciones.
 - El Centro nunca muestra alias ni textos: solo datos agregados de grupos de 5 o más.
 
+**Nombre de la clase:** ponle solo el grupo, por ejemplo «4.º A+B». Sale en la intro («Os he elegido a vosotros, 4.º A+B…») y en el expediente PDF.
+
 ## Sesión 1 (o sesión única)
 
 | Minutos | Qué pasa | Qué haces |
 |---|---|---|
-| 0–5 | Entran con el código y un alias (nunca su nombre real). Prólogo. | Recuerda que **apunten su clave de rescate** (botón «i»). |
-| 5–37 | D1, D2 y D3 a su ritmo: escena, laboratorio, Consejo, decisión con giro, justificación, objeción y réplica. | Vigila la consola: «Alertas privadas» y «Recuperaciones pendientes». |
+| 0–5 | Entran con el código y un alias (nunca su nombre real). Intro animada (unos 2 minutos, se puede saltar): el 2077 de Ari, Mnemósine y por qué la clase es su grupo de Cronistas. | Recuerda que **apunten su clave de rescate**: sale en la pantalla de inicio y en el botón «i». |
+| 5–37 | D1, D2 y D3 a su ritmo: escena, laboratorio, Consejo, decisión con giro, justificación, objeción, réplica y ondas temporales (qué ha cambiado y por qué). | Vigila la consola: «Alertas privadas» y «Recuperaciones pendientes». |
 | 37–50 | Debate con el Centro. | Pulsa **R** para revelar las decisiones; comenta el Desnivel de la clase. |
 
 Al terminar el capítulo I, el alumnado ve «Esperando el capítulo II». Es lo esperado.
@@ -46,7 +48,7 @@ Al terminar el capítulo I, el alumnado ve «Esperando el capítulo II». Es lo 
 | Minutos | Qué pasa | Qué haces |
 |---|---|---|
 | 0–3 | Retoman la partida en su móvil. | En la consola, «Abrir el capítulo II». |
-| 3–25 | D4, D5 y epílogo. | |
+| 3–25 | D4, D5 y epílogo animado: repaso de sus decisiones, cómo se transforma su 2077, el mensaje de Ari y por qué llegaron a ese final (unos 2 minutos, se puede saltar). | |
 | 25–37 | Reflexión final (100–180 palabras) y expediente PDF. | Recuerda que el nombre real **solo se escribe al generar el PDF** y no sale del móvil. |
 | 37–50 | Finales de la clase en el Centro y debate de cierre. | Que suban el PDF al aula virtual. |
 

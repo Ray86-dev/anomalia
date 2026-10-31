@@ -136,3 +136,8 @@ Datos que no están en el documento de diseño y que el docente debe comprobar a
 
 - [ ] **Leer todo el ADN** (D5). En 2003 terminó el Proyecto Genoma Humano, que leyó casi todo el ADN de nuestra especie después de trece años de trabajo de científicos de varios países.  
   <small>`fichas.json › d5-genoma`</small>
+
+## Barras del mundo y Desnivel prometeico
+
+- [ ] El nombre «Desnivel prometeico» viene del filósofo Günther Anders (el diseño solo da el apellido). Prometeo es el titán del mito griego que robó el fuego a los dioses para dárselo a los humanos.  
+  <small>`mundo.json › desnivel.origen`</small>

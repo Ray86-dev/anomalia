@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyDeltas, desnivel, INITIAL_WORLD, type WorldState } from './world.ts';
+import { applyDeltas, desnivel, gapZone, INITIAL_WORLD, type WorldState } from './world.ts';
 
 describe('applyDeltas', () => {
   it('suma los deltas y deja igual lo que no aparece', () => {
@@ -37,5 +37,15 @@ describe('desnivel', () => {
     expect(desnivel({ ...INITIAL_WORLD, poder: 80, responsabilidad: 40 })).toBe(40);
     expect(desnivel({ ...INITIAL_WORLD, poder: 30, responsabilidad: 70 })).toBe(-40);
     expect(desnivel(INITIAL_WORLD)).toBe(0);
+  });
+});
+
+describe('gapZone', () => {
+  it('usa los umbrales 10 y 25 del Desnivel', () => {
+    expect(gapZone(-20)).toBe('estable');
+    expect(gapZone(9)).toBe('estable');
+    expect(gapZone(10)).toBe('tension');
+    expect(gapZone(24)).toBe('tension');
+    expect(gapZone(25)).toBe('inestable');
   });
 });

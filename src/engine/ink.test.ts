@@ -33,7 +33,8 @@ describe('historias Ink', () => {
       expect(hasStory(id)).toBe(true);
       expect(hasStory(`${id}-facil`)).toBe(true);
     }
-    expect(hasStory('prologo-facil')).toBe(true);
+    // El prólogo ya no es Ink: es la intro animada de content/intro.json (D-87).
+    expect(hasStory('prologo')).toBe(false);
     expect(hasStory('d9')).toBe(false);
   });
 

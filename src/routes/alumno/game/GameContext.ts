@@ -19,6 +19,8 @@ export type Game = {
   readonly alias: string;
   /** Clave de rescate para recuperar la partida en otro móvil (solo la ve su dueño). */
   readonly rescueKey: string;
+  /** Nombre de la clase que puso el docente («4.º A+B»): sustituye a {grupo} en la intro (D-90). */
+  readonly classLabel: string;
   readonly run: RunSnapshot;
   readonly answer: AnswerSnapshot | null;
   readonly pending: boolean;
@@ -92,6 +94,7 @@ export function useGameState(initial: MyState, onLost: () => void): Omit<Game, '
   return {
     alias: initial.player.alias,
     rescueKey: initial.player.rescueKey,
+    classLabel: initial.class.label,
     run,
     answer,
     pending,

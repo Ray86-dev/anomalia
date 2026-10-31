@@ -2,10 +2,18 @@
 import { ui } from '@shared/generated/content.ts';
 import { checkWords, countWords, type WordCheck } from '@shared/game/words.ts';
 import type { Counselor } from '@shared/schemas/content.ts';
-import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from 'react';
 import { audio } from '../../../engine/audio.ts';
 import { loadInkLines, type InkLine, type InkVariables } from '../../../engine/ink.ts';
-import { prefersReducedMotion } from '../../../engine/motion.ts';
+import { animateIn, prefersReducedMotion } from '../../../engine/motion.ts';
 import { speech } from '../../../engine/speech.ts';
 import { reading } from '../../../lib/reading.ts';
 import { voice } from '../../../lib/settings.ts';
@@ -96,6 +104,25 @@ export function VoiceToggle() {
 
 const subscribeAudio = (listener: () => void) => audio.subscribe(listener);
 const isMuted = () => audio.isMuted();
+
+/**
+ * Paso interno de una pantalla (sin fase nueva en el servidor): al cambiar `key` se comporta
+ * como una pantalla nueva, igual que en Game.tsx (voz parada, foco en el título, arriba del
+ * todo y entrada suave).
+ */
+export function useSubScreen(key: string): void {
+  const previous = useRef(key);
+  useLayoutEffect(() => {
+    if (previous.current === key) return;
+    previous.current = key;
+    const main = document.querySelector<HTMLElement>('main.game-screen');
+    if (main === null) return;
+    speech.stop();
+    main.querySelector<HTMLElement>('[data-focus]')?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+    void animateIn(main);
+  }, [key]);
+}
 
 /** Barra inferior con la acción principal y, si falla la red, el aviso con «Reintentar». */
 export function ActionBar({ children }: { readonly children: ReactNode }) {

@@ -1,71 +1,68 @@
 /** Prólogo, viaje temporal y escena (fases 1–2 del bucle §6). */
-import { ui } from '@shared/generated/content.ts';
+import { intro, ui } from '@shared/generated/content.ts';
 import { desnivel } from '@shared/game/world.ts';
 import type { Dilemma } from '@shared/schemas/content.ts';
 import type { RunSnapshot } from '@shared/schemas/partida.ts';
 import { useEffect, useState } from 'react';
 import { audio } from '../../../../engine/audio.ts';
+import { Cinematic } from '../../../../engine/cinematic/Cinematic.tsx';
 import { countTo } from '../../../../engine/motion.ts';
 import { fmt } from '../../../../lib/text.ts';
 import { useGameContext } from '../GameContext.ts';
+import { CinematicPlayer } from '../CinematicPlayer.tsx';
 import { formatRescueKey, storyFor, texto } from '../helpers.ts';
-import { ActionBar, AdvanceButton, InkReader, Listen } from '../parts.tsx';
+import { ActionBar, AdvanceButton, InkReader, Listen, useSubScreen } from '../parts.tsx';
 
 const t = ui.juego;
 
 export function Prologue() {
-  const { setStep, rescueKey } = useGameContext();
-  const [started, setStarted] = useState(false);
-  const [done, setDone] = useState(false);
+  const { rescueKey } = useGameContext();
+  // `null`: pantalla de inicio; después, el panel de la intro que se está viendo (D-87).
+  const [panel, setPanel] = useState<number | null>(null);
+  const panels = intro.paneles;
+  useSubScreen(panel === null ? 'inicio' : 'intro');
 
   useEffect(() => {
     audio.preload(); // Howler listo antes del toque en «Comenzar» (desbloqueo en iOS/Android)
   }, []);
 
-  if (!started) {
-    return (
-      <>
-        <h1 className="title-hero" tabIndex={-1} data-focus>
-          {ui.app.titulo}
-        </h1>
-        <p className="lead">{t.comenzarAyuda}</p>
-        <div className="rescue-key">
-          <p className="rescue-key-label">{t.clave.titulo}</p>
-          <p className="rescue-key-value">{formatRescueKey(rescueKey)}</p>
-          <p className="help">{t.clave.texto}</p>
-        </div>
-        <ActionBar>
-          <button
-            className="btn"
-            type="button"
-            onClick={() => {
-              setStarted(true);
-            }}
-          >
-            {t.comenzar}
-          </button>
-        </ActionBar>
-      </>
-    );
-  }
+  const shot = panels[panel ?? 0]?.plano ?? 'canarias';
 
   return (
     <>
-      <h1 className="visually-hidden" tabIndex={-1} data-focus>
-        {ui.app.titulo}
-      </h1>
-      <InkReader
-        storyId={storyFor('prologo')}
-        knot="prologo"
-        onStep={setStep}
-        onDone={() => {
-          setDone(true);
-        }}
-      />
-      {done && (
-        <ActionBar>
-          <AdvanceButton label={t.prologo.viajar} />
-        </ActionBar>
+      <Cinematic shot={shot} />
+      {panel === null ? (
+        <>
+          <h1 className="title-hero" tabIndex={-1} data-focus>
+            {ui.app.titulo}
+          </h1>
+          <p className="lead">{t.comenzarAyuda}</p>
+          <div className="rescue-key">
+            <p className="rescue-key-label">{t.clave.titulo}</p>
+            <p className="rescue-key-value">{formatRescueKey(rescueKey)}</p>
+            <p className="help">{t.clave.texto}</p>
+          </div>
+          <ActionBar>
+            <button
+              className="btn"
+              type="button"
+              onClick={() => {
+                setPanel(0);
+              }}
+            >
+              {t.comenzar}
+            </button>
+          </ActionBar>
+        </>
+      ) : (
+        <CinematicPlayer
+          panels={panels}
+          index={panel}
+          onIndex={setPanel}
+          title={ui.app.titulo}
+          skipLabel={t.cinematica.saltar}
+          finalAction={<AdvanceButton label={t.prologo.viajar} />}
+        />
       )}
     </>
   );
