@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   validateContent,
+  vosotrosForms,
   withoutReviewMarks,
   type InkResult,
   type RawContent,
@@ -153,6 +154,36 @@ describe('validateContent', () => {
       expect(validate(realContent()).errors.join('\n')).toMatch(
         /d1-galileo\.ink: error de sintaxis/,
       );
+    } finally {
+      inkFiles['dilemas/d1-galileo.ink'] = VALID_SCENE;
+    }
+  });
+
+  it('detecta las formas de «vosotros» (en Canarias, «ustedes») sin falsos positivos', () => {
+    expect(vosotrosForms('Os he elegido a vosotros: este curso tenéis Filosofía.')).toEqual([
+      'Os',
+      'vosotros',
+      'tenéis',
+    ]);
+    expect(vosotrosForms('Sí, en vuestro instituto. ¿Estáis listos? Sois Cronistas.')).toEqual([
+      'vuestro',
+      'Estáis',
+      'Sois',
+    ]);
+    expect(
+      vosotrosForms('Los he elegido a ustedes: tengo dieciséis años, veintiséis osos y un país.'),
+    ).toEqual([]);
+  });
+
+  it('rechaza «vosotros» en el contenido y en las escenas Ink', () => {
+    const raw = realContent();
+    const [first] = (raw.intro as { paneles: { texto: Record<string, string> }[] }).paneles;
+    if (first) first.texto = { normal: 'Os he elegido.', facil: 'Ustedes tienen Filosofía.' };
+    inkFiles['dilemas/d1-galileo.ink'] = '=== escena ===\nEste curso tenéis Filosofía.\n-> END';
+    try {
+      const errors = validate(raw).errors.join('\n');
+      expect(errors).toMatch(/intro\.json: «Os» es de «vosotros»/);
+      expect(errors).toMatch(/d1-galileo\.ink: «tenéis» es de «vosotros»/);
     } finally {
       inkFiles['dilemas/d1-galileo.ink'] = VALID_SCENE;
     }

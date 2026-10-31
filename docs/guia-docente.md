@@ -31,7 +31,7 @@ Consejo: proyecta o escribe en la pizarra la dirección del alumnado. Si quieres
 - Ten la consola abierta en otra pestaña (o en tu móvil) para las alertas y las recuperaciones.
 - El Centro nunca muestra alias ni textos: solo datos agregados de grupos de 5 o más.
 
-**Nombre de la clase:** ponle solo el grupo, por ejemplo «4.º A+B». Sale en la intro («Os he elegido a vosotros, 4.º A+B…») y en el expediente PDF.
+**Nombre de la clase:** ponle solo el grupo, por ejemplo «4.º A+B». Sale en la intro («Los he elegido a ustedes, 4.º A+B…») y en el expediente PDF.
 
 ## Sesión 1 (o sesión única)
 

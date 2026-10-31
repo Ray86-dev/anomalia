@@ -31,7 +31,7 @@ Videojuego narrativo web para Filosofía de 4.º ESO (Canarias): unos 25 alumnos
    - Texto base de 18 px (mínimo 17).
    - Audio desbloqueado con el primer toque, en MP3/AAC; el juego se entiende sin sonido.
    - `prefers-reduced-motion`, más la opción manual `html[data-motion="reduced"]`.
-8. **Idioma:** interfaz y contenido en castellano de España; código, identificadores y nombres técnicos en inglés.
+8. **Idioma:** interfaz y contenido en español de Canarias (D-91): «tú» con el alumno y «ustedes» para el plural, nunca «vosotros», «os» ni «vuestro» (`npm run content` lo rechaza). Código, identificadores y nombres técnicos en inglés.
 
 ## Forma de trabajar
 

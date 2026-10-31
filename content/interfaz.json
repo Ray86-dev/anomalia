@@ -405,7 +405,7 @@
     "sinClases": "Todavía no has creado ninguna clase.",
     "crearTitulo": "Nueva clase",
     "nombreClaseEtiqueta": "Nombre de la clase",
-    "nombreClaseAyuda": "Por ejemplo, «4.º A+B». Sale en la intro del alumnado («Os he elegido a vosotros, 4.º A+B…») y en su expediente. Sin datos personales.",
+    "nombreClaseAyuda": "Por ejemplo, «4.º A+B». Sale en la intro del alumnado («Los he elegido a ustedes, 4.º A+B…») y en su expediente. Sin datos personales.",
     "modoEtiqueta": "Modo",
     "retencionEtiqueta": "Borrar los datos pasados (días)",
     "retencionAyuda": "Entre 1 y 90. Después se borra todo automáticamente.",

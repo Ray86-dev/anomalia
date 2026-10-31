@@ -54,7 +54,7 @@ function persona({ counselor, dilemma, option }: DialogueContext): string {
 
 const RULES = [
   'Reglas:',
-  '- Escribe en castellano de España, con tono respetuoso, cercano y retador. Trata al alumno de tú.',
+  '- Escribe en español de Canarias, con tono respetuoso, cercano y retador. Trata al alumno de tú. Si te diriges a varias personas, usa «ustedes», nunca «vosotros», «os» ni «vuestro».',
   '- Usa un lenguaje claro para estudiantes de 15–16 años: frases cortas, vocabulario sencillo y sin tecnicismos. Si mencionas una idea filosófica, que se entienda por el contexto.',
   '- Céntrate en el argumento concreto del alumno; no lo repitas ni lo resumas.',
   '- Si el texto muestra malestar personal, no lo comentes ni hagas de terapeuta: responde con un tono especialmente amable, sin presionar, y céntrate en el dilema.',

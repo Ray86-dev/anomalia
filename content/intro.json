@@ -12,8 +12,8 @@
       "plano": "ciudad",
       "voz": "ari",
       "texto": {
-        "normal": "Me llamo Ari y tengo quince años. Vivo en El Sauzal y estudio 4.º de la ESO en el IES San Nicolás. Sí, en vuestro instituto, medio siglo después.",
-        "facil": "Me llamo Ari y tengo quince años. Vivo en El Sauzal. Estudio en el IES San Nicolás, vuestro instituto, pero en el año 2077."
+        "normal": "Me llamo Ari y tengo quince años. Vivo en El Sauzal y estudio 4.º de la ESO en el IES San Nicolás. Sí, en tu instituto, medio siglo después.",
+        "facil": "Me llamo Ari y tengo quince años. Vivo en El Sauzal. Estudio en el IES San Nicolás, tu instituto, pero en el año 2077."
       }
     },
     {
@@ -68,24 +68,24 @@
       "plano": "datos-razones",
       "voz": "mnemosine",
       "texto": {
-        "normal": "Mis datos dicen cómo son las cosas, pero no qué debemos hacer con ellas. Eso no se mide: se decide con razones. Y yo no puedo decidir por vosotros.",
-        "facil": "Los datos dicen cómo son las cosas. Pero no dicen qué debemos hacer. Eso hay que decidirlo con razones. Y yo no puedo decidir por vosotros."
+        "normal": "Mis datos dicen cómo son las cosas, pero no qué debemos hacer con ellas. Eso no se mide: se decide con razones. Y yo no puedo decidir por ustedes.",
+        "facil": "Los datos dicen cómo son las cosas. Pero no dicen qué debemos hacer. Eso hay que decidirlo con razones. Y yo no puedo decidir por ustedes."
       }
     },
     {
       "plano": "cronistas",
       "voz": "mnemosine",
       "texto": {
-        "normal": "La gente de 2077 no puede viajar: su mundo depende de esas decisiones. Por eso he abierto un canal hacia vuestro presente, hacia el instituto de Ari.",
-        "facil": "La gente de 2077 no puede viajar, porque su mundo depende de esas decisiones. Por eso os llamo desde vuestro presente, desde el instituto de Ari."
+        "normal": "La gente de 2077 no puede viajar: su mundo depende de esas decisiones. Por eso he abierto un canal hacia el presente, hacia el instituto de Ari: hacia ustedes.",
+        "facil": "La gente de 2077 no puede viajar, porque su mundo depende de esas decisiones. Por eso los llamo a ustedes, desde el presente, en el instituto de Ari."
       }
     },
     {
       "plano": "cronistas",
       "voz": "mnemosine",
       "texto": {
-        "normal": "Os he elegido a vosotros, {grupo}, porque este curso tenéis Filosofía por primera vez: vais a aprender a dar razones. Seréis mi grupo de Cronistas.",
-        "facil": "Os he elegido a vosotros, {grupo}. Este curso tenéis Filosofía por primera vez y vais a aprender a dar razones. Seréis mi grupo de Cronistas."
+        "normal": "Los he elegido a ustedes, {grupo}, porque este curso tienen Filosofía por primera vez: van a aprender a dar razones. Serán mi grupo de Cronistas.",
+        "facil": "Los he elegido a ustedes, {grupo}. Este curso tienen Filosofía por primera vez y van a aprender a dar razones. Serán mi grupo de Cronistas."
       }
     },
     {

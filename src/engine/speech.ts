@@ -12,15 +12,32 @@ let speaking = false;
 let generation = 0;
 let onSpeaking: ((value: boolean) => void) | null = null;
 
-/** Castellano de España si lo hay (mejor una voz del propio móvil), si no, otro castellano. */
+/**
+ * Voces que sesean, como se habla en Canarias (D-91), por orden de preferencia. Después va
+ * la de España y, si no hay, cualquier otra en español.
+ */
+const SESEO = ['es-us', 'es-mx', 'es-419', 'es-co', 'es-ve', 'es-cu', 'es-do', 'es-pr'] as const;
+
+type VoiceLike = Pick<SpeechSynthesisVoice, 'lang' | 'localService'>;
+
+/** Algunos Android escriben el idioma con guion bajo (`es_US`). */
+const langOf = (v: VoiceLike) => v.lang.replace('_', '-').toLowerCase();
+
+/** La mejor voz para el juego; dentro de cada idioma, mejor la del propio móvil. */
+export function chooseVoice<T extends VoiceLike>(voices: readonly T[]): T | null {
+  const best = (matches: (lang: string) => boolean) =>
+    voices.find((v) => matches(langOf(v)) && v.localService) ??
+    voices.find((v) => matches(langOf(v)));
+  for (const lang of [...SESEO, 'es-es']) {
+    const found = best((l) => l === lang);
+    if (found !== undefined) return found;
+  }
+  return best((l) => l === 'es' || l.startsWith('es-')) ?? null;
+}
+
 function pickVoice(): void {
   if (synth === null) return;
-  const voices = synth.getVoices();
-  voice =
-    voices.find((v) => v.lang === 'es-ES' && v.localService) ??
-    voices.find((v) => v.lang === 'es-ES') ??
-    voices.find((v) => v.lang.toLowerCase().startsWith('es')) ??
-    null;
+  voice = chooseVoice(synth.getVoices());
 }
 
 if (synth !== null) {

@@ -164,6 +164,30 @@ function tooLong(text: Readonly<Record<string, string | undefined>>, max: number
     .map(([variant]) => variant);
 }
 
+/**
+ * Español de Canarias (D-91): el plural es «ustedes», así que ninguna forma de «vosotros»
+ * («vosotros», «os», «vuestro», «sois», «vais», «tenéis», «estáis»…). Los límites de palabra
+ * son Unicode: `\b` no reconoce la «ñ» ni las tildes («años» no debe contar como «os»).
+ * «Dieciséis» y «veintiséis» no son verbos, por eso «-éis» no cuenta detrás de una «s».
+ */
+const LETTER = String.raw`[\p{L}\p{N}]`;
+const VOSOTROS = new RegExp(
+  `(?<!${LETTER})(?:vosotr[oa]s|vuestr[oa]s?|os|sois|vais|${LETTER}+(?:áis|(?<!s)éis))(?!${LETTER})`,
+  'giu',
+);
+
+/** Formas de «vosotros» que aparecen en un texto. */
+export function vosotrosForms(text: string): string[] {
+  return [...text.matchAll(VOSOTROS)].map(([form]) => form);
+}
+
+/** Fuente Ink sin comentarios (notas para el docente, no se muestran). */
+const inkWithoutComments = (source: string) =>
+  source.replace(/\/\*[\s\S]*?\*\//gu, '').replace(/\/\/.*$/gmu, '');
+
+const vosotrosError = (where: string, forms: readonly string[]) =>
+  `${where}: «${[...new Set(forms)].join('», «')}» es de «vosotros»; en Canarias se usa «ustedes» (D-91)`;
+
 /** Una sola frase: ningún punto, cierre de interrogación o exclamación seguido de más texto. */
 const severalSentences = (text: string | undefined) =>
   text !== undefined && /[.!?…]\s+\S/u.test(text);
@@ -193,6 +217,8 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
       return;
     }
     if (source.includes('TODO(')) notice(`${path}: contiene marcas TODO`);
+    const forms = vosotrosForms(inkWithoutComments(source));
+    if (forms.length > 0) errors.push(vosotrosError(path, forms));
     const result = options.compileInk(source, knots);
     for (const error of result.errors) errors.push(`${path}: ${error}`);
     for (const warning of result.warnings) notice(`${path}: ${warning}`);
@@ -469,6 +495,8 @@ export function validateContent(raw: RawContent, options: ValidationOptions): Va
   for (const [file, data] of sources) {
     const todos = [...strings(data)].filter((text) => text.includes('TODO(')).length;
     if (todos > 0) notice(`${file}: ${todos} texto(s) con marca TODO`);
+    const forms = [...strings(data)].flatMap(vosotrosForms);
+    if (forms.length > 0) errors.push(vosotrosError(file, forms));
     if (options.strict && file !== 'interfaz.json') {
       for (const path of missingEasyReading(data)) {
         errors.push(`${file} › ${path}: falta la versión de lectura fácil («facil»)`);
